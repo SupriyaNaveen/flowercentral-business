@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Florist-Customer</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">Florist\nBusiness</string>
+
+    <!-- Activity -->
+    <string name="title_activity_splash">SplashActivity</string>
+
+    <!-- Error Messages and Title -->
+    <string name="title_connection_time_out">Connection Timeout</string>
+    <string name="title_internet_unavailable">No Internet</string>
+
+    <string name="msg_connection_time_out">Connection Timeout.</string>
+    <string name="msg_internet_unavailable">Please check your Wifi or Internet Data and Try Again!</string>
+
+</resources>
