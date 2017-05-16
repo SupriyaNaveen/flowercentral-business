@@ -3,6 +3,7 @@ package com.flowercentral.flowercentralbusiness.util;
 import android.app.ActivityManager;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -13,6 +14,8 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,21 +39,22 @@ public class Util {
 
     /**
      * Check internet connection is available or not
+     *
      * @param _context:Context
      * @return boolean
      */
     public static boolean checkInternet(Context _context) {
         boolean isConnected = false;
-        try{
+        try {
             ConnectivityManager connectivityManager = (ConnectivityManager) _context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-            if(activeNetwork !=null){
+            if (activeNetwork != null) {
                 isConnected = activeNetwork.isConnectedOrConnecting();
-            }else{
+            } else {
                 isConnected = false;
             }
 
-        }catch(Exception ex){
+        } catch (Exception ex) {
             isConnected = false;
             ex.printStackTrace();
         }
@@ -60,21 +64,22 @@ public class Util {
 
     /**
      * Get Network connection type
+     *
      * @param _context : Context
      * @return ConnectivityType : Int
      */
     public static int getNetworkType(Context _context) {
         int networkType;
-        try{
+        try {
             ConnectivityManager connectivityManager = (ConnectivityManager) _context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-            if(activeNetwork != null){
+            if (activeNetwork != null) {
                 networkType = activeNetwork.getType();
-            }else{
+            } else {
                 networkType = -1;
             }
 
-        }catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             return -1;
         }
@@ -83,20 +88,21 @@ public class Util {
 
     /**
      * Check whether a particular service is running or not
-     * @param _context: Context
+     *
+     * @param _context:   Context
      * @param _className: String
      */
 
     public static boolean isServiceRunning(Context _context, String _className) {
         boolean isServiceRunning = false;
-        try{
+        try {
             ActivityManager manager = (ActivityManager) _context.getSystemService(Context.ACTIVITY_SERVICE);
             for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
                 if (_className.equals(service.service.getClassName())) {
                     isServiceRunning = true;
                 }
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             isServiceRunning = false;
         }
 
@@ -105,16 +111,17 @@ public class Util {
 
     /**
      * Get IMEI Number of the device
+     *
      * @param _context : Context
      * @return _imei : String
      */
     public static String getIEMINumber(Context _context) {
         String imeiNumber = null;
-        try{
+        try {
             TelephonyManager telephonyManger = (TelephonyManager) _context.getSystemService(Context.TELEPHONY_SERVICE);
             imeiNumber = telephonyManger.getDeviceId();
 
-        }catch(Exception ex){
+        } catch (Exception ex) {
             imeiNumber = null;
             ex.printStackTrace();
         }
@@ -124,14 +131,15 @@ public class Util {
 
     /**
      * Get id of the device
+     *
      * @param _context : Context
      * @return deviceID : String
      */
     public static String getDeviceId(Context _context) {
         String deviceId = null;
-        try{
+        try {
             deviceId = Settings.Secure.getString(_context.getContentResolver(), Settings.Secure.ANDROID_ID);
-        }catch(Exception ex){
+        } catch (Exception ex) {
             deviceId = null;
             ex.printStackTrace();
         }
@@ -140,6 +148,7 @@ public class Util {
 
     /**
      * Get Device Manufacturer
+     *
      * @return String
      */
     public static String getManufacturer() {
@@ -154,6 +163,7 @@ public class Util {
 
     /**
      * Get Device Model
+     *
      * @return String
      */
     public static String getModelNumber() {
@@ -167,6 +177,7 @@ public class Util {
 
     /**
      * Get Android version
+     *
      * @return
      */
     public static String getAndroidVersion() {
@@ -181,28 +192,29 @@ public class Util {
 
     /**
      * Get Current date & time
+     *
      * @param _dateFormat
      * @return
      */
-    public static String getCurrentDateTimeStamp(String _dateFormat){
+    public static String getCurrentDateTimeStamp(String _dateFormat) {
         DateFormat dateFormat = new SimpleDateFormat(_dateFormat);
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
         return dateFormat.format(calendar.getTime());
     }
 
-    public static long getCurrentDateTimeStamp(){
+    public static long getCurrentDateTimeStamp() {
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
         return calendar.getTimeInMillis();
     }
 
-    public static String formatDate(String _date, String _fromFormat, String _toFormat){
+    public static String formatDate(String _date, String _fromFormat, String _toFormat) {
         String strDate = "";
-        try{
+        try {
             SimpleDateFormat format1 = new SimpleDateFormat(_fromFormat);
             SimpleDateFormat format2 = new SimpleDateFormat(_toFormat);
             Date date = format1.parse(_date);
             strDate = format2.format(date);
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e(TAG, e.getMessage());
             strDate = _date;
         }
@@ -212,13 +224,13 @@ public class Util {
 
     /**
      * Check for SD-card is available to write or not.
+     *
      * @param requireWriteAccess : write access is required or not
      * @return boolean
      */
     public static boolean hasStorage(boolean requireWriteAccess) {
         String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state))
-        {
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
             return true;
         } else if (!requireWriteAccess
                 && Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
@@ -233,7 +245,7 @@ public class Util {
      * other file-based ContentProviders.
      *
      * @param context The context.
-     * @param uri The Uri to query.
+     * @param uri     The Uri to query.
      * @author paulburke
      */
     public static String getPath(final Context context, final Uri uri) {
@@ -279,7 +291,7 @@ public class Util {
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[] {
+                final String[] selectionArgs = new String[]{
                         split[1]
                 };
 
@@ -302,9 +314,9 @@ public class Util {
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
      *
-     * @param context The context.
-     * @param uri The Uri to query.
-     * @param selection (Optional) Filter used in the query.
+     * @param context       The context.
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      */
@@ -356,22 +368,18 @@ public class Util {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
     }
 
-    public String getQueryString(Map<String, String> _params){
+    public String getQueryString(Map<String, String> _params) {
         StringBuilder builder = new StringBuilder();
 
-        for (String key : _params.keySet())
-        {
+        for (String key : _params.keySet()) {
             Object value = _params.get(key);
-            if (value != null)
-            {
-                try{
+            if (value != null) {
+                try {
                     value = URLEncoder.encode(String.valueOf(value), "utf-8");
                     if (builder.length() > 0)
                         builder.append("&");
                     builder.append(key).append("=").append(value);
-                }
-                catch (UnsupportedEncodingException e)
-                {
+                } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
             }
@@ -383,9 +391,39 @@ public class Util {
         int n = 0;
         char[] buffer = new char[1024 * 4];
         InputStreamReader reader = new InputStreamReader(stream, "UTF8");
-        StringWriter writer = new StringWriter ();
+        StringWriter writer = new StringWriter();
         while (-1 != (n = reader.read(buffer))) writer.write(buffer, 0, n);
         return writer.toString();
+    }
+
+    public static MaterialDialog showProgressDialog(Context _context, String _title, String _message, boolean _cancellable) {
+
+        MaterialDialog progressDialog;
+
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(_context);
+        if (_title != null) {
+            builder.title(_title);
+        }
+        if (_message != null) {
+            builder.content(_message);
+        }
+        builder.progress(true, 0);
+        builder.cancelable(_cancellable);
+
+        progressDialog = builder.build();
+
+        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                dialog.cancel();
+            }
+        });
+
+        if (!progressDialog.isShowing())
+            progressDialog.show();
+
+        return progressDialog;
+
     }
 
 }

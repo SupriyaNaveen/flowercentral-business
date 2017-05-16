@@ -11,8 +11,7 @@ public class ErrorData {
     private String errorCodeOfResponseData;
     private ERROR_TYPE errorType = ERROR_TYPE.APPLICATION_ERROR;
 
-    public static enum ERROR_TYPE  {NETWORK_NOT_AVAILABLE,SERVER_ERROR,CONNECTION_TIMEOUT,APPLICATION_ERROR} ;
-
+    public static enum ERROR_TYPE {NETWORK_NOT_AVAILABLE, INTERNAL_SERVER_ERROR, CONNECTION_TIMEOUT, APPLICATION_ERROR, UNAUTHORIZED_ERROR, AUTHENTICATION_ERROR, INVALID_INPUT_SUPPLIED, SERVER_ERROR}
 
     @Override
     public String toString() {
@@ -25,16 +24,15 @@ public class ErrorData {
                 '}';
     }
 
-    public ErrorData(){
+    public ErrorData() {
 
     }
 
-    public ErrorData(String errorMessageage){
+    public ErrorData(String errorMessageage) {
         this.errorMessage = errorMessageage;
     }
 
-    public ErrorData(int errorCode,String errorMessage)
-    {
+    public ErrorData(int errorCode, String errorMessage) {
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
     }

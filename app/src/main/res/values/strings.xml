@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Florist-Customer</string>
+    <string name="app_name">Florist-Vendor</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">Florist\nBusiness</string>
 
@@ -12,5 +12,15 @@
 
     <string name="msg_connection_time_out">Connection Timeout.</string>
     <string name="msg_internet_unavailable">Please check your Wifi or Internet Data and Try Again!</string>
+    <string name="msg_logout_success">You have been Successfully logged out.</string>
+    <string name="msg_registering_user">Please wait, saving information.</string>
+    <string name="msg_reg_user_missing_input">Required parameters are missing. Please check and try again!</string>
+
+    <string name="btn_try_again">Try Again</string>
+
+    <string name="facebook_app_id">450594541963943</string>
+    <string name="instagram_client_id">8d6f9b2dadb4418cb958fc0354a320ed</string>
+    <string name="instagram_client_secret">1f4ecb9808e447e6b6df7f5015ae2e3c</string>
+    <string name="instagram_callback_url">http://flowercentral.com</string>
 
 </resources>

@@ -12,41 +12,38 @@ import android.preference.PreferenceManager;
 
 public class UserPreference extends PreferenceActivity {
 
-    private final String TAG = UserPreference.class.getSimpleName ();
+    private final String TAG = UserPreference.class.getSimpleName();
     private static Context mContext;
 
     private final static String API_TOKEN_KEY = "api_token_key";
+    private final static String LOGIN_ACCESS_TOKEN = "login_access_token";
 
     @Override
-    public void onCreate(Bundle _savedInstanceState){
+    public void onCreate(Bundle _savedInstanceState) {
         super.onCreate(_savedInstanceState);
     }
 
-    public static void init(Context _context){
+    public static void init(Context _context) {
         mContext = _context;
     }
 
-    public static void registerSharedPreferenceChangedListner(Context mContext, SharedPreferences.OnSharedPreferenceChangeListener _listner)
-    {
-        if(_listner!=null)
-        {
+    public static void registerSharedPreferenceChangedListner(Context mContext, SharedPreferences.OnSharedPreferenceChangeListener _listner) {
+        if (_listner != null) {
             PreferenceManager.getDefaultSharedPreferences(mContext)
                     .registerOnSharedPreferenceChangeListener(_listner);
         }
     }
 
-    public static void unregisterSharedPreferenceChangedListner(Context mContext,SharedPreferences.OnSharedPreferenceChangeListener _listner)
-    {
-        if(_listner!=null)
-        {
+    public static void unregisterSharedPreferenceChangedListner(Context mContext, SharedPreferences.OnSharedPreferenceChangeListener _listner) {
+        if (_listner != null) {
             PreferenceManager.getDefaultSharedPreferences(mContext)
                     .unregisterOnSharedPreferenceChangeListener(_listner);
         }
     }
 
-    private static String readString(Context mContext, final String _key,String _defaultValue) {
+    private static String readString(Context mContext, final String _key, String _defaultValue) {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
-        return pref.getString(_key,_defaultValue);
+        return pref.getString(_key, _defaultValue);
     }
 
     private static void writeString(Context mContext, final String _key, final String _value) {
@@ -94,7 +91,7 @@ public class UserPreference extends PreferenceActivity {
 
     private static long readLong(Context mContext, final String _key, final long _defaultValue) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
-        return settings.getLong (_key, _defaultValue);
+        return settings.getLong(_key, _defaultValue);
     }
 
     private static void writeLong(Context mContext, final String _key, final long _value) {
@@ -104,11 +101,23 @@ public class UserPreference extends PreferenceActivity {
         editor.commit();
     }
 
-    public static void setApiToken(String _token){
-        writeString (mContext, API_TOKEN_KEY, _token);
+    public static void setApiToken(String _token) {
+        writeString(mContext, API_TOKEN_KEY, _token);
     }
 
-    public static String getApiToken(){
-        return readString (mContext, API_TOKEN_KEY, null);
+    public static String getApiToken() {
+        return readString(mContext, API_TOKEN_KEY, null);
+    }
+
+    public static void setAccessToken(String _token) {
+        writeString(mContext, LOGIN_ACCESS_TOKEN, _token);
+    }
+
+    public static String getAccessToken() {
+        return readString(mContext, LOGIN_ACCESS_TOKEN, null);
+    }
+
+    public static void deleteProfileInformation() {
+        setAccessToken(null);
     }
 }

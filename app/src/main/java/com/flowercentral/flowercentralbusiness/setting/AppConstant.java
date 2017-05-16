@@ -31,4 +31,5 @@ public final class AppConstant {
     public static final String DB_DATE_FORMAT = "yyyy-MM-dd";
     public static final String SHORT_DATE_FORMAT = "dd-MMM";
 
+    public enum  LOGIN_TYPE{FACEBOOK, GOOGLE, INSTAGRAM, CUSTOM}
 }
