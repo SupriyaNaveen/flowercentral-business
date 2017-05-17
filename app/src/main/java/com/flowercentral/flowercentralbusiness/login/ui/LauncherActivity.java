@@ -49,7 +49,10 @@ public class LauncherActivity extends BaseActivity {
     @BindView(R.id.btn_instagram)
     Button mButtonInstagram;
 
-    @BindView(R.id.wrapper_social_login)
+    @BindView(R.id.btn_try_again)
+    Button mButtonTryAgain;
+
+    @BindView(R.id.login_wrapper)
     LinearLayout mLinearLayoutSocialLogin;
 
     @BindView(R.id.fl_no_internet)
@@ -113,6 +116,11 @@ public class LauncherActivity extends BaseActivity {
 
         mLoginType = AppConstant.LOGIN_TYPE.INSTAGRAM.ordinal();
         mInstagramHelper.performSignIn();
+    }
+
+    @OnClick(R.id.btn_try_again)
+    void tryAgainToRegister() {
+        initializeActivity(mContext);
     }
 
     @Override

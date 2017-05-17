@@ -19,24 +19,22 @@ public class CustomJsonObjectRequest extends JsonObjectRequest {
     private HttpResponseListener responseListener;
     private NetworkResponse networkResponse;
     Map<String, String> headerValues;
-    public CustomJsonObjectRequest(int method, String Url, JSONObject jsonObjectData, Response.Listener listener, Response.ErrorListener errorListener)
-    {
-        super(method,Url,jsonObjectData,listener,errorListener);
+
+    public CustomJsonObjectRequest(int method, String Url, JSONObject jsonObjectData, Response.Listener listener, Response.ErrorListener errorListener) {
+        super(method, Url, jsonObjectData, listener, errorListener);
     }
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
-        if(headerValues==null) {
+        if (headerValues == null) {
             return super.getHeaders();
-        }else
-        {
+        } else {
             return headerValues;
         }
     }
 
-    public void appendHeaderValues(Map<String, String> headers)
-    {
-        if(headers!=null) {
+    public void appendHeaderValues(Map<String, String> headers) {
+        if (headers != null) {
             if (headerValues == null) {
                 headerValues = new HashMap<String, String>();
 
@@ -45,8 +43,7 @@ public class CustomJsonObjectRequest extends JsonObjectRequest {
         }
     }
 
-    public void setCustomResponseListener(HttpResponseListener responseListener)
-    {
+    public void setCustomResponseListener(HttpResponseListener responseListener) {
         this.responseListener = responseListener;
     }
 
@@ -70,9 +67,8 @@ public class CustomJsonObjectRequest extends JsonObjectRequest {
     @Override
     protected void deliverResponse(JSONObject response) {
         super.deliverResponse(response);
-        if(responseListener!=null&&networkResponse!=null)
-        {
-            responseListener.onSuccess(networkResponse.statusCode,networkResponse.headers,response);
+        if (responseListener != null && networkResponse != null) {
+            responseListener.onSuccess(networkResponse.statusCode, networkResponse.headers, response);
         }
 
     }

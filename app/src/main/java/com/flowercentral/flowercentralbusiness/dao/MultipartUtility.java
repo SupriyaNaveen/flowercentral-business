@@ -20,10 +20,10 @@ import java.net.URL;
 import java.net.URLConnection;
 
 /**
- * This utility class provides an abstraction layer for sending multipart HTTP 
- * POST requests to a web server. 
- * @author www.codejava.net
+ * This utility class provides an abstraction layer for sending multipart HTTP
+ * POST requests to a web server.
  *
+ * @author www.codejava.net
  */
 
 public class MultipartUtility {
@@ -38,8 +38,9 @@ public class MultipartUtility {
     private PrintWriter writer;
 
     /**
-     * This constructor initializes a new HTTP POST request with content type 
-     * is set to multipart/form-data 
+     * This constructor initializes a new HTTP POST request with content type
+     * is set to multipart/form-data
+     *
      * @param requestURL
      * @param charset
      * @throws IOException
@@ -59,7 +60,7 @@ public class MultipartUtility {
         httpConn.setRequestProperty("Accept-Charset", charset);
         httpConn.setRequestProperty("Content-Type",
                 "multipart/form-data; boundary=" + boundary);
-        httpConn.setRequestProperty("Authorization", "Bearer "+ UserPreference.getApiToken());
+        httpConn.setRequestProperty("Authorization", "Bearer " + UserPreference.getApiToken());
         httpConn.setUseCaches(false);
         httpConn.setDoInput(true);
         httpConn.setDoOutput(true);
@@ -70,9 +71,10 @@ public class MultipartUtility {
     }
 
     /**
-     * Adds a form field to the request 
-     * @param name field name 
-     * @param value field value 
+     * Adds a form field to the request
+     *
+     * @param name  field name
+     * @param value field value
      */
     public void addFormField(String name, String value) {
         writer.append("--" + boundary).append(LINE_FEED);
@@ -86,9 +88,10 @@ public class MultipartUtility {
     }
 
     /**
-     * Adds a upload file section to the request 
-     * @param fieldName name attribute in <input type="file" name="..." /> 
-     * @param uploadFile a File to be uploaded 
+     * Adds a upload file section to the request
+     *
+     * @param fieldName  name attribute in <input type="file" name="..." />
+     * @param uploadFile a File to be uploaded
      * @throws IOException
      */
     public void addFilePart(String fieldName, File uploadFile)
@@ -121,9 +124,10 @@ public class MultipartUtility {
     }
 
     /**
-     * Adds a header field to the request. 
-     * @param name - name of the header field 
-     * @param value - value of the header field 
+     * Adds a header field to the request.
+     *
+     * @param name  - name of the header field
+     * @param value - value of the header field
      */
     public void addHeaderField(String name, String value) {
         writer.append(name + ": " + value).append(LINE_FEED);
@@ -164,9 +168,10 @@ public class MultipartUtility {
     */
 
     /**
-     * Completes the request and receives response from the server. 
-     * @return a list of Strings as response in case the server returned 
-     * status OK, otherwise an exception is thrown. 
+     * Completes the request and receives response from the server.
+     *
+     * @return a list of Strings as response in case the server returned
+     * status OK, otherwise an exception is thrown.
      * @throws IOException
      */
     public String finish() throws IOException {
@@ -198,7 +203,7 @@ public class MultipartUtility {
         }
 
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in,"UTF-8"));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             StringBuilder out = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {

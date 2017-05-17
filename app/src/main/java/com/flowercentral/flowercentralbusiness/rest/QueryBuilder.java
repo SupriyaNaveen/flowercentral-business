@@ -10,56 +10,49 @@ public class QueryBuilder {
 
     private static String profileUpdateUrl;
 
-    public static String getLoginUrl()
-    {
+    public static String getLoginUrl() {
         StringBuilder sb = new StringBuilder();
         sb.append(BuildConfig.SERVER);
         sb.append("patientApi/v1/login");
         return sb.toString();
     }
 
-    public static String getCareGiversUrl()
-    {
+    public static String getCareGiversUrl() {
         StringBuilder sb = new StringBuilder();
         sb.append(BuildConfig.SERVER);
         sb.append("patientApi/v1/careGivers");
         return sb.toString();
     }
 
-    public static String getCareTeamUrl()
-    {
+    public static String getCareTeamUrl() {
         StringBuilder sb = new StringBuilder();
         sb.append(BuildConfig.SERVER);
         sb.append("patientApi/v1/careTeam");
         return sb.toString();
     }
 
-    public static String getQuestionsUrl()
-    {
+    public static String getQuestionsUrl() {
         StringBuilder sb = new StringBuilder();
         sb.append(BuildConfig.SERVER);
         sb.append("patientApi/v1/questions");
         return sb.toString();
     }
 
-    public static String getProfileUrl()
-    {
+    public static String getProfileUrl() {
         StringBuilder sb = new StringBuilder();
         sb.append(BuildConfig.SERVER);
         sb.append("patientApi/v1/profile");
         return sb.toString();
     }
 
-    public static String getReportProblemUrl()
-    {
+    public static String getReportProblemUrl() {
         StringBuilder sb = new StringBuilder();
         sb.append(BuildConfig.SERVER);
         sb.append("patientApi/v1/reportProblem");
         return sb.toString();
     }
 
-    public static String getPostOperationUrl()
-    {
+    public static String getPostOperationUrl() {
         StringBuilder sb = new StringBuilder();
         sb.append(BuildConfig.SERVER);
         sb.append("patientApi/v1/postOpInstructions");
@@ -67,8 +60,7 @@ public class QueryBuilder {
     }
 
 
-    public static String getSubmitAnswerUrl()
-    {
+    public static String getSubmitAnswerUrl() {
         StringBuilder sb = new StringBuilder();
         sb.append(BuildConfig.SERVER);
         sb.append("patientApi/v1/submitAnswer");

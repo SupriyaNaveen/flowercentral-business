@@ -14,25 +14,21 @@ public class CustomStringRequest extends StringRequest {
     private HttpResponseListener responseListener;
     private NetworkResponse networkResponse;
 
-    public CustomStringRequest(int method, String url, Response.Listener listener, Response.ErrorListener errorListener)
-    {
-        super(method,url,listener,errorListener);
+    public CustomStringRequest(int method, String url, Response.Listener listener, Response.ErrorListener errorListener) {
+        super(method, url, listener, errorListener);
     }
 
-    public void appendParams(Map<String,String> map)
-    {
+    public void appendParams(Map<String, String> map) {
         try {
-            if(getParams()!=null) {
+            if (getParams() != null) {
                 getParams().putAll(map);
             }
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void setCustomResponseListener(HttpResponseListener responseListener)
-    {
+    public void setCustomResponseListener(HttpResponseListener responseListener) {
         this.responseListener = responseListener;
     }
 
@@ -47,9 +43,8 @@ public class CustomStringRequest extends StringRequest {
     @Override
     protected void deliverResponse(String response) {
         super.deliverResponse(response);
-        if(responseListener!=null&&networkResponse!=null)
-        {
-            responseListener.onSuccess(networkResponse.statusCode,networkResponse.headers,response);
+        if (responseListener != null && networkResponse != null) {
+            responseListener.onSuccess(networkResponse.statusCode, networkResponse.headers, response);
         }
 
     }

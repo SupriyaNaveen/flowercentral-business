@@ -8,7 +8,8 @@ import com.flowercentral.flowercentralbusiness.volley.ErrorData;
  */
 public interface ResponseListener<O> {
 
-    public void onDataReceived (O data);
-    public void onDataError (ErrorData errorData);
+    public void onDataReceived(O data);
+
+    public void onDataError(ErrorData errorData);
 
 }

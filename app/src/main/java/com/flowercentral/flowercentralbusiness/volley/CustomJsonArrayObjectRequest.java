@@ -31,17 +31,15 @@ public class CustomJsonArrayObjectRequest extends JsonArrayRequest {
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
-        if(headerValues==null) {
+        if (headerValues == null) {
             return super.getHeaders();
-        }else
-        {
+        } else {
             return headerValues;
         }
     }
 
-    public void appendHeaderValues(Map<String, String> headers)
-    {
-        if(headers!=null) {
+    public void appendHeaderValues(Map<String, String> headers) {
+        if (headers != null) {
             if (headerValues == null) {
                 headerValues = new HashMap<String, String>();
 
@@ -50,8 +48,7 @@ public class CustomJsonArrayObjectRequest extends JsonArrayRequest {
         }
     }
 
-    public void setCustomResponseListener(HttpResponseListener responseListener)
-    {
+    public void setCustomResponseListener(HttpResponseListener responseListener) {
         this.responseListener = responseListener;
     }
 
@@ -75,9 +72,8 @@ public class CustomJsonArrayObjectRequest extends JsonArrayRequest {
     @Override
     protected void deliverResponse(JSONArray response) {
         super.deliverResponse(response);
-        if(responseListener!=null&&networkResponse!=null)
-        {
-            responseListener.onSuccess(networkResponse.statusCode,networkResponse.headers,response);
+        if (responseListener != null && networkResponse != null) {
+            responseListener.onSuccess(networkResponse.statusCode, networkResponse.headers, response);
         }
 
     }

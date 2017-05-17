@@ -20,7 +20,7 @@ public class RestUtil {
         ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeInfo = connMgr.getActiveNetworkInfo();
         if (activeInfo != null && activeInfo.isConnected()) {
-            Logger.log(TAG, "isNetworkAvailable","network type" + activeInfo.getTypeName(), AppConstant.LOG_LEVEL_INFO);
+            Logger.log(TAG, "isNetworkAvailable", "network type" + activeInfo.getTypeName(), AppConstant.LOG_LEVEL_INFO);
             isNetworkAvailable = true;
         }
 

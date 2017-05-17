@@ -13,7 +13,7 @@ public final class AppConstant {
     public static final String LOCAL_DB_NAME = "florist.db";
     public static final int DB_VERSION = 1;
 
-    public enum APP_MODE {DEVELOPMENT, TEST, PRODUCTION};
+    public enum APP_MODE {DEVELOPMENT, TEST, PRODUCTION}
 
     public static final int VERSION_CODE = BuildConfig.VERSION_CODE;
     public static final String VERSION_NAME = BuildConfig.VERSION_NAME;
@@ -31,5 +31,5 @@ public final class AppConstant {
     public static final String DB_DATE_FORMAT = "yyyy-MM-dd";
     public static final String SHORT_DATE_FORMAT = "dd-MMM";
 
-    public enum  LOGIN_TYPE{FACEBOOK, GOOGLE, INSTAGRAM, CUSTOM}
+    public enum LOGIN_TYPE {FACEBOOK, GOOGLE, INSTAGRAM, CUSTOM}
 }

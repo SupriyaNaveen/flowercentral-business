@@ -25,7 +25,6 @@ public class AsyncHttpClient {
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
 
-
     public static synchronized AsyncHttpClient getInstance(Context context) {
         if (mInstance == null) {
             mInstance = new AsyncHttpClient(context.getApplicationContext());
@@ -66,8 +65,7 @@ public class AsyncHttpClient {
 
     public void addToRequestQueue(Request request) {
         // sets the default tag if tag is empty
-        if(request.getTag()==null)
-        {
+        if (request.getTag() == null) {
             request.setTag(TAG);
         }
         getRequestQueue().add(request);
@@ -116,9 +114,6 @@ public class AsyncHttpClient {
         });
 
     }
-
-
-
 
 
 }
