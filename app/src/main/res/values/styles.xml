@@ -25,23 +25,26 @@
         <item name="android:background">@color/black_overlay</item>
     </style>
 
-
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
     <style name="AppTheme.Title" parent="AppTheme">
-        <item name="android:textAllCaps">true</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textAppearance">@android:style/TextAppearance.Large</item>
-        <item name="android:textColor">@color/colorPrimaryText</item>
-        <item name="android:paddingTop">@dimen/dp16</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:padding">5dp</item>
+    </style>
+
+    <style name="AppTheme.Label" parent="AppTheme">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:padding">5dp</item>
     </style>
 
     <style name="AppTheme.Normal" parent="AppTheme">
         <item name="android:textAppearance">@android:style/TextAppearance.Small</item>
         <item name="android:textColor">@color/colorSecondaryText</item>
-        <item name="android:paddingTop">@dimen/dp16</item>
+        <item name="android:padding">5dp</item>
     </style>
 
 </resources>

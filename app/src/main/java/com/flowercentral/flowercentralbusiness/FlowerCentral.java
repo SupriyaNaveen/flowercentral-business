@@ -18,14 +18,14 @@ import java.util.List;
 
 public class FlowerCentral extends Application {
 
-    private final static String TAG = FlowerCentral.class.getSimpleName ();
+    private final static String TAG = FlowerCentral.class.getSimpleName();
 
     private static Application mAppInstance;
     private Context mContext;
 
     @Override
-    public void onCreate () {
-        super.onCreate ();
+    public void onCreate() {
+        super.onCreate();
         mContext = this;
         mAppInstance = this;
 
@@ -35,18 +35,17 @@ public class FlowerCentral extends Application {
             Logger.print_log_to_file = true;
 
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                .detectDiskReads()
-                .detectDiskWrites()
-                .detectNetwork()
-                .penaltyLog()
-                .build());
+                    .detectDiskReads()
+                    .detectDiskWrites()
+                    .detectNetwork()
+                    .penaltyLog()
+                    .build());
             StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-                .detectLeakedSqlLiteObjects()
-                .detectLeakedClosableObjects()
-                .penaltyLog()
-                .build());
-        }else
-        {
+                    .detectLeakedSqlLiteObjects()
+                    .detectLeakedClosableObjects()
+                    .penaltyLog()
+                    .build());
+        } else {
 
             Logger.print_log_to_file = false;
             Logger.print_log_to_file = false;
@@ -57,8 +56,8 @@ public class FlowerCentral extends Application {
     }
 
     @Override
-    protected void attachBaseContext (Context base) {
-        super.attachBaseContext (base);
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
     }
 
     public static Application getInstance() {

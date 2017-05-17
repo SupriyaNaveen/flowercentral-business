@@ -4,12 +4,11 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.binarysoft.sociallogin.facebook.FacebookGraphListner;
@@ -27,7 +26,6 @@ import com.flowercentral.flowercentralbusiness.volley.ErrorData;
 
 import org.json.JSONObject;
 
-import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -42,22 +40,22 @@ public class LauncherActivity extends BaseActivity {
 
     private static final String TAG = LauncherActivity.class.getSimpleName();
 
-    @BindView(R.id.imageViewGoogle)
-    ImageView mImageViewGoogle;
+    @BindView(R.id.btn_google)
+    Button mButtonGoogle;
 
-    @BindView(R.id.imageViewFacebook)
-    ImageView mImageViewFacebook;
+    @BindView(R.id.btn_fb)
+    Button mButtonFacebook;
 
-    @BindView(R.id.imageViewInstagram)
-    ImageView mImageViewInstagram;
+    @BindView(R.id.btn_instagram)
+    Button mButtonInstagram;
 
-    @BindView(R.id.linearLayoutSocialLogin)
+    @BindView(R.id.wrapper_social_login)
     LinearLayout mLinearLayoutSocialLogin;
 
-    @BindView(R.id.frameLayoutNoInternet)
+    @BindView(R.id.fl_no_internet)
     FrameLayout mFrameLayoutNoInternet;
 
-    @BindView(R.id.frameLayoutRoot)
+    @BindView(R.id.outer_wrapper)
     FrameLayout mFrameLayoutRoot;
 
     private MaterialDialog mProgressDialog;
@@ -66,8 +64,8 @@ public class LauncherActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_launch);
-        ButterKnife.bind(LauncherActivity.this);
+        setContentView(R.layout.activity_launcher);
+        ButterKnife.bind(this);
 
         mContext = this;
         initializeActivity(mContext);
@@ -87,7 +85,7 @@ public class LauncherActivity extends BaseActivity {
         }
     }
 
-    @OnClick(R.id.imageViewGoogle)
+    @OnClick(R.id.btn_google)
     void registerThroughGoogle() {
         if (UserPreference.getAccessToken() != null) {
             UserPreference.deleteProfileInformation();
@@ -97,7 +95,7 @@ public class LauncherActivity extends BaseActivity {
         mGoogleHelper.performSignIn(this);
     }
 
-    @OnClick(R.id.imageViewFacebook)
+    @OnClick(R.id.btn_fb)
     void registerThroughFacebook() {
         if (UserPreference.getAccessToken() != null) {
             UserPreference.deleteProfileInformation();
@@ -107,7 +105,7 @@ public class LauncherActivity extends BaseActivity {
         mFacebookHelper.performSignIn(this);
     }
 
-    @OnClick(R.id.imageViewInstagram)
+    @OnClick(R.id.btn_instagram)
     void registerThroughInstagram() {
         if (UserPreference.getAccessToken() != null) {
             UserPreference.deleteProfileInformation();

@@ -1,0 +1,80 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/outer_wrapper"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_background"
+    tools:context="com.flowercentral.flowercentralbusiness.login.ui.LauncherActivity">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+    is needed to present your content, e.g. VideoView, SurfaceView,
+    TextureView, etc. -->
+
+    <LinearLayout
+        android:id="@+id/login_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".5"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/dp75">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_pinterest" />
+
+            <TextView
+                style="@style/AppTheme.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_app_name" />
+
+            <TextView
+                style="@style/AppTheme.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_app_tag" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".5"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/wrapper_social_login"
+                layout="@layout/layout_social_login" />
+
+            <include
+                android:id="@+id/wrapper_app_rgistration"
+                layout="@layout/layout_app_registration" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- This FrameLayout insets its children based on system windows using
+    android:fitsSystemWindows. -->
+    <FrameLayout
+        android:id="@+id/fl_no_internet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:visibility="gone">
+
+        <include layout="@layout/layout_no_internet" />
+
+    </FrameLayout>
+
+</FrameLayout>
