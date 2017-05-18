@@ -224,6 +224,9 @@ public class LauncherActivity extends BaseActivity {
                 //Close Progress dialog
                 dismissDialog();
 
+                //TODO Remove
+                mContext.startActivity(new Intent(LauncherActivity.this, DashboardActivity.class));
+
                 if (error != null) {
 
                     switch (error.getErrorType()) {

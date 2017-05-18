@@ -13,42 +13,49 @@
 
         <ImageView
             android:layout_width="0dp"
-            android:layout_weight="0.75"
             android:layout_height="match_parent"
+            android:layout_weight="0.75"
             android:src="@mipmap/ic_launcher_round" />
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1.25"
             android:layout_height="wrap_content"
+            android:layout_weight="1.25"
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/order_details"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="10 roses bunch XL+" />
+
             <TextView
+                android:id="@+id/order_price_details"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="INR 300" />
+
             <TextView
+                android:id="@+id/order_schedule"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Schedule 12th may 2017" />
         </LinearLayout>
 
         <Button
+            android:id="@+id/order_status"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Delivered"/>
+            android:text="Delivered" />
 
     </LinearLayout>
 
     <TextView
-        android:padding="16dp"
+        android:id="@+id/order_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="16dp"
         android:text="#9c 591 st main, 9th cross, Srinidhi Layout, Konanakunte, Bangalore" />
 
 </LinearLayout>
