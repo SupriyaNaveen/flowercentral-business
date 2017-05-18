@@ -105,6 +105,7 @@ public class CompletedOrder extends Fragment {
             public void onError(ErrorData error) {
                 hideRefreshLayout();
                 if (error != null) {
+                    mListEmptyMessageView.setVisibility(View.VISIBLE);
                     error.setErrorMessage("API call failed. Cause :: " + error.getErrorMessage());
                     switch (error.getErrorType()) {
                         case NETWORK_NOT_AVAILABLE:

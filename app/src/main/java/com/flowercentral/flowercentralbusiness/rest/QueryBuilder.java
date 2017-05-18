@@ -30,4 +30,11 @@ public class QueryBuilder {
         sb.append("patientApi/v1/getCompletedOrderList");
         return sb.toString();
     }
+
+    public static String getRegisterUrl() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(BuildConfig.SERVER);
+        sb.append("patientApi/v1/register");
+        return sb.toString();
+    }
 }

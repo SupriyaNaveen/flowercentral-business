@@ -117,6 +117,12 @@ public class PendingOrder extends Fragment {
             public void onError(ErrorData error) {
                 hideRefreshLayout();
                 if (error != null) {
+
+                    //TODO remove
+                    List<OrderItem> orderItemList = constructOrderItemList(null);
+                    updatePendingOrderViews(orderItemList);
+
+//                    mListEmptyMessageView.setVisibility(View.VISIBLE);
                     error.setErrorMessage("API call failed. Cause :: " + error.getErrorMessage());
                     switch (error.getErrorType()) {
                         case NETWORK_NOT_AVAILABLE:

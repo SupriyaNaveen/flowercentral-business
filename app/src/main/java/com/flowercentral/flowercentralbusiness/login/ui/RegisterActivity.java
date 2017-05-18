@@ -1,21 +1,19 @@
 package com.flowercentral.flowercentralbusiness.login.ui;
 
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.flowercentral.flowercentralbusiness.R;
-import com.flowercentral.flowercentralbusiness.dashboard.DashboardActivity;
-import com.flowercentral.flowercentralbusiness.preference.UserPreference;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
 import com.flowercentral.flowercentralbusiness.util.Util;
@@ -30,18 +28,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by admin on 16-05-2017.
+ * Created by admin on 18-05-2017.
  */
 
-public class LauncherActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
 
-    private static final String TAG = LauncherActivity.class.getSimpleName();
-
-    @BindView(R.id.btn_try_again)
-    Button mButtonTryAgain;
-
-    @BindView(R.id.login_wrapper)
-    LinearLayout mLinearLayoutLogin;
+    private String TAG = RegisterActivity.class.getSimpleName();
+    private Context mContext;
 
     @BindView(R.id.fl_no_internet)
     FrameLayout mFrameLayoutNoInternet;
@@ -49,27 +42,19 @@ public class LauncherActivity extends AppCompatActivity {
     @BindView(R.id.outer_wrapper)
     FrameLayout mFrameLayoutRoot;
 
+    @BindView(R.id.register_wrapper)
+    LinearLayout mLinearLayoutRegister;
+
+    @BindView(R.id.btn_register)
+    Button buttonRegister;
+
     private MaterialDialog mProgressDialog;
-
-    private Context mContext;
-
-    @BindView(R.id.textview_vendor_name)
-    TextView textViewVendorName;
-
-    @BindView(R.id.textview_password)
-    TextView textViewPassword;
-
-    @BindView(R.id.textview_forgot_password)
-    TextView textViewForgotPassword;
-
-    @BindView(R.id.txt_link_flower_central_account)
-    TextView textViewRegisterAccount;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_launcher);
+        setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
 
         mContext = this;
@@ -80,19 +65,16 @@ public class LauncherActivity extends AppCompatActivity {
         //Check internet connectivity
         if (Util.checkInternet(_context)) {
             mFrameLayoutNoInternet.setVisibility(View.GONE);
-            mLinearLayoutLogin.setVisibility(View.VISIBLE);
+            mLinearLayoutRegister.setVisibility(View.VISIBLE);
 
         } else {
             mFrameLayoutNoInternet.setVisibility(View.VISIBLE);
-            mLinearLayoutLogin.setVisibility(View.GONE);
+            mLinearLayoutRegister.setVisibility(View.GONE);
         }
     }
 
-    @OnClick(R.id.btn_login)
-    void loginSelected() {
-        if (UserPreference.getAccessToken() != null) {
-            UserPreference.deleteProfileInformation();
-        }
+    @OnClick(R.id.btn_register)
+    void registerSelected() {
 
         boolean isValidInput = isValidInput();
         if (isValidInput) {
@@ -102,44 +84,6 @@ public class LauncherActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isValidInput() {
-        boolean isValid = true;
-
-        if (textViewVendorName.getText().toString().isEmpty()) {
-            textViewVendorName.setError("Please enter vendor name.");
-            isValid = false;
-        } else {
-            textViewVendorName.setError(null);
-        }
-
-        if (textViewPassword.getText().toString().isEmpty()) {
-            textViewPassword.setError("Please enter password.");
-            isValid = false;
-        } else {
-            textViewPassword.setError(null);
-        }
-
-        return isValid;
-    }
-
-    @OnClick(R.id.textview_forgot_password)
-    void forgotPasswordSelected() {
-
-    }
-
-    @OnClick(R.id.txt_link_flower_central_account)
-    void registerAccountSelected() {
-        startActivity(new Intent(this, RegisterActivity.class));
-    }
-
-    @OnClick(R.id.btn_try_again)
-    void tryAgainToRegister() {
-        initializeActivity(mContext);
-    }
-
-    /**
-     * Register User using Social Login
-     */
     private void registerUser(Context _context, JSONObject _user) {
         //Start Progress dialog
         dismissDialog();
@@ -151,7 +95,7 @@ public class LauncherActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
                 //CLose Progress dialog
                 dismissDialog();
-                mContext.startActivity(new Intent(LauncherActivity.this, DashboardActivity.class));
+                showRegisterSuccessMessage();
             }
 
             @Override
@@ -160,7 +104,7 @@ public class LauncherActivity extends AppCompatActivity {
                 dismissDialog();
 
                 //TODO Remove
-                mContext.startActivity(new Intent(LauncherActivity.this, DashboardActivity.class));
+                showRegisterSuccessMessage();
 
                 if (error != null) {
 
@@ -191,12 +135,34 @@ public class LauncherActivity extends AppCompatActivity {
             }
         };
 
-        String url = QueryBuilder.getLoginUrl();
+        String url = QueryBuilder.getRegisterUrl();
         if (_user != null) {
             baseModel.executePostJsonRequest(url, _user, TAG);
         } else {
             Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();
         }
+    }
+
+    private void showRegisterSuccessMessage() {
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Thanks for registering. Your account is under verification. We will update you as when your account verified and then you can start using the app.");
+        alertDialogBuilder.setPositiveButton("Okay",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
+    private boolean isValidInput() {
+        boolean isValid = true;
+        //TODO field validation
+        return isValid;
     }
 
     public void dismissDialog() {
