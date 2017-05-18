@@ -28,5 +28,22 @@
     <string name="lbl_app_tag">Your one stop flower shop</string>
     <string name="lbl_or">Or Sign-In With</string>
     <string name="btn_try_again">Try Again</string>
+    <string name="title_activity_dashboard">Dashboard</string>
+
+    <!-- Navigation drawer -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_item_order">Orders</string>
+    <string name="nav_item_sales_dashboard">Sales Dashboard</string>
+    <string name="nav_item_profile">Profile</string>
+    <string name="nav_item_feedback">View Feedback</string>
+    <string name="nav_item_help">Help</string>
+    <string name="nav_item_logout">Logout</string>
+
+    <!-- Order fragment -->
+    <string name="title_pending_order">Pending Orders</string>
+    <string name="title_completed_order">Completed Orders</string>
+    <string name="empty_pending_order_items">No pending order items</string>
+    <string name="empty_completed_order_items">No completed order items</string>
 
 </resources>

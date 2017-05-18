@@ -1,13 +1,13 @@
 package com.flowercentral.flowercentralbusiness.login.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -17,6 +17,7 @@ import com.binarysoft.sociallogin.google.GoogleUser;
 import com.binarysoft.sociallogin.instagram.InstagramUser;
 import com.flowercentral.flowercentralbusiness.BaseActivity;
 import com.flowercentral.flowercentralbusiness.R;
+import com.flowercentral.flowercentralbusiness.dashboard.DashboardActivity;
 import com.flowercentral.flowercentralbusiness.preference.UserPreference;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
@@ -215,12 +216,14 @@ public class LauncherActivity extends BaseActivity {
             public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
                 //CLose Progress dialog
                 dismissDialog();
+                mContext.startActivity(new Intent(LauncherActivity.this, DashboardActivity.class));
             }
 
             @Override
             public void onError(ErrorData error) {
                 //Close Progress dialog
                 dismissDialog();
+
                 if (error != null) {
 
                     switch (error.getErrorType()) {

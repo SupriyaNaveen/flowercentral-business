@@ -1,0 +1,136 @@
+package com.flowercentral.flowercentralbusiness.dashboard;
+
+import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+
+import com.flowercentral.flowercentralbusiness.R;
+import com.flowercentral.flowercentralbusiness.order.OrderFragment;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+/**
+ * Created by admin on 17-05-2017.
+ */
+
+public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+
+    @BindView(R.id.drawer_layout)
+    DrawerLayout mDrawer;
+
+    private ActionBarDrawerToggle mToggle;
+
+    @BindView(R.id.nav_view_left)
+    NavigationView mNavigationViewLeft;
+
+    private ActionBar mActionBar;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_dashboard);
+
+        ButterKnife.bind(this);
+        setSupportActionBar(mToolbar);
+
+        if (mToolbar != null) {
+            setSupportActionBar(mToolbar);
+            mActionBar = getSupportActionBar();
+            if (mActionBar != null) {
+                mActionBar.setHomeButtonEnabled(true);
+                mActionBar.setTitle(getString(R.string.app_name));
+                mActionBar.setDisplayHomeAsUpEnabled(true);
+                mActionBar.setDisplayShowHomeEnabled(true);
+            }
+        }
+
+        mToggle = new ActionBarDrawerToggle(
+                this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.setDrawerListener(mToggle);
+        mToggle.syncState();
+
+        mNavigationViewLeft.setNavigationItemSelectedListener(this);
+
+        //Show the Order navigation option by default.
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.nav_content_wrapper, OrderFragment.newInstance()).commit();
+        mActionBar.setSubtitle(getString(R.string.nav_item_order));
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        switch (id) {
+            case R.id.nav_item_order:
+                transaction.replace(R.id.nav_content_wrapper, OrderFragment.newInstance()).commit();
+                mActionBar.setSubtitle(getString(R.string.nav_item_order));
+                break;
+
+            case R.id.nav_item_sales_dashboard:
+                //TODO add sales dashboard fragment
+                if (getSupportFragmentManager().findFragmentById(R.id.nav_content_wrapper) != null)
+                    transaction.remove(getSupportFragmentManager().findFragmentById(R.id.nav_content_wrapper)).commit();
+
+                mActionBar.setSubtitle(getString(R.string.nav_item_sales_dashboard));
+                break;
+
+            case R.id.nav_item_profile:
+                // TODO add profile fragment
+                if (getSupportFragmentManager().findFragmentById(R.id.nav_content_wrapper) != null)
+                    transaction.remove(getSupportFragmentManager().findFragmentById(R.id.nav_content_wrapper)).commit();
+
+                mActionBar.setSubtitle(getString(R.string.nav_item_profile));
+                break;
+
+            case R.id.nav_item_feedback:
+                //TODO add view feedback fragment
+                if (getSupportFragmentManager().findFragmentById(R.id.nav_content_wrapper) != null)
+                    transaction.remove(getSupportFragmentManager().findFragmentById(R.id.nav_content_wrapper)).commit();
+
+                mActionBar.setSubtitle(getString(R.string.nav_item_feedback));
+                break;
+
+            case R.id.nav_item_help:
+                //TODO add help fragment
+                if (getSupportFragmentManager().findFragmentById(R.id.nav_content_wrapper) != null)
+                    transaction.remove(getSupportFragmentManager().findFragmentById(R.id.nav_content_wrapper)).commit();
+
+                mActionBar.setSubtitle(getString(R.string.nav_item_help));
+                break;
+
+            case R.id.nav_item_logout:
+                if (getSupportFragmentManager().findFragmentById(R.id.nav_content_wrapper) != null)
+                    transaction.remove(getSupportFragmentManager().findFragmentById(R.id.nav_content_wrapper)).commit();
+
+                break;
+        }
+
+        mDrawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+}
