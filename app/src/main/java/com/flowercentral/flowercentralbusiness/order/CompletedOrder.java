@@ -12,10 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
+import com.flowercentral.flowercentralbusiness.util.Util;
 import com.flowercentral.flowercentralbusiness.volley.ErrorData;
 
 import org.json.JSONObject;
@@ -56,11 +58,22 @@ public class CompletedOrder extends Fragment {
     public CompletedOrder() {
     }
 
+    /**
+     * Instantiate completed order fragment.
+     *
+     * @return
+     */
     public static CompletedOrder newInstance() {
         CompletedOrder fragment = new CompletedOrder();
         return fragment;
     }
 
+    /**
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,8 +82,6 @@ public class CompletedOrder extends Fragment {
 
         mContext = getActivity();
 
-        // in content do not change the layout size of the RecyclerView
-        mOrderItemRecyclerView.setHasFixedSize(true);
         // use a linear layout manager
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mOrderItemRecyclerView.setLayoutManager(mLayoutManager);
@@ -86,13 +97,23 @@ public class CompletedOrder extends Fragment {
         return view;
     }
 
+    /**
+     * On swipe refresh the layout.
+     */
     private void refreshItems() {
         getCompletedOrderItems();
     }
+
     /**
      * Get the completed order list and present it on UI.
      */
     private void getCompletedOrderItems() {
+
+        //No internet connection then return
+        if (!Util.checkInternet(mContext)) {
+            Toast.makeText(mContext, getResources().getString(R.string.msg_internet_unavailable), Toast.LENGTH_LONG).show();
+            return;
+        }
 
         BaseModel<JSONObject> baseModel = new BaseModel<JSONObject>(mContext) {
             @Override
@@ -105,6 +126,7 @@ public class CompletedOrder extends Fragment {
             public void onError(ErrorData error) {
                 hideRefreshLayout();
                 if (error != null) {
+
                     mListEmptyMessageView.setVisibility(View.VISIBLE);
                     error.setErrorMessage("API call failed. Cause :: " + error.getErrorMessage());
                     switch (error.getErrorType()) {
@@ -138,6 +160,8 @@ public class CompletedOrder extends Fragment {
         };
 
         String url = QueryBuilder.getCompletedOrderListUrl();
+
+        //TODO construct input json
         JSONObject user = new JSONObject();
         if (user != null) {
             baseModel.executePostJsonRequest(url, user, TAG);
@@ -146,6 +170,10 @@ public class CompletedOrder extends Fragment {
         }
     }
 
+    /**
+     * @param response
+     * @return
+     */
     private List<OrderItem> constructOrderItemList(JSONObject response) {
         List<OrderItem> orderItemList = new ArrayList<>();
         //TODO construct list from json response
@@ -166,6 +194,11 @@ public class CompletedOrder extends Fragment {
         return orderItemList;
     }
 
+    /**
+     * Update view for ordered item list.
+     *
+     * @param orderItemList
+     */
     private void updateCompletedOrderViews(List<OrderItem> orderItemList) {
 
         hideRefreshLayout();
@@ -179,6 +212,9 @@ public class CompletedOrder extends Fragment {
         mOrderItemRecyclerView.setAdapter(adapter);
     }
 
+    /**
+     * Hide the refresh layout.
+     */
     private void hideRefreshLayout() {
         mSwipeRefreshLayout.setRefreshing(false);
     }

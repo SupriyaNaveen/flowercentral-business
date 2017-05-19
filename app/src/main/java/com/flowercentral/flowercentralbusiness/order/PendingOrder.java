@@ -12,10 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
+import com.flowercentral.flowercentralbusiness.util.Util;
 import com.flowercentral.flowercentralbusiness.volley.ErrorData;
 
 import org.json.JSONObject;
@@ -80,14 +82,13 @@ public class PendingOrder extends Fragment {
 
         mContext = getActivity();
 
-        // in content do not change the layout size of the RecyclerView
-        mOrderItemRecyclerView.setHasFixedSize(true);
-        // use a linear layout manager
+        // For recycler view use a linear layout manager
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mOrderItemRecyclerView.setLayoutManager(mLayoutManager);
 
         getPendingOrderItems();
 
+        //On swipe refresh the screen.
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -106,9 +107,17 @@ public class PendingOrder extends Fragment {
      */
     private void getPendingOrderItems() {
 
+        //No internet connection then return
+        if (!Util.checkInternet(mContext)) {
+            Toast.makeText(mContext, getResources().getString(R.string.msg_internet_unavailable), Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Make web api call to get the pending order item list.
         BaseModel<JSONObject> baseModel = new BaseModel<JSONObject>(mContext) {
             @Override
             public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
+                // Construct the order item list from web api response.
                 List<OrderItem> orderItemList = constructOrderItemList(response);
                 updatePendingOrderViews(orderItemList);
             }
@@ -117,13 +126,8 @@ public class PendingOrder extends Fragment {
             public void onError(ErrorData error) {
                 hideRefreshLayout();
                 if (error != null) {
-
-                    //TODO remove
-                    List<OrderItem> orderItemList = constructOrderItemList(null);
-                    updatePendingOrderViews(orderItemList);
-
-//                    mListEmptyMessageView.setVisibility(View.VISIBLE);
-                    error.setErrorMessage("API call failed. Cause :: " + error.getErrorMessage());
+                    mListEmptyMessageView.setVisibility(View.VISIBLE);
+                    error.setErrorMessage("Data fetch failed. Cause of fail : " + error.getErrorMessage());
                     switch (error.getErrorType()) {
                         case NETWORK_NOT_AVAILABLE:
                             Snackbar.make(rootLayout, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();
@@ -155,6 +159,8 @@ public class PendingOrder extends Fragment {
         };
 
         String url = QueryBuilder.getPendingOrderListUrl();
+
+        //TODO Construct input parameters
         JSONObject user = new JSONObject();
         if (user != null) {
             baseModel.executePostJsonRequest(url, user, TAG);
@@ -163,10 +169,14 @@ public class PendingOrder extends Fragment {
         }
     }
 
+    /**
+     * @param response
+     * @return
+     */
     private List<OrderItem> constructOrderItemList(JSONObject response) {
         List<OrderItem> orderItemList = new ArrayList<>();
         //TODO construct list from json response
-        //TODO remove
+        //TODO remove hardcode data
 
         // Check for internet connection, on no network  show message.
         OrderItem orderItem = new OrderItem();
@@ -183,6 +193,12 @@ public class PendingOrder extends Fragment {
         return orderItemList;
     }
 
+    /**
+     * Hide the swipe refresh layout.
+     * If the list is empty show empty view. Else show the recycler view.
+     *
+     * @param orderItemList
+     */
     private void updatePendingOrderViews(List<OrderItem> orderItemList) {
 
         hideRefreshLayout();
@@ -196,6 +212,9 @@ public class PendingOrder extends Fragment {
         mOrderItemRecyclerView.setAdapter(adapter);
     }
 
+    /**
+     * Hide the swipe refresh layout.
+     */
     private void hideRefreshLayout() {
         mSwipeRefreshLayout.setRefreshing(false);
     }

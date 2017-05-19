@@ -36,6 +36,9 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
     private ActionBar mActionBar;
 
+    /**
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +71,9 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         mActionBar.setSubtitle(getString(R.string.nav_item_order));
     }
 
+    /**
+     *
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -78,6 +84,10 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         }
     }
 
+    /**
+     * @param item
+     * @return
+     */
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
@@ -92,41 +102,27 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 break;
 
             case R.id.nav_item_sales_dashboard:
-                //TODO add sales dashboard fragment
-                if (getSupportFragmentManager().findFragmentById(R.id.nav_content_wrapper) != null)
-                    transaction.remove(getSupportFragmentManager().findFragmentById(R.id.nav_content_wrapper)).commit();
-
+                transaction.replace(R.id.nav_content_wrapper, SalesDashboardFragment.newInstance()).commit();
                 mActionBar.setSubtitle(getString(R.string.nav_item_sales_dashboard));
                 break;
 
             case R.id.nav_item_profile:
-                // TODO add profile fragment
-                if (getSupportFragmentManager().findFragmentById(R.id.nav_content_wrapper) != null)
-                    transaction.remove(getSupportFragmentManager().findFragmentById(R.id.nav_content_wrapper)).commit();
-
+                transaction.replace(R.id.nav_content_wrapper, ProfileFragment.newInstance()).commit();
                 mActionBar.setSubtitle(getString(R.string.nav_item_profile));
                 break;
 
             case R.id.nav_item_feedback:
-                //TODO add view feedback fragment
-                if (getSupportFragmentManager().findFragmentById(R.id.nav_content_wrapper) != null)
-                    transaction.remove(getSupportFragmentManager().findFragmentById(R.id.nav_content_wrapper)).commit();
-
+                transaction.replace(R.id.nav_content_wrapper, FeedbackFragment.newInstance()).commit();
                 mActionBar.setSubtitle(getString(R.string.nav_item_feedback));
                 break;
 
             case R.id.nav_item_help:
-                //TODO add help fragment
-                if (getSupportFragmentManager().findFragmentById(R.id.nav_content_wrapper) != null)
-                    transaction.remove(getSupportFragmentManager().findFragmentById(R.id.nav_content_wrapper)).commit();
-
+                transaction.replace(R.id.nav_content_wrapper, HelpFragment.newInstance()).commit();
                 mActionBar.setSubtitle(getString(R.string.nav_item_help));
                 break;
 
             case R.id.nav_item_logout:
-                if (getSupportFragmentManager().findFragmentById(R.id.nav_content_wrapper) != null)
-                    transaction.remove(getSupportFragmentManager().findFragmentById(R.id.nav_content_wrapper)).commit();
-
+                finish();
                 break;
         }
 

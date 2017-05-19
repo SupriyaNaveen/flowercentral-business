@@ -34,11 +34,24 @@ public class OrderFragment extends Fragment {
     public OrderFragment() {
     }
 
+    /**
+     * Instantiate the order fragment to hold pending order and completed order.
+     *
+     * @return
+     */
     public static OrderFragment newInstance() {
         OrderFragment fragment = new OrderFragment();
         return fragment;
     }
 
+    /**
+     * Set up view pager.
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -48,6 +61,9 @@ public class OrderFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Set up view pager for pending order and completed order list.
+     */
     private void setupViewPager() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
         adapter.addFragment(new PendingOrder(), getString(R.string.title_pending_order));
