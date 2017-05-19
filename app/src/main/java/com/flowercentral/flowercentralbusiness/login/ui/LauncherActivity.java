@@ -65,6 +65,9 @@ public class LauncherActivity extends AppCompatActivity {
     @BindView(R.id.txt_link_flower_central_account)
     TextView textViewRegisterAccount;
 
+    /**
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +79,11 @@ public class LauncherActivity extends AppCompatActivity {
         initializeActivity(mContext);
     }
 
+    /**
+     * Check for internet connection and update view accordingly.
+     *
+     * @param _context
+     */
     private void initializeActivity(Context _context) {
         //Check internet connectivity
         if (Util.checkInternet(_context)) {
@@ -88,6 +96,9 @@ public class LauncherActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Validate the input and make web api call.
+     */
     @OnClick(R.id.btn_login)
     void loginSelected() {
         if (UserPreference.getAccessToken() != null) {
@@ -102,6 +113,11 @@ public class LauncherActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Validator class
+     *
+     * @return
+     */
     private boolean isValidInput() {
         boolean isValid = true;
 
@@ -159,11 +175,8 @@ public class LauncherActivity extends AppCompatActivity {
                 //Close Progress dialog
                 dismissDialog();
 
-                //TODO Remove
-                mContext.startActivity(new Intent(LauncherActivity.this, DashboardActivity.class));
-
                 if (error != null) {
-
+                    error.setErrorMessage("Login failed. Cause -> " + error.getErrorMessage());
                     switch (error.getErrorType()) {
                         case NETWORK_NOT_AVAILABLE:
                             Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();
@@ -184,6 +197,9 @@ public class LauncherActivity extends AppCompatActivity {
                             Snackbar.make(mFrameLayoutRoot, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case UNAUTHORIZED_ERROR:
+                            Snackbar.make(mFrameLayoutRoot, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            break;
+                        default:
                             Snackbar.make(mFrameLayoutRoot, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                     }

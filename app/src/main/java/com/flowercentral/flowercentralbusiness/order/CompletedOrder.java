@@ -127,8 +127,10 @@ public class CompletedOrder extends Fragment {
                 hideRefreshLayout();
                 if (error != null) {
 
-                    mListEmptyMessageView.setVisibility(View.VISIBLE);
-                    error.setErrorMessage("API call failed. Cause :: " + error.getErrorMessage());
+                    List<OrderItem> orderItemList = new ArrayList<>();
+                    updateCompletedOrderViews(orderItemList);
+
+                    error.setErrorMessage("Data fetch failed. Cause -> " + error.getErrorMessage());
                     switch (error.getErrorType()) {
                         case NETWORK_NOT_AVAILABLE:
                             Snackbar.make(rootLayout, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();
@@ -152,6 +154,9 @@ public class CompletedOrder extends Fragment {
                             Snackbar.make(rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case SERVER_ERROR:
+                            Snackbar.make(rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            break;
+                        default:
                             Snackbar.make(rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                     }

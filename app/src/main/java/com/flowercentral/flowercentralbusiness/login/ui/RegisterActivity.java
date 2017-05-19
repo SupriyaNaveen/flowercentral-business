@@ -103,11 +103,8 @@ public class RegisterActivity extends AppCompatActivity {
                 //Close Progress dialog
                 dismissDialog();
 
-                //TODO Remove
-                showRegisterSuccessMessage();
-
                 if (error != null) {
-
+                    error.setErrorMessage("Register failed. Cause -> " + error.getErrorMessage());
                     switch (error.getErrorType()) {
                         case NETWORK_NOT_AVAILABLE:
                             Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();
@@ -130,6 +127,9 @@ public class RegisterActivity extends AppCompatActivity {
                         case UNAUTHORIZED_ERROR:
                             Snackbar.make(mFrameLayoutRoot, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
+                        default:
+                            Snackbar.make(mFrameLayoutRoot, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            break;
                     }
                 }
             }
@@ -146,7 +146,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void showRegisterSuccessMessage() {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Thanks for registering. Your account is under verification. We will update you as when your account verified and then you can start using the app.");
+        alertDialogBuilder.setMessage("Thanks for registering. Your account is under verification. We will update you as soon as when your account verified and then you can start using the app.");
         alertDialogBuilder.setPositiveButton("Okay",
                 new DialogInterface.OnClickListener() {
                     @Override
