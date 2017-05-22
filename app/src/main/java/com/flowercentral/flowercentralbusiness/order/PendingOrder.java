@@ -19,11 +19,12 @@ import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
 import com.flowercentral.flowercentralbusiness.util.Util;
 import com.flowercentral.flowercentralbusiness.volley.ErrorData;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONObject;
+import org.json.JSONArray;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -114,9 +115,9 @@ public class PendingOrder extends Fragment {
         }
 
         // Make web api call to get the pending order item list.
-        BaseModel<JSONObject> baseModel = new BaseModel<JSONObject>(mContext) {
+        BaseModel<JSONArray> baseModel = new BaseModel<JSONArray>(mContext) {
             @Override
-            public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
+            public void onSuccess(int statusCode, Map<String, String> headers, JSONArray response) {
                 // Construct the order item list from web api response.
                 List<OrderItem> orderItemList = constructOrderItemList(response);
                 updatePendingOrderViews(orderItemList);
@@ -165,37 +166,17 @@ public class PendingOrder extends Fragment {
         };
 
         String url = QueryBuilder.getPendingOrderListUrl();
-
-        //TODO Construct input parameters
-        JSONObject user = new JSONObject();
-        if (user != null) {
-            baseModel.executePostJsonRequest(url, user, TAG);
-        } else {
-            Snackbar.make(rootLayout, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();
-        }
+        baseModel.executeGetJsonArrayRequest(url, TAG);
     }
 
     /**
      * @param response
      * @return
      */
-    private List<OrderItem> constructOrderItemList(JSONObject response) {
-        List<OrderItem> orderItemList = new ArrayList<>();
-        //TODO construct list from json response
-        //TODO remove hardcode data
+    private List<OrderItem> constructOrderItemList(JSONArray response) {
 
-        // Check for internet connection, on no network  show message.
-        OrderItem orderItem = new OrderItem();
-        orderItem.setName("Rose bunch");
-        orderItem.setAddress("#9C, 59, 1st main, 9th cross, Srinidhi Layout, Konanakunte, Bangalore");
-        orderItem.setCategory(OrderItem.CATEGORY.S);
-        orderItem.setPaidStatus(OrderItem.PAID_STATUS.PAID);
-        orderItem.setPrice(100.0);
-        orderItem.setQuantity(10);
-        orderItem.setScheduleInMillis(Calendar.getInstance().getTimeInMillis());
-        orderItem.setDeliveryStatus(OrderItem.DELIVERY_STATUS.PENDING);
-        orderItemList.add(orderItem);
-        orderItemList.add(orderItem);
+        List<OrderItem> orderItemList = new Gson().<List<OrderItem>>fromJson(String.valueOf(response),
+                new TypeToken<List<OrderItem>>(){}.getType());
         return orderItemList;
     }
 
@@ -210,6 +191,7 @@ public class PendingOrder extends Fragment {
         hideRefreshLayout();
         if (null == orderItemList || orderItemList.isEmpty()) {
             mListEmptyMessageView.setVisibility(View.VISIBLE);
+            orderItemList = new ArrayList<>();
         } else {
             mListEmptyMessageView.setVisibility(View.GONE);
         }

@@ -177,6 +177,7 @@ public class LauncherActivity extends AppCompatActivity {
 
                 if (error != null) {
                     error.setErrorMessage("Login failed. Cause -> " + error.getErrorMessage());
+                    mContext.startActivity(new Intent(LauncherActivity.this, DashboardActivity.class));
                     switch (error.getErrorType()) {
                         case NETWORK_NOT_AVAILABLE:
                             Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();

@@ -19,11 +19,12 @@ import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
 import com.flowercentral.flowercentralbusiness.util.Util;
 import com.flowercentral.flowercentralbusiness.volley.ErrorData;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONObject;
+import org.json.JSONArray;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -115,9 +116,9 @@ public class CompletedOrder extends Fragment {
             return;
         }
 
-        BaseModel<JSONObject> baseModel = new BaseModel<JSONObject>(mContext) {
+        BaseModel<JSONArray> baseModel = new BaseModel<JSONArray>(mContext) {
             @Override
-            public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
+            public void onSuccess(int statusCode, Map<String, String> headers, JSONArray response) {
                 List<OrderItem> orderItemList = constructOrderItemList(response);
                 updateCompletedOrderViews(orderItemList);
             }
@@ -165,37 +166,16 @@ public class CompletedOrder extends Fragment {
         };
 
         String url = QueryBuilder.getCompletedOrderListUrl();
-
-        //TODO construct input json
-        JSONObject user = new JSONObject();
-        if (user != null) {
-            baseModel.executePostJsonRequest(url, user, TAG);
-        } else {
-            Snackbar.make(rootLayout, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();
-        }
+        baseModel.executeGetJsonArrayRequest(url, TAG);
     }
 
     /**
      * @param response
      * @return
      */
-    private List<OrderItem> constructOrderItemList(JSONObject response) {
-        List<OrderItem> orderItemList = new ArrayList<>();
-        //TODO construct list from json response
-        //TODO remove
-
-        // Check for internet connection, on no network  show message.
-        OrderItem orderItem = new OrderItem();
-        orderItem.setName("Rose bunch");
-        orderItem.setAddress("#9C, 59, 1st main, 9th cross, Srinidhi Layout, Konanakunte, Bangalore");
-        orderItem.setCategory(OrderItem.CATEGORY.XLL);
-        orderItem.setPaidStatus(OrderItem.PAID_STATUS.PENDING);
-        orderItem.setPrice(100.0);
-        orderItem.setQuantity(10);
-        orderItem.setScheduleInMillis(Calendar.getInstance().getTimeInMillis());
-        orderItem.setDeliveryStatus(OrderItem.DELIVERY_STATUS.DELIVERED);
-        orderItemList.add(orderItem);
-        orderItemList.add(orderItem);
+    private List<OrderItem> constructOrderItemList(JSONArray response) {
+        List<OrderItem> orderItemList = new Gson().<List<OrderItem>>fromJson(String.valueOf(response),
+                new TypeToken<List<OrderItem>>(){}.getType());
         return orderItemList;
     }
 
@@ -209,6 +189,7 @@ public class CompletedOrder extends Fragment {
         hideRefreshLayout();
         if (null == orderItemList || orderItemList.isEmpty()) {
             mListEmptyMessageView.setVisibility(View.VISIBLE);
+            orderItemList = new ArrayList<>();
         } else {
             mListEmptyMessageView.setVisibility(View.GONE);
         }

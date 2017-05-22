@@ -9,8 +9,6 @@ import android.widget.TextView;
 
 import com.flowercentral.flowercentralbusiness.R;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -49,11 +47,11 @@ class PendingOrderAdapter extends RecyclerView.Adapter<PendingOrderAdapter.ViewH
                 + " "
                 + orderItemList.get(position).getPaidStatus());
 
-        SimpleDateFormat formatter = new SimpleDateFormat("dd EEE yyyy, hh:mm a");
-        Calendar calendarInstance = Calendar.getInstance();
-        calendarInstance.setTimeInMillis(orderItemList.get(position).getScheduleInMillis());
+//        SimpleDateFormat formatter = new SimpleDateFormat("dd EEE yyyy, hh:mm a");
+//        Calendar calendarInstance = Calendar.getInstance();
+//        calendarInstance.setTimeInMillis(orderItemList.get(position).getScheduleInMillis());
 
-        holder.textViewOrderSchedule.setText(formatter.format(calendarInstance.getTime()));
+        holder.textViewOrderSchedule.setText(orderItemList.get(position).getScheduleDateTime());
 
         holder.textViewOrderAddress.setText(orderItemList.get(position).getAddress());
 

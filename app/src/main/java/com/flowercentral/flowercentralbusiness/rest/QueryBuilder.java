@@ -20,14 +20,14 @@ public class QueryBuilder {
     public static String getPendingOrderListUrl() {
         StringBuilder sb = new StringBuilder();
         sb.append(BuildConfig.SERVER);
-        sb.append("patientApi/v1/getPendingOrderList");
+        sb.append("pending");
         return sb.toString();
     }
 
     public static String getCompletedOrderListUrl() {
         StringBuilder sb = new StringBuilder();
         sb.append(BuildConfig.SERVER);
-        sb.append("patientApi/v1/getCompletedOrderList");
+        sb.append("delivered");
         return sb.toString();
     }
 
