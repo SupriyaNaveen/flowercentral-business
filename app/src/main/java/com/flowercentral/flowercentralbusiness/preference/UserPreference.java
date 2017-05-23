@@ -15,8 +15,18 @@ public class UserPreference extends PreferenceActivity {
     private final String TAG = UserPreference.class.getSimpleName();
     private static Context mContext;
 
-    private final static String API_TOKEN_KEY = "api_token_key";
+    private final static String API_TOKEN = "api_token";
+
+    public static String getApiToken() {
+        return API_TOKEN;
+    }
+
     private final static String LOGIN_ACCESS_TOKEN = "login_access_token";
+    private final static String VENDOR_LOGIN_STATUS = "vendor_login_status";
+    private final static String VENDOR_LOGIN_MESSAGE = "vendor_login_message";
+    private final static String VENDOR_SHOP_NAME = "vendor_shop_name";
+    private final static String VENDOR_SHOP_ADDRESS = "vendor_shop_address";
+    private final static String VENDOR_SHOP_EMAIL = "vendor_shop_email";
 
     @Override
     public void onCreate(Bundle _savedInstanceState) {
@@ -101,23 +111,83 @@ public class UserPreference extends PreferenceActivity {
         editor.commit();
     }
 
-    public static void setApiToken(String _token) {
-        writeString(mContext, API_TOKEN_KEY, _token);
-    }
-
-    public static String getApiToken() {
-        return readString(mContext, API_TOKEN_KEY, null);
+    public static String getAccessToken() {
+        return readString(mContext, LOGIN_ACCESS_TOKEN, null);
     }
 
     public static void setAccessToken(String _token) {
         writeString(mContext, LOGIN_ACCESS_TOKEN, _token);
     }
 
-    public static String getAccessToken() {
-        return readString(mContext, LOGIN_ACCESS_TOKEN, null);
+    public static String getVendorShopName() {
+        return readString(mContext, VENDOR_SHOP_NAME, null);
+    }
+
+    public static void setVendorShopName(String _token) {
+        writeString(mContext, VENDOR_SHOP_NAME, _token);
+    }
+
+    public static String getVendorShopEmail() {
+        return readString(mContext, VENDOR_SHOP_EMAIL, null);
+    }
+
+    public static void setVendorShopEmail(String _token) {
+        writeString(mContext, VENDOR_SHOP_EMAIL, _token);
+    }
+
+    public static String getVendorShopAddress() {
+        return readString(mContext, VENDOR_SHOP_ADDRESS, null);
+    }
+
+    public static void setVendorShopAddress(String _token) {
+        writeString(mContext, VENDOR_SHOP_ADDRESS, _token);
+    }
+
+    public static String getVendorLoginStatus() {
+        return VENDOR_LOGIN_STATUS;
+    }
+
+    public static void setVendorLoginStatus(String _token) {
+        writeString(mContext, VENDOR_LOGIN_STATUS, _token);
+    }
+
+    public static String getVendorLoginMessage() {
+        return VENDOR_LOGIN_MESSAGE;
+    }
+
+    public static void setVendorLoginMessage(String _token) {
+        writeString(mContext, VENDOR_LOGIN_MESSAGE, _token);
+    }
+
+    public static Vendor getProfileInformation() {
+        Vendor vendor = new Vendor();
+        vendor.setAccessToken(readString(mContext, LOGIN_ACCESS_TOKEN, null));
+        vendor.setStatus(readString(mContext, VENDOR_LOGIN_STATUS, null));
+        vendor.setMessage(readString(mContext, VENDOR_LOGIN_MESSAGE, null));
+        VendorDetails vendorDetails = new VendorDetails();
+        vendorDetails.setVendorEmail(readString(mContext, VENDOR_SHOP_EMAIL, null));
+        vendorDetails.setVendorAddress(readString(mContext, VENDOR_SHOP_ADDRESS, null));
+        vendorDetails.setVendorShopName(readString(mContext, VENDOR_SHOP_NAME, null));
+        vendor.setVendorDetails(vendorDetails);
+
+        return vendor;
+    }
+
+    public static void setProfileInformation(Vendor vendor) {
+        setAccessToken(vendor.getAccessToken());
+        setVendorShopName(vendor.getVendorDetails().getVendorShopName());
+        setVendorShopAddress(vendor.getVendorDetails().getVendorAddress());
+        setVendorShopEmail(vendor.getVendorDetails().getVendorEmail());
+        setVendorLoginStatus(vendor.getStatus());
+        setVendorLoginMessage(vendor.getMessage());
     }
 
     public static void deleteProfileInformation() {
         setAccessToken(null);
+        setVendorShopName(null);
+        setVendorShopAddress(null);
+        setVendorShopEmail(null);
+        setVendorLoginStatus(null);
+        setVendorLoginMessage(null);
     }
 }

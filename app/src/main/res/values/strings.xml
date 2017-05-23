@@ -13,6 +13,7 @@
     <string name="msg_internet_unavailable">Please check your Wifi or Internet Data and Try Again!</string>
     <string name="msg_logout_success">You have been Successfully logged out.</string>
     <string name="msg_registering_user">Processing...</string>
+    <string name="msg_is_loggd_in_user">Logging in!!!</string>
     <string name="msg_reg_user_missing_input">Required parameters are missing. Please check and try again!</string>
 
     <!-- Login Page -->

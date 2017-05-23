@@ -16,11 +16,15 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.dashboard.DashboardActivity;
 import com.flowercentral.flowercentralbusiness.preference.UserPreference;
+import com.flowercentral.flowercentralbusiness.preference.Vendor;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
 import com.flowercentral.flowercentralbusiness.util.Util;
 import com.flowercentral.flowercentralbusiness.volley.ErrorData;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
@@ -72,11 +76,19 @@ public class LauncherActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_launcher);
-        ButterKnife.bind(this);
-
         mContext = this;
-        initializeActivity(mContext);
+        if (UserPreference.getAccessToken() != null) {
+            Intent intent = new Intent(LauncherActivity.this, DashboardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(intent);
+            finish();
+            overridePendingTransition(0,0);
+        } else {
+            setContentView(R.layout.activity_launcher);
+            ButterKnife.bind(this);
+            initializeActivity(mContext);
+        }
+
     }
 
     /**
@@ -107,9 +119,14 @@ public class LauncherActivity extends AppCompatActivity {
 
         boolean isValidInput = isValidInput();
         if (isValidInput) {
-            JSONObject user = new JSONObject();
-            // TODO construct json object for login
-            registerUser(mContext, user);
+            try {
+                JSONObject user = new JSONObject();
+                user.put("username", textViewVendorName.getText());
+                user.put("password", textViewPassword.getText());
+                registerUser(mContext, user);
+            } catch (JSONException e) {
+                Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -154,7 +171,7 @@ public class LauncherActivity extends AppCompatActivity {
     }
 
     /**
-     * Register User using Social Login
+     * Register VendorDetails using Social Login
      */
     private void registerUser(Context _context, JSONObject _user) {
         //Start Progress dialog
@@ -165,9 +182,14 @@ public class LauncherActivity extends AppCompatActivity {
         BaseModel<JSONObject> baseModel = new BaseModel<JSONObject>(_context) {
             @Override
             public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
+                Vendor vendor = new Gson().<Vendor>fromJson(String.valueOf(response),
+                        new TypeToken<Vendor>() {
+                        }.getType());
+                UserPreference.setProfileInformation(vendor);
                 //CLose Progress dialog
                 dismissDialog();
                 mContext.startActivity(new Intent(LauncherActivity.this, DashboardActivity.class));
+                finish();
             }
 
             @Override
@@ -177,7 +199,7 @@ public class LauncherActivity extends AppCompatActivity {
 
                 if (error != null) {
                     error.setErrorMessage("Login failed. Cause -> " + error.getErrorMessage());
-                    mContext.startActivity(new Intent(LauncherActivity.this, DashboardActivity.class));
+
                     switch (error.getErrorType()) {
                         case NETWORK_NOT_AVAILABLE:
                             Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();

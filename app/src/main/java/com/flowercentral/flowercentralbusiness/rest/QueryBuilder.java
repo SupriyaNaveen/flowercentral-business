@@ -13,7 +13,7 @@ public class QueryBuilder {
     public static String getLoginUrl() {
         StringBuilder sb = new StringBuilder();
         sb.append(BuildConfig.SERVER);
-        sb.append("patientApi/v1/login");
+        sb.append("login");
         return sb.toString();
     }
 
@@ -34,7 +34,7 @@ public class QueryBuilder {
     public static String getRegisterUrl() {
         StringBuilder sb = new StringBuilder();
         sb.append(BuildConfig.SERVER);
-        sb.append("patientApi/v1/register");
+        sb.append("register");
         return sb.toString();
     }
 }
