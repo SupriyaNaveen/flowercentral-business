@@ -155,10 +155,20 @@ public class OrderItem implements Parcelable {
     }
 
     enum PAID_STATUS {
-        @SerializedName("")
-        PENDING,
-        @SerializedName("paid")
-        PAID
+        @SerializedName("1")
+        PENDING("Cash On Delivery"),
+        @SerializedName("0")
+        PAID("Paid Delivery");
+
+        PAID_STATUS(String s) {
+            this.paidStatus = s;
+        }
+
+        String paidStatus;
+
+        public String value() {
+            return paidStatus;
+        }
     }
 
     enum DELIVERY_STATUS {

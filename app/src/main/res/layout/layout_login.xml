@@ -16,6 +16,8 @@
             android:id="@+id/textview_vendor_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_person_outline_white_24dp"
+            android:drawablePadding="@dimen/dp10"
             android:imeOptions="actionNext"
             android:maxLines="1"
             android:singleLine="true" />
@@ -31,6 +33,8 @@
             android:id="@+id/textview_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_person_outline_white_24dp"
+            android:drawablePadding="@dimen/dp10"
             android:imeOptions="actionDone"
             android:inputType="textPassword"
             android:maxLines="1"
@@ -38,19 +42,21 @@
 
     </android.support.design.widget.TextInputLayout>
 
-    <TextView
-        android:id="@+id/textview_forgot_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp16"
-        android:gravity="right"
-        android:text="@string/lbl_forgot_password" />
-
     <Button
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp16"
+        android:layout_marginTop="@dimen/dp32"
+        android:background="@drawable/rounded_corner_border"
         android:text="@string/lbl_login" />
+
+    <TextView
+        android:id="@+id/textview_forgot_password"
+        style="@style/AppTheme.Label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp16"
+        android:gravity="center"
+        android:text="@string/lbl_forgot_password" />
 
 </LinearLayout>
