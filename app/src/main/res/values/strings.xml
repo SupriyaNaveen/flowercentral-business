@@ -24,6 +24,7 @@
     <string name="lbl_or">Or Sign-In With</string>
     <string name="btn_try_again">Try Again</string>
     <string name="lbl_vendor_name">Vendor Name</string>
+    <string name="lbl_vendor_tin">TIN</string>
     <string name="lbl_password">Password</string>
     <string name="lbl_login">LOGIN</string>
     <string name="lbl_forgot_password"><u>Forgot Password?</u></string>

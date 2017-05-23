@@ -28,6 +28,25 @@
                     android:id="@+id/textview_vendor_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_person_outline_white_24dp"
+                    android:drawablePadding="@dimen/dp10"
+                    android:imeOptions="actionNext"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/lbl_vendor_tin">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/textview_tin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_person_outline_white_24dp"
+                    android:drawablePadding="@dimen/dp10"
                     android:imeOptions="actionNext"
                     android:maxLines="1"
                     android:singleLine="true" />
@@ -43,6 +62,8 @@
                     android:id="@+id/textview_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_location_white_24dp"
+                    android:drawablePadding="@dimen/dp10"
                     android:imeOptions="actionNext"
                     android:maxLines="1"
                     android:singleLine="true" />
@@ -58,6 +79,8 @@
                     android:id="@+id/textview_city"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_person_outline_white_24dp"
+                    android:drawablePadding="@dimen/dp10"
                     android:imeOptions="actionNext"
                     android:maxLines="1"
                     android:singleLine="true" />
@@ -73,6 +96,7 @@
                     android:id="@+id/textview_state"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp32"
                     android:imeOptions="actionNext"
                     android:maxLines="1"
                     android:singleLine="true" />
@@ -88,6 +112,7 @@
                     android:id="@+id/textview_zip"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp32"
                     android:imeOptions="actionNext"
                     android:maxLines="1"
                     android:singleLine="true" />
@@ -103,6 +128,8 @@
                     android:id="@+id/textview_phone1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_phone_white_24dp"
+                    android:drawablePadding="@dimen/dp10"
                     android:imeOptions="actionNext"
                     android:maxLines="1"
                     android:singleLine="true" />
@@ -118,11 +145,54 @@
                     android:id="@+id/textview_phone2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp32"
                     android:imeOptions="actionNext"
                     android:maxLines="1"
                     android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp16"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableTop="@drawable/ic_cloud_upload_white_24dp"
+                        android:gravity="center"
+                        android:text="Verification Doc" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableTop="@drawable/ic_cloud_upload_white_24dp"
+                            android:gravity="center"
+                            android:text="Shop Picture" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

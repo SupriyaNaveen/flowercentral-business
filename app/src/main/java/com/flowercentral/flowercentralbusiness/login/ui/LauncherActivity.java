@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -58,10 +59,10 @@ public class LauncherActivity extends AppCompatActivity {
     private Context mContext;
 
     @BindView(R.id.textview_vendor_name)
-    TextView textViewVendorName;
+    TextInputEditText textViewVendorName;
 
     @BindView(R.id.textview_password)
-    TextView textViewPassword;
+    TextInputEditText textViewPassword;
 
     @BindView(R.id.textview_forgot_password)
     TextView textViewForgotPassword;

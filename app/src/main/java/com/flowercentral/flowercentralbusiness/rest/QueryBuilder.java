@@ -34,7 +34,7 @@ public class QueryBuilder {
     public static String getRegisterUrl() {
         StringBuilder sb = new StringBuilder();
         sb.append(BuildConfig.SERVER);
-        sb.append("register");
+        sb.append("registration");
         return sb.toString();
     }
 }

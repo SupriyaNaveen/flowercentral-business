@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
 import com.flowercentral.flowercentralbusiness.util.Util;
 import com.flowercentral.flowercentralbusiness.volley.ErrorData;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
@@ -50,6 +52,30 @@ public class RegisterActivity extends AppCompatActivity {
 
     private MaterialDialog mProgressDialog;
 
+    @BindView(R.id.textview_vendor_name)
+    TextInputEditText editTextShopName;
+
+    @BindView(R.id.textview_address)
+    TextInputEditText editTextAddress;
+
+    @BindView(R.id.textview_state)
+    TextInputEditText editTextState;
+
+    @BindView(R.id.textview_city)
+    TextInputEditText editTextCity;
+
+    @BindView(R.id.textview_zip)
+    TextInputEditText editTextZip;
+
+    @BindView(R.id.textview_phone1)
+    TextInputEditText editTextPhone1;
+
+    @BindView(R.id.textview_phone2)
+    TextInputEditText editTextPhone2;
+
+    @BindView(R.id.textview_tin)
+    TextInputEditText editTextTIN;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,9 +104,39 @@ public class RegisterActivity extends AppCompatActivity {
 
         boolean isValidInput = isValidInput();
         if (isValidInput) {
-            JSONObject user = new JSONObject();
-            // TODO construct json object for login
-            registerUser(mContext, user);
+            try {
+                JSONObject register = new JSONObject();
+                if (editTextShopName.getText().length() > 0) {
+                    register.put("shop_name", editTextShopName.getText());
+                }
+                if (editTextAddress.getText().length() > 0) {
+                    register.put("add1", editTextAddress.getText());
+                }
+
+                if (editTextCity.getText().length() > 0) {
+                    register.put("city", editTextCity.getText());
+                }
+                if (editTextState.getText().length() > 0) {
+                    register.put("state", editTextState.getText());
+                }
+                if (editTextZip.getText().length() > 0) {
+                    register.put("pin", editTextZip.getText());
+                }
+
+                if (editTextPhone1.getText().length() > 0) {
+                    register.put("phone1", editTextPhone1.getText());
+                }
+                if (editTextPhone2.getText().length() > 0) {
+                    register.put("phone2", editTextPhone2.getText());
+                }
+                if (editTextTIN.getText().length() > 0) {
+                    register.put("tin", editTextTIN.getText());
+                }
+                registerUser(mContext, register);
+            } catch (JSONException e) {
+
+                Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -95,7 +151,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
                 //CLose Progress dialog
                 dismissDialog();
-                showRegisterSuccessMessage();
+                showRegisterSuccessMessage(response);
             }
 
             @Override
@@ -143,25 +199,40 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private void showRegisterSuccessMessage() {
+    private void showRegisterSuccessMessage(final JSONObject response) {
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Thanks for registering. Your account is under verification. We will update you as soon as when your account verified and then you can start using the app.");
-        alertDialogBuilder.setPositiveButton("Okay",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.setCanceledOnTouchOutside(false);
-        alertDialog.show();
+        try {
+            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setMessage(response.getString("message"));
+            alertDialogBuilder.setPositiveButton("Okay",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                if (response.getString("status").equals("success")) {
+                                    finish();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+            final AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.setCanceledOnTouchOutside(false);
+            alertDialog.show();
+        } catch (JSONException e) {
+            Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     private boolean isValidInput() {
         boolean isValid = true;
-        //TODO field validation
+        if (editTextShopName.getText().toString().isEmpty()) {
+            editTextShopName.setError("Please enter vendor name.");
+            isValid = false;
+        } else {
+            editTextShopName.setError(null);
+        }
         return isValid;
     }
 
