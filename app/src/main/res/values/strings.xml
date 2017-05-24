@@ -62,5 +62,16 @@
     <string name="lbl_status_pending">Pending</string>
     <string name="lbl_status_delivered">Delivered</string>
     <string name="btn_view_on_map">VIEW ON MAP</string>
+    <string name="key_latitude">latitude</string>
+    <string name="key_longitude">longitude</string>
+    <string name="key_address">address</string>
+
+
+    <string name="google_api_key">AIzaSyD-dCHMqIc7cAC2vz8dQfNjOW6HaFeZl3U</string>
+    <string name="s_required_permission_location">Grant permission to access location</string>
+    <string name="s_action_request_again">Request</string>
+    <string name="s_required_permission_settings">Grant permission in setting.</string>
+    <string name="s_action_redirect_settings">Settings</string>
+    <string name="s_required_permission_read_storage">Grant permission to read storage.</string>
 
 </resources>

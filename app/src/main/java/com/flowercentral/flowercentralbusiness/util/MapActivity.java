@@ -1,0 +1,163 @@
+package com.flowercentral.flowercentralbusiness.util;
+
+import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.view.View;
+import android.widget.RelativeLayout;
+
+import com.flowercentral.flowercentralbusiness.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class MapActivity extends Activity implements OnMapReadyCallback {
+
+    private static final int REQ_CODE_ACCESS_FINE_LOCATION = 100;
+    private static final String permission = Manifest.permission.ACCESS_FINE_LOCATION;
+    private GoogleMap mGoogleMap;
+    private double mLatitude;
+    private double mLongitude;
+    private String mAddress;
+
+    @BindView(R.id.root_layout)
+    RelativeLayout relativeLayoutRoot;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.map_activity);
+
+        ButterKnife.bind(this);
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+        try {
+            mLatitude = Double.parseDouble(getIntent().getStringExtra(getString(R.string.key_latitude)));
+            mLongitude = Double.parseDouble(getIntent().getStringExtra(getString(R.string.key_longitude)));
+            mAddress = getIntent().getStringExtra(getString(R.string.key_address));
+        } catch (NumberFormatException e) {
+
+        }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        mGoogleMap = map;
+        requestPermission();
+    }
+
+    /**
+     * Request for the runtime permission (SDK >= Marshmallow devices)
+     */
+    private void requestPermission() {
+        if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
+            setMap();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{permission}, REQ_CODE_ACCESS_FINE_LOCATION);
+        }
+    }
+
+    private void setMap() {
+        try {
+            mGoogleMap.setMyLocationEnabled(true);
+        } catch (SecurityException e) {
+
+        }
+        LatLng location = new LatLng(mLongitude, mLatitude);
+
+        Geocoder geocoder = new Geocoder(MapActivity.this, Locale.getDefault());
+        List<Address> addresses = null;
+        String cityName = mAddress;
+        try {
+            addresses = geocoder.getFromLocation(mLongitude, mLatitude, 1);
+            cityName = addresses.get(0).getAddressLine(0);
+        } catch (IOException e) {
+        } catch (IndexOutOfBoundsException e) {
+        }
+
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16));
+
+        mGoogleMap.addMarker(new MarkerOptions()
+                .title(cityName).visible(true)
+                .position(location)).showInfoWindow();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case REQ_CODE_ACCESS_FINE_LOCATION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    setMap();
+                } else {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+                        snackBarRequestPermission();
+                    } else {
+                        snackBarRedirectToSettings();
+                    }
+                }
+                break;
+        }
+    }
+
+    /**
+     * Displays the snack bar to request the permission from user
+     */
+    private void snackBarRequestPermission() {
+        Snackbar snackbar = Snackbar.make(relativeLayoutRoot, getResources().getString(R.string
+                .s_required_permission_location), Snackbar.LENGTH_INDEFINITE).setAction(getResources().getString(R.string
+                .s_action_request_again), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestPermission();
+            }
+        });
+        snackbar.show();
+    }
+
+    /**
+     * If the user checked "Never ask again" option and deny the permission then request dialog
+     * cannot be invoked. So display SnackBar to redirect to Settings to grant the permissions
+     */
+    private void snackBarRedirectToSettings() {
+        Snackbar snackbar = Snackbar.make(relativeLayoutRoot, getResources()
+                .getString(R.string.s_required_permission_settings), Snackbar.LENGTH_INDEFINITE)
+                .setAction(getResources().getString(R.string.s_action_redirect_settings), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Navigate to app details settings
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getPackageName(), null);
+                        intent.setData(uri);
+                        startActivityForResult(intent, REQ_CODE_ACCESS_FINE_LOCATION);
+                    }
+                });
+        snackbar.show();
+    }
+}
+
+

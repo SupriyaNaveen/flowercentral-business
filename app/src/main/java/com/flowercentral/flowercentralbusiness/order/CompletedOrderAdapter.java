@@ -1,6 +1,7 @@
 package com.flowercentral.flowercentralbusiness.order;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.util.CircularTextView;
+import com.flowercentral.flowercentralbusiness.util.MapActivity;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -72,6 +74,17 @@ public class CompletedOrderAdapter extends RecyclerView.Adapter<CompletedOrderAd
                 into(holder.orderItemImage);
 
         holder.circularTextViewCategory.setText(String.valueOf(orderItemList.get(position).getCategory()));
+
+        holder.relativeLayoutMaps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mapIntent = new Intent(context, MapActivity.class);
+                mapIntent.putExtra(context.getString(R.string.key_latitude), orderItemList.get(position).getLatitude());
+                mapIntent.putExtra(context.getString(R.string.key_longitude), orderItemList.get(position).getLongitude());
+                mapIntent.putExtra(context.getString(R.string.key_address), orderItemList.get(position).getAddress());
+                context.startActivity(mapIntent);
+            }
+        });
     }
 
     @Override
@@ -110,6 +123,9 @@ public class CompletedOrderAdapter extends RecyclerView.Adapter<CompletedOrderAd
 
         @BindView(R.id.order_quantity)
         TextView textViewOrderQuantity;
+
+        @BindView(R.id.order_map_details)
+        RelativeLayout relativeLayoutMaps;
 
         public ViewHolder(View view) {
             super(view);

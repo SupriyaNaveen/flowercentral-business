@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:name="com.flowercentral.flowercentralbusiness.FlowerCentral"
@@ -26,32 +27,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity-->
-        <!--android:name="com.facebook.CustomTabActivity"-->
-        <!--android:exported="true">-->
-        <!--<intent-filter>-->
-        <!--<action android:name="android.intent.action.VIEW" />-->
 
-        <!--<category android:name="android.intent.category.DEFAULT" />-->
-        <!--<category android:name="android.intent.category.BROWSABLE" />-->
-
-        <!--<data android:scheme="@string/facebook_app_id" />-->
-        <!--</intent-filter>-->
-        <!--</activity>-->
-
-        <!--&lt;!&ndash;Meta data for facebook &ndash;&gt;-->
-        <!--<meta-data-->
-        <!--android:name="com.facebook.sdk.ApplicationId"-->
-        <!--android:value="@string/facebook_app_id" />-->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_api_key" />
 
         <activity
-            android:name=".dashboard.DashboardActivity"
+            android:name="com.flowercentral.flowercentralbusiness.dashboard.DashboardActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.Base"></activity>
+            android:theme="@style/AppTheme.Base"/>
 
         <activity
-            android:name=".login.ui.RegisterActivity"
+            android:name="com.flowercentral.flowercentralbusiness.login.ui.RegisterActivity"
             android:theme="@style/AppTheme" />
+
+        <activity android:name=".util.MapActivity"/>
     </application>
 
 </manifest>

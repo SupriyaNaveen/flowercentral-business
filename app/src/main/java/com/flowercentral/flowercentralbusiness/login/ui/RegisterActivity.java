@@ -1,17 +1,27 @@
 package com.flowercentral.flowercentralbusiness.login.ui;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.flowercentral.flowercentralbusiness.R;
@@ -23,6 +33,7 @@ import com.flowercentral.flowercentralbusiness.volley.ErrorData;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -35,8 +46,16 @@ import butterknife.OnClick;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    private static final int REQ_CODE_READ_STORAGE = 100;
+    private static final String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
     private String TAG = RegisterActivity.class.getSimpleName();
+    private static final int TYPE_DOC_UPLOAD = 1;
+    private static final int TYPE_PICTURES_UPLOAD = 2;
+    private static int currentUploadType;
     private Context mContext;
+
+    private ArrayList<String> docPathList = new ArrayList<>();
+    private ArrayList<String> picPathList = new ArrayList<>();
 
     @BindView(R.id.fl_no_internet)
     FrameLayout mFrameLayoutNoInternet;
@@ -75,6 +94,12 @@ public class RegisterActivity extends AppCompatActivity {
 
     @BindView(R.id.textview_tin)
     TextInputEditText editTextTIN;
+
+    @BindView(R.id.textView_doc_upload)
+    TextView textViewDocUpload;
+
+    @BindView(R.id.image_view_locate)
+    ImageView imageViewLocate;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -244,6 +269,127 @@ public class RegisterActivity extends AppCompatActivity {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @OnClick(R.id.textView_doc_upload)
+    void uploadDocuments() {
+        currentUploadType = TYPE_DOC_UPLOAD;
+        requestPermission();
+    }
+
+    private void browseDocuments() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("file/*");
+        startActivityForResult(intent, TYPE_DOC_UPLOAD);
+    }
+
+    @OnClick(R.id.text_view_picture_upload)
+    void uploadPictures() {
+        currentUploadType = TYPE_PICTURES_UPLOAD;
+        requestPermission();
+    }
+
+    private void browsePictures() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(intent, TYPE_PICTURES_UPLOAD);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        switch (resultCode) {
+            case TYPE_DOC_UPLOAD:
+                docPathList.add(Util.getPath(this, data.getData()));
+                break;
+            case TYPE_PICTURES_UPLOAD:
+                picPathList.add(Util.getPath(this, data.getData()));
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    /**
+     * Request for the runtime permission (SDK >= Marshmallow devices)
+     */
+    private void requestPermission() {
+        if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
+
+            if (currentUploadType == TYPE_DOC_UPLOAD) {
+                browseDocuments();
+            } else {
+                browsePictures();
+            }
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{permission}, REQ_CODE_READ_STORAGE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case REQ_CODE_READ_STORAGE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (currentUploadType == TYPE_DOC_UPLOAD) {
+                        browseDocuments();
+                    } else {
+                        browsePictures();
+                    }
+                } else {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+                        snackBarRequestPermission();
+                    } else {
+                        snackBarRedirectToSettings();
+                    }
+                }
+                break;
+        }
+    }
+
+    /**
+     * Displays the snack bar to request the permission from user
+     */
+    private void snackBarRequestPermission() {
+        Snackbar snackbar = Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string
+                .s_required_permission_read_storage), Snackbar.LENGTH_INDEFINITE).setAction(getResources().getString(R.string
+                .s_action_request_again), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestPermission();
+            }
+        });
+        snackbar.show();
+    }
+
+    /**
+     * If the user checked "Never ask again" option and deny the permission then request dialog
+     * cannot be invoked. So display SnackBar to redirect to Settings to grant the permissions
+     */
+    private void snackBarRedirectToSettings() {
+        Snackbar snackbar = Snackbar.make(mFrameLayoutRoot, getResources()
+                .getString(R.string.s_required_permission_settings), Snackbar.LENGTH_INDEFINITE)
+                .setAction(getResources().getString(R.string.s_action_redirect_settings), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Navigate to app details settings
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getPackageName(), null);
+                        intent.setData(uri);
+                        startActivityForResult(intent, REQ_CODE_READ_STORAGE);
+                    }
+                });
+        snackbar.show();
+    }
+
+    @OnClick(R.id.image_view_locate)
+    void locateAddressSelected() {
+        if (editTextAddress.getText().length() > 0) {
+
+        } else {
+
         }
     }
 }
