@@ -18,7 +18,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -28,6 +31,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.flowercentral.flowercentralbusiness.R;
+import com.flowercentral.flowercentralbusiness.login.ui.adapter.UploadListAdapter;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
 import com.flowercentral.flowercentralbusiness.util.MapActivity;
@@ -60,9 +64,6 @@ public class RegisterActivity extends AppCompatActivity {
     private static final int TYPE_PICTURES_UPLOAD = 2;
     private static int currentUploadType;
     private Context mContext;
-
-    private ArrayList<String> docPathList = new ArrayList<>();
-    private ArrayList<String> picPathList = new ArrayList<>();
 
     @BindView(R.id.fl_no_internet)
     FrameLayout mFrameLayoutNoInternet;
@@ -108,8 +109,16 @@ public class RegisterActivity extends AppCompatActivity {
     @BindView(R.id.image_view_locate)
     ImageView imageViewLocate;
 
+    @BindView(R.id.list_view_doc)
+    RecyclerView listViewDoc;
+
+    @BindView(R.id.list_view_picture)
+    RecyclerView listViewImage;
+
     private double mLongitude;
     private double mLatitude;
+    private ArrayList<Uri> docPathList = new ArrayList<>();
+    private ArrayList<Uri> imagePathList = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -120,6 +129,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         mContext = this;
         initializeActivity(mContext);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     private void initializeActivity(Context _context) {
@@ -127,6 +137,13 @@ public class RegisterActivity extends AppCompatActivity {
         if (Util.checkInternet(_context)) {
             mFrameLayoutNoInternet.setVisibility(View.GONE);
             mLinearLayoutRegister.setVisibility(View.VISIBLE);
+
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+            listViewDoc.setLayoutManager(mLayoutManager);
+            mLayoutManager = new LinearLayoutManager(this);
+            listViewImage.setLayoutManager(mLayoutManager);
+            listViewDoc.setAdapter(new UploadListAdapter(this, docPathList));
+            listViewImage.setAdapter(new UploadListAdapter(this, imagePathList));
 
         } else {
             mFrameLayoutNoInternet.setVisibility(View.VISIBLE);
@@ -314,12 +331,19 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        UploadListAdapter listAdapter;
         switch (requestCode) {
             case TYPE_DOC_UPLOAD:
-                docPathList.add(Util.getPath(this, data.getData()));
+                if(data != null) {
+                    docPathList.add(data.getData());
+                    listViewDoc.setAdapter(new UploadListAdapter(this, docPathList));
+                }
                 break;
             case TYPE_PICTURES_UPLOAD:
-                picPathList.add(Util.getPath(this, data.getData()));
+                if(data != null) {
+                    imagePathList.add(data.getData());
+                    listViewImage.setAdapter(new UploadListAdapter(this, imagePathList));
+                }
                 break;
             case TYPE_MAP:
                 mLatitude = data.getDoubleExtra(getString(R.string.key_latitude), 0.0);

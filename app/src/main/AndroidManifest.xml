@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name="com.flowercentral.flowercentralbusiness.FlowerCentral"
@@ -35,13 +35,15 @@
         <activity
             android:name="com.flowercentral.flowercentralbusiness.dashboard.DashboardActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.Base"/>
+            android:theme="@style/AppTheme.Base" />
 
         <activity
             android:name="com.flowercentral.flowercentralbusiness.login.ui.RegisterActivity"
-            android:theme="@style/AppTheme" />
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullscreenTheme" />
 
-        <activity android:name=".util.MapActivity"/>
+        <activity android:name=".util.MapActivity" />
     </application>
 
 </manifest>

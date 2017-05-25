@@ -187,12 +187,12 @@
                         android:layout_height="wrap_content"
                         android:drawableTop="@drawable/ic_cloud_upload_white_24dp"
                         android:gravity="center"
-                        android:text="Verification Doc" />
+                        android:text="Verification Doc"/>
 
-                    <ListView
+                    <android.support.v7.widget.RecyclerView
                         android:id="@+id/list_view_doc"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="match_parent" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -212,12 +212,12 @@
                             android:layout_height="wrap_content"
                             android:drawableTop="@drawable/ic_cloud_upload_white_24dp"
                             android:gravity="center"
-                            android:text="Shop Picture" />
+                            android:text="Shop Picture"/>
 
-                        <ListView
+                        <android.support.v7.widget.RecyclerView
                             android:id="@+id/list_view_picture"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="match_parent" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
