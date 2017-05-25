@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "664133550762",
+    "firebase_url": "https://flowercentral-buisness.firebaseio.com",
+    "project_id": "flowercentral-buisness",
+    "storage_bucket": "flowercentral-buisness.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664133550762:android:7c3d5ba4b1345fda",
+        "android_client_info": {
+          "package_name": "com.flowercentral.flowercentralbusiness"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "664133550762-fhi35tp8l707u9bcmaosidreg5j3vkhc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCw728HNYd8DDi5UYtTP_lpzAgn9NzRWQ4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "664133550762-fhi35tp8l707u9bcmaosidreg5j3vkhc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -30,7 +30,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_api_key" />
+            android:value="AIzaSyCw728HNYd8DDi5UYtTP_lpzAgn9NzRWQ4" />
 
         <activity
             android:name="com.flowercentral.flowercentralbusiness.dashboard.DashboardActivity"
@@ -44,6 +44,23 @@
             android:theme="@style/FullscreenTheme" />
 
         <activity android:name=".util.MapActivity" />
+
+        <service
+            android:name=".notification.NotificationFireBaseMessagingService"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service android:name=".notification.NotificationInstanceIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity android:name=".notification.NotificationOverlay"/>
     </application>
 
 </manifest>
