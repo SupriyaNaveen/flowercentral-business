@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -22,18 +24,22 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
+import com.flowercentral.flowercentralbusiness.util.MapActivity;
 import com.flowercentral.flowercentralbusiness.util.Util;
 import com.flowercentral.flowercentralbusiness.volley.ErrorData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -48,6 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private static final int REQ_CODE_READ_STORAGE = 100;
     private static final String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
+    private static final int TYPE_MAP = 3;
     private String TAG = RegisterActivity.class.getSimpleName();
     private static final int TYPE_DOC_UPLOAD = 1;
     private static final int TYPE_PICTURES_UPLOAD = 2;
@@ -101,6 +108,9 @@ public class RegisterActivity extends AppCompatActivity {
     @BindView(R.id.image_view_locate)
     ImageView imageViewLocate;
 
+    private double mLongitude;
+    private double mLatitude;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,6 +146,11 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 if (editTextAddress.getText().length() > 0) {
                     register.put("add1", editTextAddress.getText());
+                    if (mLatitude == 0 || mLongitude == 0) {
+                        isLocated(editTextAddress.getText().toString());
+                    }
+                    register.put("latitude", mLatitude);
+                    register.put("longitude", mLongitude);
                 }
 
                 if (editTextCity.getText().length() > 0) {
@@ -299,12 +314,16 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        switch (resultCode) {
+        switch (requestCode) {
             case TYPE_DOC_UPLOAD:
                 docPathList.add(Util.getPath(this, data.getData()));
                 break;
             case TYPE_PICTURES_UPLOAD:
                 picPathList.add(Util.getPath(this, data.getData()));
+                break;
+            case TYPE_MAP:
+                mLatitude = data.getDoubleExtra(getString(R.string.key_latitude), 0.0);
+                mLongitude = data.getDoubleExtra(getString(R.string.key_longitude), 0.0);
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -387,9 +406,38 @@ public class RegisterActivity extends AppCompatActivity {
     @OnClick(R.id.image_view_locate)
     void locateAddressSelected() {
         if (editTextAddress.getText().length() > 0) {
-
+            if (isLocated(editTextAddress.getText().toString())) {
+                Intent mapIntent = new Intent(this, MapActivity.class);
+                mapIntent.putExtra(getString(R.string.key_latitude), mLatitude);
+                mapIntent.putExtra(getString(R.string.key_longitude), mLongitude);
+                mapIntent.putExtra(getString(R.string.key_address), editTextAddress.getText());
+                mapIntent.putExtra(getString(R.string.key_is_draggable), true);
+                startActivityForResult(mapIntent, TYPE_MAP);
+            }
         } else {
-
+            Toast.makeText(this, "Please enter address to locate on map.", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private boolean isLocated(String strAddress) {
+
+        Geocoder coder = new Geocoder(this);
+        List<Address> address;
+
+        try {
+            address = coder.getFromLocationName(strAddress, 5);
+            if (address == null) {
+                Toast.makeText(this, "Unable to locate the address.", Toast.LENGTH_LONG).show();
+                return false;
+            }
+
+            Address location = address.get(0);
+            mLongitude = location.getLongitude();
+            mLatitude = location.getLatitude();
+            return true;
+        } catch (IOException e) {
+            Toast.makeText(this, "Unable to locate the address.", Toast.LENGTH_LONG).show();
+        }
+        return false;
     }
 }

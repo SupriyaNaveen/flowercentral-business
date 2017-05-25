@@ -77,11 +77,16 @@ class PendingOrderAdapter extends RecyclerView.Adapter<PendingOrderAdapter.ViewH
         holder.relativeLayoutMaps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mapIntent = new Intent(context, MapActivity.class);
-                mapIntent.putExtra(context.getString(R.string.key_latitude), orderItemList.get(position).getLatitude());
-                mapIntent.putExtra(context.getString(R.string.key_longitude), orderItemList.get(position).getLongitude());
-                mapIntent.putExtra(context.getString(R.string.key_address), orderItemList.get(position).getAddress());
-                context.startActivity(mapIntent);
+                try {
+                    Intent mapIntent = new Intent(context, MapActivity.class);
+                    mapIntent.putExtra(context.getString(R.string.key_latitude), Double.parseDouble(orderItemList.get(position).getLatitude()));
+                    mapIntent.putExtra(context.getString(R.string.key_longitude), Double.parseDouble(orderItemList.get(position).getLongitude()));
+                    mapIntent.putExtra(context.getString(R.string.key_address), orderItemList.get(position).getAddress());
+                    mapIntent.putExtra(context.getString(R.string.key_is_draggable), false);
+                    context.startActivity(mapIntent);
+                }catch (NumberFormatException e) {
+
+                }
             }
         });
     }

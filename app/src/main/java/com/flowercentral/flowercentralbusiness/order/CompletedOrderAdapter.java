@@ -58,14 +58,14 @@ public class CompletedOrderAdapter extends RecyclerView.Adapter<CompletedOrderAd
         Date date = null;
         try {
             date = formatSrc.parse(orderItemList.get(position).getScheduleDateTime());
-            holder.textViewOrderSchedule.setText( context.getString(R.string.order_lbl_schedule, formatDest.format(date)));
+            holder.textViewOrderSchedule.setText(context.getString(R.string.order_lbl_schedule, formatDest.format(date)));
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
         holder.textViewOrderAddress.setText(context.getString(R.string.order_lbl_address, orderItemList.get(position).getAddress()));
 
-        holder.buttonDeliveryStatus.setBackgroundColor(ContextCompat.getColor(context,R.color.colorGreen));
+        holder.buttonDeliveryStatus.setBackgroundColor(ContextCompat.getColor(context, R.color.colorGreen));
         holder.textViewDeliveryStatus.setText(String.valueOf(orderItemList.get(position).getDeliveryStatus()));
 
         Picasso.
@@ -78,11 +78,16 @@ public class CompletedOrderAdapter extends RecyclerView.Adapter<CompletedOrderAd
         holder.relativeLayoutMaps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mapIntent = new Intent(context, MapActivity.class);
-                mapIntent.putExtra(context.getString(R.string.key_latitude), orderItemList.get(position).getLatitude());
-                mapIntent.putExtra(context.getString(R.string.key_longitude), orderItemList.get(position).getLongitude());
-                mapIntent.putExtra(context.getString(R.string.key_address), orderItemList.get(position).getAddress());
-                context.startActivity(mapIntent);
+                try {
+                    Intent mapIntent = new Intent(context, MapActivity.class);
+                    mapIntent.putExtra(context.getString(R.string.key_latitude), Double.parseDouble(orderItemList.get(position).getLatitude()));
+                    mapIntent.putExtra(context.getString(R.string.key_longitude), Double.parseDouble(orderItemList.get(position).getLongitude()));
+                    mapIntent.putExtra(context.getString(R.string.key_address), orderItemList.get(position).getAddress());
+                    mapIntent.putExtra(context.getString(R.string.key_is_draggable), false);
+                    context.startActivity(mapIntent);
+                } catch (NumberFormatException e) {
+
+                }
             }
         });
     }

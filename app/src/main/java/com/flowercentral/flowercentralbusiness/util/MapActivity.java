@@ -22,6 +22,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
@@ -35,10 +36,12 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
 
     private static final int REQ_CODE_ACCESS_FINE_LOCATION = 100;
     private static final String permission = Manifest.permission.ACCESS_FINE_LOCATION;
+
     private GoogleMap mGoogleMap;
     private double mLatitude;
     private double mLongitude;
     private String mAddress;
+    private boolean mIsDraggable;
 
     @BindView(R.id.root_layout)
     RelativeLayout relativeLayoutRoot;
@@ -54,13 +57,10 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        try {
-            mLatitude = Double.parseDouble(getIntent().getStringExtra(getString(R.string.key_latitude)));
-            mLongitude = Double.parseDouble(getIntent().getStringExtra(getString(R.string.key_longitude)));
-            mAddress = getIntent().getStringExtra(getString(R.string.key_address));
-        } catch (NumberFormatException e) {
-
-        }
+        mLatitude = getIntent().getDoubleExtra(getString(R.string.key_latitude), 0.0);
+        mLongitude = getIntent().getDoubleExtra(getString(R.string.key_longitude), 0.0);
+        mAddress = getIntent().getStringExtra(getString(R.string.key_address));
+        mIsDraggable = getIntent().getBooleanExtra(getString(R.string.key_is_draggable), false);
     }
 
     @Override
@@ -86,23 +86,53 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
         } catch (SecurityException e) {
 
         }
-        LatLng location = new LatLng(mLongitude, mLatitude);
+        LatLng location = new LatLng(mLatitude, mLongitude);
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16));
 
+        if (mIsDraggable) {
+            mGoogleMap.addMarker(new MarkerOptions()
+                    .title(getCityName()).visible(true)
+                    .draggable(true)
+                    .position(location)).showInfoWindow();
+        } else {
+            mGoogleMap.addMarker(new MarkerOptions()
+                    .title(getCityName()).visible(true)
+                    .position(location)).showInfoWindow();
+        }
+
+        mGoogleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+            @Override
+            public void onMarkerDragStart(Marker marker) {
+
+            }
+
+            @Override
+            public void onMarkerDrag(Marker marker) {
+
+            }
+
+            @Override
+            public void onMarkerDragEnd(Marker marker) {
+                LatLng location = marker.getPosition();
+                mLatitude = location.latitude;
+                mLongitude = location.longitude;
+                marker.setTitle(getCityName());
+                marker.showInfoWindow();
+            }
+        });
+    }
+
+    private String getCityName() {
         Geocoder geocoder = new Geocoder(MapActivity.this, Locale.getDefault());
         List<Address> addresses = null;
         String cityName = mAddress;
         try {
-            addresses = geocoder.getFromLocation(mLongitude, mLatitude, 1);
+            addresses = geocoder.getFromLocation(mLatitude, mLongitude, 1);
             cityName = addresses.get(0).getAddressLine(0);
         } catch (IOException e) {
         } catch (IndexOutOfBoundsException e) {
         }
-
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16));
-
-        mGoogleMap.addMarker(new MarkerOptions()
-                .title(cityName).visible(true)
-                .position(location)).showInfoWindow();
+        return cityName;
     }
 
     @Override
@@ -157,6 +187,17 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
                     }
                 });
         snackbar.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getCallingActivity() != null) {
+            Intent data = new Intent();
+            data.putExtra(getString(R.string.key_latitude), mLatitude);
+            data.putExtra(getString(R.string.key_longitude), mLongitude);
+            setResult(RESULT_OK, data);
+        }
+        super.onBackPressed();
     }
 }
 

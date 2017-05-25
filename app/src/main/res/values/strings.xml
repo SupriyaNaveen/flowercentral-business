@@ -65,7 +65,7 @@
     <string name="key_latitude">latitude</string>
     <string name="key_longitude">longitude</string>
     <string name="key_address">address</string>
-
+    <string name="key_is_draggable">isDraggable</string>
 
     <string name="google_api_key">AIzaSyD-dCHMqIc7cAC2vz8dQfNjOW6HaFeZl3U</string>
     <string name="s_required_permission_location">Grant permission to access location</string>
