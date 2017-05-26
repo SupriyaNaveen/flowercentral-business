@@ -1,9 +1,12 @@
-package com.flowercentral.flowercentralbusiness.order;
+package com.flowercentral.flowercentralbusiness.order.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by admin on 17-05-2017.
@@ -49,6 +52,12 @@ public class OrderItem implements Parcelable {
 
     @SerializedName("delivered_at")
     String deliveredSchedule;
+
+    String placedSchedule;
+
+    String scheduleState;
+
+    List<ProductItem> productItemList = new ArrayList<>();
 
     /**
      * Standard basic constructor for non-parcel
@@ -154,7 +163,7 @@ public class OrderItem implements Parcelable {
         XXL
     }
 
-    enum PAID_STATUS {
+    public enum PAID_STATUS {
         @SerializedName("1")
         PENDING("Cash On Delivery"),
         @SerializedName("0")
@@ -280,6 +289,30 @@ public class OrderItem implements Parcelable {
 
     public void setDeliveredSchedule(String deliveredSchedule) {
         this.deliveredSchedule = deliveredSchedule;
+    }
+
+    public String getPlacedSchedule() {
+        return placedSchedule;
+    }
+
+    public void setPlacedSchedule(String placedSchedule) {
+        this.placedSchedule = placedSchedule;
+    }
+
+    public String getScheduleState() {
+        return scheduleState;
+    }
+
+    public void setScheduleState(String scheduleState) {
+        this.scheduleState = scheduleState;
+    }
+
+    public List<ProductItem> getProductItemList() {
+        return productItemList;
+    }
+
+    public void setProductItemList(List<ProductItem> productItemList) {
+        this.productItemList = productItemList;
     }
 
     public static Creator getCREATOR() {

@@ -1,4 +1,4 @@
-package com.flowercentral.flowercentralbusiness.preference;
+package com.flowercentral.flowercentralbusiness.login.ui.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

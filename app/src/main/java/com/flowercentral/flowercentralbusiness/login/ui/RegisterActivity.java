@@ -24,7 +24,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,7 +61,8 @@ public class RegisterActivity extends AppCompatActivity {
     private String TAG = RegisterActivity.class.getSimpleName();
     private static final int TYPE_DOC_UPLOAD = 1;
     private static final int TYPE_PICTURES_UPLOAD = 2;
-    private static int currentUploadType;
+
+    private static int mCurrentUploadType;
     private Context mContext;
 
     @BindView(R.id.fl_no_internet)
@@ -75,50 +75,50 @@ public class RegisterActivity extends AppCompatActivity {
     LinearLayout mLinearLayoutRegister;
 
     @BindView(R.id.btn_register)
-    Button buttonRegister;
+    Button mButtonRegister;
 
     private MaterialDialog mProgressDialog;
 
     @BindView(R.id.textview_vendor_name)
-    TextInputEditText editTextShopName;
+    TextInputEditText mEditTextShopName;
 
     @BindView(R.id.textview_address)
-    TextInputEditText editTextAddress;
+    TextInputEditText mEditTextAddress;
 
     @BindView(R.id.textview_state)
-    TextInputEditText editTextState;
+    TextInputEditText mEditTextState;
 
     @BindView(R.id.textview_city)
-    TextInputEditText editTextCity;
+    TextInputEditText mEditTextCity;
 
     @BindView(R.id.textview_zip)
-    TextInputEditText editTextZip;
+    TextInputEditText mEditTextZip;
 
     @BindView(R.id.textview_phone1)
-    TextInputEditText editTextPhone1;
+    TextInputEditText mEditTextPhone1;
 
     @BindView(R.id.textview_phone2)
-    TextInputEditText editTextPhone2;
+    TextInputEditText mEditTextPhone2;
 
     @BindView(R.id.textview_tin)
-    TextInputEditText editTextTIN;
+    TextInputEditText mEditTextTIN;
 
     @BindView(R.id.textView_doc_upload)
-    TextView textViewDocUpload;
+    TextView mTextViewDocUpload;
 
-    @BindView(R.id.image_view_locate)
-    ImageView imageViewLocate;
+    @BindView(R.id.text_view_locate)
+    TextView mTextViewLocate;
 
     @BindView(R.id.list_view_doc)
-    RecyclerView listViewDoc;
+    RecyclerView mListViewDoc;
 
     @BindView(R.id.list_view_picture)
-    RecyclerView listViewImage;
+    RecyclerView mListViewImage;
 
     private double mLongitude;
     private double mLatitude;
-    private ArrayList<Uri> docPathList = new ArrayList<>();
-    private ArrayList<Uri> imagePathList = new ArrayList<>();
+    private ArrayList<Uri> mDocPathList = new ArrayList<>();
+    private ArrayList<Uri> mImagePathList = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -139,11 +139,11 @@ public class RegisterActivity extends AppCompatActivity {
             mLinearLayoutRegister.setVisibility(View.VISIBLE);
 
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-            listViewDoc.setLayoutManager(mLayoutManager);
+            mListViewDoc.setLayoutManager(mLayoutManager);
             mLayoutManager = new LinearLayoutManager(this);
-            listViewImage.setLayoutManager(mLayoutManager);
-            listViewDoc.setAdapter(new UploadListAdapter(this, docPathList));
-            listViewImage.setAdapter(new UploadListAdapter(this, imagePathList));
+            mListViewImage.setLayoutManager(mLayoutManager);
+            mListViewDoc.setAdapter(new UploadListAdapter(this, mDocPathList));
+            mListViewImage.setAdapter(new UploadListAdapter(this, mImagePathList));
 
         } else {
             mFrameLayoutNoInternet.setVisibility(View.VISIBLE);
@@ -158,36 +158,36 @@ public class RegisterActivity extends AppCompatActivity {
         if (isValidInput) {
             try {
                 JSONObject register = new JSONObject();
-                if (editTextShopName.getText().length() > 0) {
-                    register.put("shop_name", editTextShopName.getText());
+                if (mEditTextShopName.getText().length() > 0) {
+                    register.put("shop_name", mEditTextShopName.getText());
                 }
-                if (editTextAddress.getText().length() > 0) {
-                    register.put("add1", editTextAddress.getText());
+                if (mEditTextAddress.getText().length() > 0) {
+                    register.put("add1", mEditTextAddress.getText());
                     if (mLatitude == 0 || mLongitude == 0) {
-                        isLocated(editTextAddress.getText().toString());
+                        isLocated(mEditTextAddress.getText().toString());
                     }
                     register.put("latitude", mLatitude);
                     register.put("longitude", mLongitude);
                 }
 
-                if (editTextCity.getText().length() > 0) {
-                    register.put("city", editTextCity.getText());
+                if (mEditTextCity.getText().length() > 0) {
+                    register.put("city", mEditTextCity.getText());
                 }
-                if (editTextState.getText().length() > 0) {
-                    register.put("state", editTextState.getText());
+                if (mEditTextState.getText().length() > 0) {
+                    register.put("state", mEditTextState.getText());
                 }
-                if (editTextZip.getText().length() > 0) {
-                    register.put("pin", editTextZip.getText());
+                if (mEditTextZip.getText().length() > 0) {
+                    register.put("pin", mEditTextZip.getText());
                 }
 
-                if (editTextPhone1.getText().length() > 0) {
-                    register.put("phone1", editTextPhone1.getText());
+                if (mEditTextPhone1.getText().length() > 0) {
+                    register.put("phone1", mEditTextPhone1.getText());
                 }
-                if (editTextPhone2.getText().length() > 0) {
-                    register.put("phone2", editTextPhone2.getText());
+                if (mEditTextPhone2.getText().length() > 0) {
+                    register.put("phone2", mEditTextPhone2.getText());
                 }
-                if (editTextTIN.getText().length() > 0) {
-                    register.put("tin", editTextTIN.getText());
+                if (mEditTextTIN.getText().length() > 0) {
+                    register.put("tin", mEditTextTIN.getText());
                 }
                 registerUser(mContext, register);
             } catch (JSONException e) {
@@ -284,11 +284,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     private boolean isValidInput() {
         boolean isValid = true;
-        if (editTextShopName.getText().toString().isEmpty()) {
-            editTextShopName.setError("Please enter vendor name.");
+        if (mEditTextShopName.getText().toString().isEmpty()) {
+            mEditTextShopName.setError("Please enter vendor name.");
             isValid = false;
         } else {
-            editTextShopName.setError(null);
+            mEditTextShopName.setError(null);
         }
         return isValid;
     }
@@ -306,7 +306,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     @OnClick(R.id.textView_doc_upload)
     void uploadDocuments() {
-        currentUploadType = TYPE_DOC_UPLOAD;
+        mCurrentUploadType = TYPE_DOC_UPLOAD;
         requestPermission();
     }
 
@@ -318,7 +318,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     @OnClick(R.id.text_view_picture_upload)
     void uploadPictures() {
-        currentUploadType = TYPE_PICTURES_UPLOAD;
+        mCurrentUploadType = TYPE_PICTURES_UPLOAD;
         requestPermission();
     }
 
@@ -335,14 +335,14 @@ public class RegisterActivity extends AppCompatActivity {
         switch (requestCode) {
             case TYPE_DOC_UPLOAD:
                 if(data != null) {
-                    docPathList.add(data.getData());
-                    listViewDoc.setAdapter(new UploadListAdapter(this, docPathList));
+                    mDocPathList.add(data.getData());
+                    mListViewDoc.setAdapter(new UploadListAdapter(this, mDocPathList));
                 }
                 break;
             case TYPE_PICTURES_UPLOAD:
                 if(data != null) {
-                    imagePathList.add(data.getData());
-                    listViewImage.setAdapter(new UploadListAdapter(this, imagePathList));
+                    mImagePathList.add(data.getData());
+                    mListViewImage.setAdapter(new UploadListAdapter(this, mImagePathList));
                 }
                 break;
             case TYPE_MAP:
@@ -359,7 +359,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void requestPermission() {
         if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
 
-            if (currentUploadType == TYPE_DOC_UPLOAD) {
+            if (mCurrentUploadType == TYPE_DOC_UPLOAD) {
                 browseDocuments();
             } else {
                 browsePictures();
@@ -376,7 +376,7 @@ public class RegisterActivity extends AppCompatActivity {
         switch (requestCode) {
             case REQ_CODE_READ_STORAGE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (currentUploadType == TYPE_DOC_UPLOAD) {
+                    if (mCurrentUploadType == TYPE_DOC_UPLOAD) {
                         browseDocuments();
                     } else {
                         browsePictures();
@@ -427,14 +427,14 @@ public class RegisterActivity extends AppCompatActivity {
         snackbar.show();
     }
 
-    @OnClick(R.id.image_view_locate)
+    @OnClick(R.id.text_view_locate)
     void locateAddressSelected() {
-        if (editTextAddress.getText().length() > 0) {
-            if (isLocated(editTextAddress.getText().toString())) {
+        if (mEditTextAddress.getText().length() > 0) {
+            if (isLocated(mEditTextAddress.getText().toString())) {
                 Intent mapIntent = new Intent(this, MapActivity.class);
                 mapIntent.putExtra(getString(R.string.key_latitude), mLatitude);
                 mapIntent.putExtra(getString(R.string.key_longitude), mLongitude);
-                mapIntent.putExtra(getString(R.string.key_address), editTextAddress.getText());
+                mapIntent.putExtra(getString(R.string.key_address), mEditTextAddress.getText());
                 mapIntent.putExtra(getString(R.string.key_is_draggable), true);
                 startActivityForResult(mapIntent, TYPE_MAP);
             }

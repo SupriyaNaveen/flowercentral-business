@@ -62,6 +62,7 @@
     <string name="lbl_status_pending">Pending</string>
     <string name="lbl_status_delivered">Delivered</string>
     <string name="btn_view_on_map">VIEW ON MAP</string>
+    <string name="link_view_on_map"><u>View on map</u></string>
     <string name="key_latitude">latitude</string>
     <string name="key_longitude">longitude</string>
     <string name="key_address">address</string>
@@ -74,4 +75,12 @@
     <string name="s_required_permission_read_storage">Grant permission to read storage.</string>
 
     <string name="order_details">Order Details</string>
+    <string name="lbl_order_placed_schedule">Order Placed</string>
+    <string name="lbl_order_total">Order Total</string>
+    <string name="lbl_order_delievry_address">Delivery Address</string>
+    <string name="lbl_is_scheduled_delievry">Scheduled Delivery</string>
+    <string name="lbl_schedule">Schedule</string>
+    <string name="lbl_status">Order Status</string>
+    <string name="order_items">Items</string>
+    <string name="key_order_id">order_id</string>
 </resources>

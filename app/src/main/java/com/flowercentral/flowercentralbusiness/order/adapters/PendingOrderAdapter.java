@@ -1,4 +1,4 @@
-package com.flowercentral.flowercentralbusiness.order;
+package com.flowercentral.flowercentralbusiness.order.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +13,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.flowercentral.flowercentralbusiness.R;
+import com.flowercentral.flowercentralbusiness.order.OrderDetailsActivity;
+import com.flowercentral.flowercentralbusiness.order.model.OrderItem;
 import com.flowercentral.flowercentralbusiness.util.CircularTextView;
 import com.flowercentral.flowercentralbusiness.util.MapActivity;
 import com.squareup.picasso.Picasso;
@@ -29,63 +31,63 @@ import butterknife.ButterKnife;
  * Created by admin on 18-05-2017.
  */
 
-class PendingOrderAdapter extends RecyclerView.Adapter<PendingOrderAdapter.ViewHolder> {
+public class PendingOrderAdapter extends RecyclerView.Adapter<PendingOrderAdapter.ViewHolder> {
 
-    private List<OrderItem> orderItemList;
-    private Context context;
+    private List<OrderItem> mOrderItemList;
+    private Context mContext;
 
     public PendingOrderAdapter(List<OrderItem> list) {
-        this.orderItemList = list;
+        this.mOrderItemList = list;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.order_item_row, parent, false);
-        context = parent.getContext();
+        mContext = parent.getContext();
         return new ViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.textViewOrderDetails.setText(orderItemList.get(position).getName());
+        holder.textViewOrderDetails.setText(mOrderItemList.get(position).getName());
 
-        holder.textViewOrderPriceDetails.setText(context.getString(R.string.order_lbl_price, String.valueOf(orderItemList.get(position).getPrice())));
-        holder.textViewPaidStatus.setText(orderItemList.get(position).getPaidStatus().value());
-        holder.textViewOrderQuantity.setText(context.getString(R.string.order_lbl_quantity, String.valueOf(orderItemList.get(position).getQuantity())));
+        holder.textViewOrderPriceDetails.setText(mContext.getString(R.string.order_lbl_price, String.valueOf(mOrderItemList.get(position).getPrice())));
+        holder.textViewPaidStatus.setText(mOrderItemList.get(position).getPaidStatus().value());
+        holder.textViewOrderQuantity.setText(mContext.getString(R.string.order_lbl_quantity, String.valueOf(mOrderItemList.get(position).getQuantity())));
 
         SimpleDateFormat formatSrc = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         SimpleDateFormat formatDest = new SimpleDateFormat("dd EEE yyyy, hh:mm a");
         Date date = null;
         try {
-            date = formatSrc.parse(orderItemList.get(position).getScheduleDateTime());
-            holder.textViewOrderSchedule.setText(context.getString(R.string.order_lbl_schedule, formatDest.format(date)));
+            date = formatSrc.parse(mOrderItemList.get(position).getScheduleDateTime());
+            holder.textViewOrderSchedule.setText(mContext.getString(R.string.order_lbl_schedule, formatDest.format(date)));
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        holder.textViewOrderAddress.setText(context.getString(R.string.order_lbl_address, orderItemList.get(position).getAddress()));
+        holder.textViewOrderAddress.setText(mContext.getString(R.string.order_lbl_address, mOrderItemList.get(position).getAddress()));
 
-//        holder.textViewDeliveryStatus.setText(String.valueOf(orderItemList.get(position).getDeliveryStatus()));
+//        holder.textViewDeliveryStatus.setText(String.valueOf(mOrderItemList.get(position).getDeliveryStatus()));
 
         Picasso.
-                with(context).
-                load(orderItemList.get(position).getImageUrl()).
+                with(mContext).
+                load(mOrderItemList.get(position).getImageUrl()).
                 into(holder.orderItemImage);
 
-        holder.circularTextViewCategory.setText(String.valueOf(orderItemList.get(position).getCategory()));
+        holder.circularTextViewCategory.setText(String.valueOf(mOrderItemList.get(position).getCategory()));
 
         holder.relativeLayoutMaps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    Intent mapIntent = new Intent(context, MapActivity.class);
-                    mapIntent.putExtra(context.getString(R.string.key_latitude), Double.parseDouble(orderItemList.get(position).getLatitude()));
-                    mapIntent.putExtra(context.getString(R.string.key_longitude), Double.parseDouble(orderItemList.get(position).getLongitude()));
-                    mapIntent.putExtra(context.getString(R.string.key_address), orderItemList.get(position).getAddress());
-                    mapIntent.putExtra(context.getString(R.string.key_is_draggable), false);
-                    context.startActivity(mapIntent);
-                }catch (NumberFormatException e) {
+                    Intent mapIntent = new Intent(mContext, MapActivity.class);
+                    mapIntent.putExtra(mContext.getString(R.string.key_latitude), Double.parseDouble(mOrderItemList.get(position).getLatitude()));
+                    mapIntent.putExtra(mContext.getString(R.string.key_longitude), Double.parseDouble(mOrderItemList.get(position).getLongitude()));
+                    mapIntent.putExtra(mContext.getString(R.string.key_address), mOrderItemList.get(position).getAddress());
+                    mapIntent.putExtra(mContext.getString(R.string.key_is_draggable), false);
+                    mContext.startActivity(mapIntent);
+                } catch (NumberFormatException e) {
 
                 }
             }
@@ -94,14 +96,24 @@ class PendingOrderAdapter extends RecyclerView.Adapter<PendingOrderAdapter.ViewH
         holder.linearLayoutOrderDetailContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, OrderDetailsActivity.class));
+                Intent orderDetailIntent = new Intent(mContext, OrderDetailsActivity.class);
+                orderDetailIntent.putExtra(mContext.getString(R.string.key_order_id), mOrderItemList.get(position).getId());
+                mContext.startActivity(orderDetailIntent);
+            }
+        });
+
+        holder.buttonDeliveryStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO call web api
+                //processOrderDeliveredRequestByVendor();
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return orderItemList.size();
+        return mOrderItemList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -147,9 +159,9 @@ class PendingOrderAdapter extends RecyclerView.Adapter<PendingOrderAdapter.ViewH
             ButterKnife.bind(this, view);
 
             circularTextViewCategory.setStrokeWidth(1);
-            circularTextViewCategory.setStrokeColor(ContextCompat.getColor(context, R.color.colorPrimary));
-            circularTextViewCategory.setSolidColor(ContextCompat.getColor(context, R.color.colorWhite));
-            circularTextViewCategory.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
+            circularTextViewCategory.setStrokeColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+            circularTextViewCategory.setSolidColor(ContextCompat.getColor(mContext, R.color.colorWhite));
+            circularTextViewCategory.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
         }
     }
 }

@@ -26,7 +26,7 @@ public class OrderFragment extends Fragment {
     ViewPager mViewPager;
 
     @BindView(R.id.tabs)
-    TabLayout tabLayout;
+    TabLayout mTabLayout;
 
     /**
      * Default Constructor
@@ -71,6 +71,6 @@ public class OrderFragment extends Fragment {
 
         mViewPager.setAdapter(adapter);
         mViewPager.setOffscreenPageLimit(2);
-        tabLayout.setupWithViewPager(mViewPager);
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 }

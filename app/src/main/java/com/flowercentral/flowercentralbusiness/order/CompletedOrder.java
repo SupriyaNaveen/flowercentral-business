@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flowercentral.flowercentralbusiness.R;
+import com.flowercentral.flowercentralbusiness.order.adapters.CompletedOrderAdapter;
+import com.flowercentral.flowercentralbusiness.order.model.OrderItem;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
 import com.flowercentral.flowercentralbusiness.util.Util;
@@ -51,7 +53,7 @@ public class CompletedOrder extends Fragment {
     SwipeRefreshLayout mSwipeRefreshLayout;
 
     @BindView(R.id.root_layout)
-    RelativeLayout rootLayout;
+    RelativeLayout mRootLayout;
 
     /**
      * Default Constructor
@@ -134,31 +136,31 @@ public class CompletedOrder extends Fragment {
                     error.setErrorMessage("Data fetch failed. Cause -> " + error.getErrorMessage());
                     switch (error.getErrorType()) {
                         case NETWORK_NOT_AVAILABLE:
-                            Snackbar.make(rootLayout, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mRootLayout, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();
                             break;
                         case INTERNAL_SERVER_ERROR:
-                            Snackbar.make(rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case CONNECTION_TIMEOUT:
-                            Snackbar.make(rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case APPLICATION_ERROR:
-                            Snackbar.make(rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case INVALID_INPUT_SUPPLIED:
-                            Snackbar.make(rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case AUTHENTICATION_ERROR:
-                            Snackbar.make(rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case UNAUTHORIZED_ERROR:
-                            Snackbar.make(rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case SERVER_ERROR:
-                            Snackbar.make(rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         default:
-                            Snackbar.make(rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                     }
                 }

@@ -56,33 +56,23 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="1">
+                android:orientation="horizontal">
 
                 <android.support.design.widget.TextInputLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.9"
                     android:hint="@string/lbl_address">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/textview_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawableStart="@drawable/ic_person_outline_white_24dp"
                         android:drawablePadding="@dimen/dp10"
+                        android:drawableStart="@drawable/ic_person_outline_white_24dp"
                         android:imeOptions="actionNext"
                         android:maxLines="1"
                         android:singleLine="true" />
                 </android.support.design.widget.TextInputLayout>
-
-                <ImageView
-                    android:id="@+id/image_view_locate"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end|center_vertical"
-                    android:layout_weight="0.1"
-                    android:src="@drawable/ic_location_white_24dp"/>
 
             </LinearLayout>
 
@@ -134,6 +124,14 @@
                     android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/text_view_locate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:text="@string/link_view_on_map"
+                android:layout_marginTop="@dimen/dp16"/>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -187,7 +185,7 @@
                         android:layout_height="wrap_content"
                         android:drawableTop="@drawable/ic_cloud_upload_white_24dp"
                         android:gravity="center"
-                        android:text="Verification Doc"/>
+                        android:text="Verification Doc" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/list_view_doc"
@@ -212,7 +210,7 @@
                             android:layout_height="wrap_content"
                             android:drawableTop="@drawable/ic_cloud_upload_white_24dp"
                             android:gravity="center"
-                            android:text="Shop Picture"/>
+                            android:text="Shop Picture" />
 
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/list_view_picture"

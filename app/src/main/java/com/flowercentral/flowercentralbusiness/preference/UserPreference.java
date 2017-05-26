@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
+import com.flowercentral.flowercentralbusiness.login.ui.model.Vendor;
+import com.flowercentral.flowercentralbusiness.login.ui.model.VendorDetails;
+
 /**
  * Created by Ashish Upadhyay on 4/29/17.
  */

@@ -16,8 +16,8 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.dashboard.DashboardActivity;
+import com.flowercentral.flowercentralbusiness.login.ui.model.Vendor;
 import com.flowercentral.flowercentralbusiness.preference.UserPreference;
-import com.flowercentral.flowercentralbusiness.preference.Vendor;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
 import com.flowercentral.flowercentralbusiness.util.Util;
@@ -59,16 +59,16 @@ public class LauncherActivity extends AppCompatActivity {
     private Context mContext;
 
     @BindView(R.id.textview_vendor_name)
-    TextInputEditText textViewVendorName;
+    TextInputEditText mTextViewVendorName;
 
     @BindView(R.id.textview_password)
-    TextInputEditText textViewPassword;
+    TextInputEditText mTextViewPassword;
 
     @BindView(R.id.textview_forgot_password)
-    TextView textViewForgotPassword;
+    TextView mTextViewForgotPassword;
 
     @BindView(R.id.txt_link_flower_central_account)
-    TextView textViewRegisterAccount;
+    TextView mTextViewRegisterAccount;
 
     /**
      * @param savedInstanceState
@@ -122,8 +122,8 @@ public class LauncherActivity extends AppCompatActivity {
         if (isValidInput) {
             try {
                 JSONObject user = new JSONObject();
-                user.put("username", textViewVendorName.getText());
-                user.put("password", textViewPassword.getText());
+                user.put("username", mTextViewVendorName.getText());
+                user.put("password", mTextViewPassword.getText());
                 registerUser(mContext, user);
             } catch (JSONException e) {
                 Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();
@@ -139,18 +139,18 @@ public class LauncherActivity extends AppCompatActivity {
     private boolean isValidInput() {
         boolean isValid = true;
 
-        if (textViewVendorName.getText().toString().isEmpty()) {
-            textViewVendorName.setError("Please enter vendor name.");
+        if (mTextViewVendorName.getText().toString().isEmpty()) {
+            mTextViewVendorName.setError("Please enter vendor name.");
             isValid = false;
         } else {
-            textViewVendorName.setError(null);
+            mTextViewVendorName.setError(null);
         }
 
-        if (textViewPassword.getText().toString().isEmpty()) {
-            textViewPassword.setError("Please enter password.");
+        if (mTextViewPassword.getText().toString().isEmpty()) {
+            mTextViewPassword.setError("Please enter password.");
             isValid = false;
         } else {
-            textViewPassword.setError(null);
+            mTextViewPassword.setError(null);
         }
 
         return isValid;

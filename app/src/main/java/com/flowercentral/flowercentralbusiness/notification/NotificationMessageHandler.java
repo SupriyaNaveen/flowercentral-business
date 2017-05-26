@@ -24,7 +24,7 @@ import java.util.Set;
 public class NotificationMessageHandler {
 
     // Will queue the notification, or else replace the notification.
-    public static int notificationId = 0;
+    public static int mNotificationId = 0;
 
     private static final String TAG = NotificationMessageHandler.class.getSimpleName();
     private static NotificationMessageHandler notificationMessageHandler;
@@ -85,7 +85,7 @@ public class NotificationMessageHandler {
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(notificationId++, notificationBuilder.build());
+        notificationManager.notify(mNotificationId++, notificationBuilder.build());
     }
 
     /**

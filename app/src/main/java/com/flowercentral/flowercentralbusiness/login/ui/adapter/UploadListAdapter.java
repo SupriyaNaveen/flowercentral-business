@@ -21,12 +21,10 @@ import butterknife.ButterKnife;
  */
 
 public class UploadListAdapter extends RecyclerView.Adapter<UploadListAdapter.ViewHolder> {
-    private final Context context;
-    private final ArrayList<Uri> uploadDataList;
+    private final ArrayList<Uri> mUploadDataList;
 
     public UploadListAdapter(Context context, ArrayList<Uri> values) {
-        this.context = context;
-        this.uploadDataList = values;
+        this.mUploadDataList = values;
     }
 
     @Override
@@ -38,11 +36,11 @@ public class UploadListAdapter extends RecyclerView.Adapter<UploadListAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.textViewData.setText(uploadDataList.get(position).getPath());
+        holder.textViewData.setText(mUploadDataList.get(position).getPath());
         holder.imageViewClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadDataList.remove(position);
+                mUploadDataList.remove(position);
                 notifyDataSetChanged();
             }
         });
@@ -50,7 +48,7 @@ public class UploadListAdapter extends RecyclerView.Adapter<UploadListAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return uploadDataList.size();
+        return mUploadDataList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

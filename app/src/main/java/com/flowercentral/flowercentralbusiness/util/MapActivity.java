@@ -44,7 +44,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
     private boolean mIsDraggable;
 
     @BindView(R.id.root_layout)
-    RelativeLayout relativeLayoutRoot;
+    RelativeLayout mRelativeLayoutRoot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,7 +158,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
      * Displays the snack bar to request the permission from user
      */
     private void snackBarRequestPermission() {
-        Snackbar snackbar = Snackbar.make(relativeLayoutRoot, getResources().getString(R.string
+        Snackbar snackbar = Snackbar.make(mRelativeLayoutRoot, getResources().getString(R.string
                 .s_required_permission_location), Snackbar.LENGTH_INDEFINITE).setAction(getResources().getString(R.string
                 .s_action_request_again), new View.OnClickListener() {
             @Override
@@ -174,7 +174,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
      * cannot be invoked. So display SnackBar to redirect to Settings to grant the permissions
      */
     private void snackBarRedirectToSettings() {
-        Snackbar snackbar = Snackbar.make(relativeLayoutRoot, getResources()
+        Snackbar snackbar = Snackbar.make(mRelativeLayoutRoot, getResources()
                 .getString(R.string.s_required_permission_settings), Snackbar.LENGTH_INDEFINITE)
                 .setAction(getResources().getString(R.string.s_action_redirect_settings), new View.OnClickListener() {
                     @Override

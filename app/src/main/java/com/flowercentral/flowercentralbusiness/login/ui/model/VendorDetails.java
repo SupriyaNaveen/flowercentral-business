@@ -1,4 +1,4 @@
-package com.flowercentral.flowercentralbusiness.preference;
+package com.flowercentral.flowercentralbusiness.login.ui.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * Created by admin on 23-05-2017.
  */
 
-class VendorDetails implements Parcelable {
+public class VendorDetails implements Parcelable {
 
     @SerializedName("shop_name")
     private String vendorShopName;

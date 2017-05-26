@@ -37,4 +37,11 @@ public class QueryBuilder {
         sb.append("registration");
         return sb.toString();
     }
+
+    public static String getOrderDetailsUrl() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(BuildConfig.SERVER);
+        sb.append("orderdetails");
+        return sb.toString();
+    }
 }
