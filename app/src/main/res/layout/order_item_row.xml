@@ -16,6 +16,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/order_detail_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -162,7 +163,8 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:paddingStart="@dimen/dp5"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:text="@string/lbl_status_delivered"/>
 
                 <ImageView
                     android:layout_width="wrap_content"

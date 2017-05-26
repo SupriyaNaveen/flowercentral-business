@@ -61,6 +61,8 @@
         </service>
 
         <activity android:name=".notification.NotificationOverlay"/>
+
+        <activity android:name=".order.OrderDetailsActivity"/>
     </application>
 
 </manifest>

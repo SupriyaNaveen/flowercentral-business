@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -66,7 +67,7 @@ public class CompletedOrderAdapter extends RecyclerView.Adapter<CompletedOrderAd
         holder.textViewOrderAddress.setText(context.getString(R.string.order_lbl_address, orderItemList.get(position).getAddress()));
 
         holder.buttonDeliveryStatus.setBackgroundColor(ContextCompat.getColor(context, R.color.colorGreen));
-        holder.textViewDeliveryStatus.setText(String.valueOf(orderItemList.get(position).getDeliveryStatus()));
+//        holder.textViewDeliveryStatus.setText(String.valueOf(orderItemList.get(position).getDeliveryStatus()));
 
         Picasso.
                 with(context).
@@ -88,6 +89,13 @@ public class CompletedOrderAdapter extends RecyclerView.Adapter<CompletedOrderAd
                 } catch (NumberFormatException e) {
 
                 }
+            }
+        });
+
+        holder.linearLayoutOrderDetailContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(context, OrderDetailsActivity.class));
             }
         });
     }
@@ -131,6 +139,9 @@ public class CompletedOrderAdapter extends RecyclerView.Adapter<CompletedOrderAd
 
         @BindView(R.id.order_map_details)
         RelativeLayout relativeLayoutMaps;
+
+        @BindView(R.id.order_detail_container)
+        LinearLayout linearLayoutOrderDetailContainer;
 
         public ViewHolder(View view) {
             super(view);
