@@ -125,7 +125,7 @@ public class NotificationMessageHandler {
 
     private boolean isUserAlreadyLoggedIn() {
         Boolean isUserAlreadyLoggedIn = false;
-        if (UserPreference.getAccessToken() != null) {
+        if (UserPreference.getApiToken() != null) {
             isUserAlreadyLoggedIn = true;
         }
         return isUserAlreadyLoggedIn;

@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dp10"
+    android:background="@color/colorWhite"
     android:orientation="horizontal"
     android:weightSum="1">
 
     <ImageView
         android:id="@+id/product_item_image"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp100"
         android:layout_weight="0.3" />
 
     <LinearLayout
@@ -18,8 +20,9 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp5"
             android:orientation="horizontal">
 
             <TextView
@@ -33,10 +36,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/AppTheme.Normal" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/product_price_details"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:theme="@style/AppTheme.Normal" />
 
@@ -44,15 +53,16 @@
                 android:id="@+id/product_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dp5"
+                android:layout_margin="@dimen/dp2"
                 android:gravity="center"
-                android:padding="@dimen/dp5" />
+                android:padding="@dimen/dp2" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/product_message"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.Normal" />
     </LinearLayout>
 
 </LinearLayout>

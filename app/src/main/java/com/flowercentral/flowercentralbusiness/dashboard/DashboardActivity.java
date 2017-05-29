@@ -16,6 +16,7 @@ import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.login.ui.LauncherActivity;
 import com.flowercentral.flowercentralbusiness.order.OrderFragment;
 import com.flowercentral.flowercentralbusiness.preference.UserPreference;
+import com.flowercentral.flowercentralbusiness.profile.ProfileFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

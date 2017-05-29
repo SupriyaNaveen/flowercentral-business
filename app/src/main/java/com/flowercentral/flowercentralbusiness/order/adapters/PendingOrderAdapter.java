@@ -2,6 +2,7 @@ package com.flowercentral.flowercentralbusiness.order.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,15 +15,23 @@ import android.widget.TextView;
 
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.order.OrderDetailsActivity;
+import com.flowercentral.flowercentralbusiness.order.PendingOrder;
 import com.flowercentral.flowercentralbusiness.order.model.OrderItem;
+import com.flowercentral.flowercentralbusiness.rest.BaseModel;
+import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
 import com.flowercentral.flowercentralbusiness.util.CircularTextView;
 import com.flowercentral.flowercentralbusiness.util.MapActivity;
+import com.flowercentral.flowercentralbusiness.volley.ErrorData;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,11 +42,16 @@ import butterknife.ButterKnife;
 
 public class PendingOrderAdapter extends RecyclerView.Adapter<PendingOrderAdapter.ViewHolder> {
 
+    private static final String TAG = PendingOrderAdapter.class.getSimpleName();
+    private final PendingOrder.RefreshViews mRefreshViews;
     private List<OrderItem> mOrderItemList;
     private Context mContext;
+    private final RelativeLayout mRootLayout;
 
-    public PendingOrderAdapter(List<OrderItem> list) {
+    public PendingOrderAdapter(List<OrderItem> list, RelativeLayout rootLayout, PendingOrder.RefreshViews refreshViews) {
         this.mOrderItemList = list;
+        mRootLayout = rootLayout;
+        mRefreshViews = refreshViews;
     }
 
     @Override
@@ -105,10 +119,72 @@ public class PendingOrderAdapter extends RecyclerView.Adapter<PendingOrderAdapte
         holder.buttonDeliveryStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO call web api
-                //processOrderDeliveredRequestByVendor();
+                processOrderDeliveredRequestByVendor(mOrderItemList.get(position).getId());
             }
         });
+    }
+
+    private void processOrderDeliveredRequestByVendor(int orderId) {
+
+        try {
+            JSONObject requestObject = new JSONObject();
+            requestObject.put("order_id", orderId);
+            marsAsDelieverd(requestObject);
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void marsAsDelieverd(JSONObject requestObject) {
+
+        BaseModel<JSONObject> baseModel = new BaseModel<JSONObject>(mContext) {
+            @Override
+            public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
+                Snackbar.make(mRootLayout, "Order delivered status processed.", Snackbar.LENGTH_SHORT).show();
+                mRefreshViews.performRefreshView();
+            }
+
+            @Override
+            public void onError(ErrorData error) {
+
+                if (error != null) {
+                    error.setErrorMessage("Mark failed. Cause -> " + error.getErrorMessage());
+
+                    switch (error.getErrorType()) {
+                        case NETWORK_NOT_AVAILABLE:
+                            break;
+                        case INTERNAL_SERVER_ERROR:
+                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            break;
+                        case CONNECTION_TIMEOUT:
+                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            break;
+                        case APPLICATION_ERROR:
+                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            break;
+                        case INVALID_INPUT_SUPPLIED:
+                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            break;
+                        case AUTHENTICATION_ERROR:
+                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            break;
+                        case UNAUTHORIZED_ERROR:
+                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            break;
+                        default:
+                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            break;
+                    }
+                }
+            }
+        };
+
+        String url = QueryBuilder.getLoginUrl();
+        if (requestObject != null) {
+            baseModel.executePostJsonRequest(url, requestObject, TAG);
+        } else {
+            Snackbar.make(mRootLayout, mContext.getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     @Override

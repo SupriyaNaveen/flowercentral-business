@@ -83,4 +83,9 @@
     <string name="lbl_status">Order Status</string>
     <string name="order_items">Items</string>
     <string name="key_order_id">order_id</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_shop_pictures">Shop Pictures</string>
+    <string name="title_change_password">Change Password</string>
+    <string name="lbl_update">Update</string>
+    <string name="lbl_cancel">Cancel</string>
 </resources>

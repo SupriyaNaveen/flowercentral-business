@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.order.adapters.ProductDetailsAdapter;
-import com.flowercentral.flowercentralbusiness.order.model.OrderItem;
+import com.flowercentral.flowercentralbusiness.order.model.OrderDetailedItem;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
 import com.flowercentral.flowercentralbusiness.util.MapActivity;
@@ -28,6 +28,7 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
@@ -74,7 +75,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
     private ActionBar mActionBar;
 
-    private OrderItem mOrderItem;
+    private OrderDetailedItem mOrderItem;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -108,10 +109,10 @@ public class OrderDetailsActivity extends AppCompatActivity {
         BaseModel<JSONObject> baseModel = new BaseModel<JSONObject>(this) {
             @Override
             public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
-                OrderItem orderItem = new Gson().<OrderItem>fromJson(String.valueOf(response),
-                        new TypeToken<OrderItem>() {
+                OrderDetailedItem orderDetailedItem = new Gson().<OrderDetailedItem>fromJson(String.valueOf(response),
+                        new TypeToken<OrderDetailedItem>() {
                         }.getType());
-                updateView(orderItem);
+                updateView(orderDetailedItem);
             }
 
             @Override
@@ -153,6 +154,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
         try {
             JSONObject requestObject = new JSONObject();
             requestObject.put("order_id", orderId);
+            SimpleDateFormat formatSrc = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            requestObject.put("timestamp", formatSrc.format(Calendar.getInstance().getTime()));
             if (requestObject != null) {
                 baseModel.executePostJsonRequest(url, requestObject, TAG);
             } else {
@@ -163,28 +166,28 @@ public class OrderDetailsActivity extends AppCompatActivity {
         }
     }
 
-    private void updateView(OrderItem orderItem) {
+    private void updateView(OrderDetailedItem orderDetailedItem) {
 
-        mOrderItem = orderItem;
+        mOrderItem = orderDetailedItem;
 
-        mTextViewOrderPlaced.setText(orderItem.getPlacedSchedule());
-        mTextViewIsScheduledDelivery.setText(orderItem.getScheduleState());
-        mTextViewOrderTotal.setText(String.valueOf(orderItem.getPrice()));
-        mTextViewOrderStatus.setText(String.valueOf(orderItem.getDeliveryStatus()));
+        mTextViewOrderPlaced.setText(orderDetailedItem.getOrderDate());
+        mTextViewIsScheduledDelivery.setText(orderDetailedItem.getOrderTotal());
+        mTextViewOrderTotal.setText(orderDetailedItem.getOrderTotal());
+        mTextViewOrderStatus.setText(String.valueOf(orderDetailedItem.getDeliveryStatus()));
 
         SimpleDateFormat formatSrc = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         SimpleDateFormat formatDest = new SimpleDateFormat("dd EEE yyyy, hh:mm a");
         Date date = null;
         try {
-            date = formatSrc.parse(orderItem.getScheduleDateTime());
-            mTextViewOrderSchedule.setText(getString(R.string.order_lbl_schedule, formatDest.format(date)));
+            date = formatSrc.parse(orderDetailedItem.getScheduleDateTime());
+            mTextViewOrderSchedule.setText(formatDest.format(date));
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        mTextViewOrderDeliveryAddress.setText(orderItem.getAddress());
+        mTextViewOrderDeliveryAddress.setText(orderDetailedItem.getAddress());
 
-        ProductDetailsAdapter adapter = new ProductDetailsAdapter(orderItem.getProductItemList());
+        ProductDetailsAdapter adapter = new ProductDetailsAdapter(orderDetailedItem.getProductItemList());
         mRecyclerViewProductDetails.setAdapter(adapter);
     }
 
@@ -203,12 +206,16 @@ public class OrderDetailsActivity extends AppCompatActivity {
     void mapViewSelected() {
 
         if (null != mOrderItem) {
-            Intent mapIntent = new Intent(this, MapActivity.class);
-            mapIntent.putExtra(getString(R.string.key_latitude), Double.parseDouble(mOrderItem.getLatitude()));
-            mapIntent.putExtra(getString(R.string.key_longitude), Double.parseDouble(mOrderItem.getLongitude()));
-            mapIntent.putExtra(getString(R.string.key_address), mOrderItem.getAddress());
-            mapIntent.putExtra(getString(R.string.key_is_draggable), false);
-            startActivity(mapIntent);
+            try {
+                Intent mapIntent = new Intent(this, MapActivity.class);
+                mapIntent.putExtra(getString(R.string.key_latitude), Double.parseDouble(mOrderItem.getLatitude()));
+                mapIntent.putExtra(getString(R.string.key_longitude), Double.parseDouble(mOrderItem.getLongitude()));
+                mapIntent.putExtra(getString(R.string.key_address), mOrderItem.getAddress());
+                mapIntent.putExtra(getString(R.string.key_is_draggable), false);
+                startActivity(mapIntent);
+            } catch (NumberFormatException e) {
+                Snackbar.make(mLinearLayoutRoot, "Unable to locate address.", Snackbar.LENGTH_SHORT).show();
+            }
         } else {
             Snackbar.make(mLinearLayoutRoot, "Unable to locate address.", Snackbar.LENGTH_SHORT).show();
         }

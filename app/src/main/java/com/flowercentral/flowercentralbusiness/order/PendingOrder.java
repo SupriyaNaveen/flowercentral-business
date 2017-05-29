@@ -55,6 +55,10 @@ public class PendingOrder extends Fragment {
     @BindView(R.id.root_layout)
     RelativeLayout mRootLayout;
 
+    public interface RefreshViews {
+        void performRefreshView();
+    }
+
     /**
      * Default Constructor
      */
@@ -198,7 +202,12 @@ public class PendingOrder extends Fragment {
             mListEmptyMessageView.setVisibility(View.GONE);
         }
 
-        PendingOrderAdapter adapter = new PendingOrderAdapter(orderItemList);
+        PendingOrderAdapter adapter = new PendingOrderAdapter(orderItemList, mRootLayout, new RefreshViews() {
+            @Override
+            public void performRefreshView() {
+                refreshItems();
+            }
+        });
         mOrderItemRecyclerView.setAdapter(adapter);
     }
 

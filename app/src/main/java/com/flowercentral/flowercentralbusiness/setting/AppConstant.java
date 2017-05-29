@@ -26,10 +26,5 @@ public final class AppConstant {
     public static final int LOG_LEVEL_WARN = 3;
     public static final int LOG_LEVEL_INFO = 4;
 
-    // Date Format
-    public static final String DISPLAY_DATE_FORMAT = "dd-MMM-yyyy";
-    public static final String DB_DATE_FORMAT = "yyyy-MM-dd";
-    public static final String SHORT_DATE_FORMAT = "dd-MMM";
 
-    public enum LOGIN_TYPE {FACEBOOK, GOOGLE, INSTAGRAM, CUSTOM}
 }

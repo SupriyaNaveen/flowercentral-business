@@ -41,7 +41,21 @@ public class QueryBuilder {
     public static String getOrderDetailsUrl() {
         StringBuilder sb = new StringBuilder();
         sb.append(BuildConfig.SERVER);
-        sb.append("orderdetails");
+        sb.append("order_details");
+        return sb.toString();
+    }
+
+    public static String getUpdateUrl() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(BuildConfig.SERVER);
+        sb.append("update");
+        return sb.toString();
+    }
+
+    public static String getProfileInformationUrl() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(BuildConfig.SERVER);
+        sb.append("profile");
         return sb.toString();
     }
 }

@@ -187,7 +187,7 @@ public class RegisterActivity extends AppCompatActivity {
                     register.put("phone2", mEditTextPhone2.getText());
                 }
                 if (mEditTextTIN.getText().length() > 0) {
-                    register.put("tin", mEditTextTIN.getText());
+                    register.put("tin_number", mEditTextTIN.getText());
                 }
                 registerUser(mContext, register);
             } catch (JSONException e) {

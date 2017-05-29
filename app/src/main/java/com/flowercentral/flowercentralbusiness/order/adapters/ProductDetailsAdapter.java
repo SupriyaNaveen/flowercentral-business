@@ -44,7 +44,7 @@ public class ProductDetailsAdapter extends RecyclerView.Adapter<ProductDetailsAd
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.textViewProductDetails.setText(mProductList.get(position).getName());
         holder.textViewProductPriceDetails.setText(mContext.getString(R.string.order_lbl_price, String.valueOf(mProductList.get(position).getPrice())));
-        holder.textViewProductQuantity.setText(mContext.getString(R.string.order_lbl_quantity, String.valueOf(mProductList.get(position).getQuantity())));
+        holder.textViewProductQuantity.setText(String.valueOf(mProductList.get(position).getQuantity()));
 
 //        holder.textViewProductMessage.setText(mContext.getString(R.string.product_lbl_address, mProductList.get(position).getMessage()));
 

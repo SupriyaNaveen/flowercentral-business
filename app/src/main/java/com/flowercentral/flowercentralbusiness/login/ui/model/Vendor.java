@@ -15,7 +15,7 @@ public class Vendor implements Parcelable {
     private String status;
 
     @SerializedName("api_token")
-    private String accessToken;
+    private String apiToken;
 
     @SerializedName("message")
     private String message;
@@ -25,7 +25,7 @@ public class Vendor implements Parcelable {
 
     protected Vendor(Parcel in) {
         status = in.readString();
-        accessToken = in.readString();
+        apiToken = in.readString();
         message = in.readString();
         vendorDetails = (VendorDetails) in.readParcelable(VendorDetails.class.getClassLoader());
     }
@@ -54,7 +54,7 @@ public class Vendor implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(status);
-        dest.writeString(accessToken);
+        dest.writeString(apiToken);
         dest.writeString(message);
 
         // Add inner class
@@ -69,12 +69,12 @@ public class Vendor implements Parcelable {
         this.status = status;
     }
 
-    public String getAccessToken() {
-        return accessToken;
+    public String getApiToken() {
+        return apiToken;
     }
 
-    public void setAccessToken(String apiToken) {
-        this.accessToken = apiToken;
+    public void setApiToken(String apiToken) {
+        this.apiToken = apiToken;
     }
 
     public String getMessage() {

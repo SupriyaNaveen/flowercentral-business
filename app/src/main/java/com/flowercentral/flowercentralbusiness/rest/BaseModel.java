@@ -292,12 +292,12 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
     private Map<String, String> getCommonAuthorizationHeader() {
         Map<String, String> headerValues = new HashMap<String, String>();
         try {
-           /* Logger.logInfo(TAG, "getCommonAuthorizationHeader","Access token " + StorageManager.getAccessToken());
+           /* Logger.logInfo(TAG, "getCommonAuthorizationHeader","Access token " + StorageManager.getApiToken());
             Logger.logInfo(TAG,"getCommonAuthorizationHeader", "Refresh token " + StorageManager.getRefreshToken());
             Logger.logInfo(TAG,"getCommonAuthorizationHeader", "TimeStamp " + StorageManager.getTimestamp());
 
-            if(!TextUtils.isEmpty(StorageManager.getAccessToken())) {
-                String encodedString = Base64.encodeToString(StorageManager.getAccessToken().getBytes(), Base64.NO_WRAP);
+            if(!TextUtils.isEmpty(StorageManager.getApiToken())) {
+                String encodedString = Base64.encodeToString(StorageManager.getApiToken().getBytes(), Base64.NO_WRAP);
                 headerValues.put("Authorization", "Basic " + encodedString);
                 headerValues.put("Content-Type", "application/json");
                 headerValues.put("Accept-Encoding", "gzip");

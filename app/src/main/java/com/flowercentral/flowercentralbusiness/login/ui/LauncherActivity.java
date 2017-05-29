@@ -3,10 +3,12 @@ package com.flowercentral.flowercentralbusiness.login.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -78,7 +80,7 @@ public class LauncherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         mContext = this;
-        if (UserPreference.getAccessToken() != null) {
+        if (UserPreference.getApiToken() != null) {
             Intent intent = new Intent(LauncherActivity.this, DashboardActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(intent);
@@ -114,7 +116,7 @@ public class LauncherActivity extends AppCompatActivity {
      */
     @OnClick(R.id.btn_login)
     void loginSelected() {
-        if (UserPreference.getAccessToken() != null) {
+        if (UserPreference.getApiToken() != null) {
             UserPreference.deleteProfileInformation();
         }
 
@@ -124,6 +126,11 @@ public class LauncherActivity extends AppCompatActivity {
                 JSONObject user = new JSONObject();
                 user.put("username", mTextViewVendorName.getText());
                 user.put("password", mTextViewPassword.getText());
+                String android_id = Settings.Secure.getString(getContentResolver(),
+                        Settings.Secure.ANDROID_ID);
+                user.put("deviceid", android_id);
+                TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                user.put("imei", telephonyManager.getDeviceId());
                 registerUser(mContext, user);
             } catch (JSONException e) {
                 Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();

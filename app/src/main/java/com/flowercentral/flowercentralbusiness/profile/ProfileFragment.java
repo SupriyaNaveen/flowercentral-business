@@ -1,4 +1,4 @@
-package com.flowercentral.flowercentralbusiness.order;
+package com.flowercentral.flowercentralbusiness.profile;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -15,10 +15,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by admin on 17-05-2017.
+ * Created by admin on 19-05-2017.
  */
-
-public class OrderFragment extends Fragment {
+public class ProfileFragment extends Fragment {
 
     private View view;
 
@@ -31,7 +30,7 @@ public class OrderFragment extends Fragment {
     /**
      * Default Constructor
      */
-    public OrderFragment() {
+    public ProfileFragment() {
     }
 
     /**
@@ -39,8 +38,8 @@ public class OrderFragment extends Fragment {
      *
      * @return
      */
-    public static OrderFragment newInstance() {
-        OrderFragment fragment = new OrderFragment();
+    public static ProfileFragment newInstance() {
+        ProfileFragment fragment = new ProfileFragment();
         return fragment;
     }
 
@@ -55,7 +54,7 @@ public class OrderFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_order, container, false);
+        view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, view);
         setupViewPager();
         return view;
@@ -66,11 +65,13 @@ public class OrderFragment extends Fragment {
      */
     private void setupViewPager() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
-        adapter.addFragment(new PendingOrder(), getString(R.string.title_pending_order));
-        adapter.addFragment(new CompletedOrder(), getString(R.string.title_completed_order));
+        adapter.addFragment(new UpdateProfile(), getString(R.string.title_profile));
+        adapter.addFragment(new ShopPictures(), getString(R.string.title_shop_pictures));
+        adapter.addFragment(new ChangePassword(), getString(R.string.title_change_password));
+
 
         mViewPager.setAdapter(adapter);
-        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setOffscreenPageLimit(3);
         mTabLayout.setupWithViewPager(mViewPager);
     }
 }

@@ -18,41 +18,32 @@
         android:orientation="vertical"
         android:visibility="visible">
 
-        <LinearLayout
+        <include layout="@layout/layout_register_header" />
+
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:paddingTop="@dimen/dp10">
+            android:fadeScrollbars="false">
 
-            <ImageView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_pinterest" />
+                android:orientation="vertical">
 
-            <TextView
-                style="@style/AppTheme.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/lbl_app_name" />
+                <include layout="@layout/layout_register" />
 
-            <TextView
-                style="@style/AppTheme.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/lbl_app_tag" />
+                <include layout="@layout/layout_upload_shop_details" />
 
-        </LinearLayout>
+                <Button
+                    android:id="@+id/btn_register"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:text="@string/lbl_register"
+                    android:background="@drawable/rounded_corner_border"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <include
-                layout="@layout/layout_register" />
-
-        </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
 
     </LinearLayout>
 

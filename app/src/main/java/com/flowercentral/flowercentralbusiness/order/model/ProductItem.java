@@ -11,9 +11,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class ProductItem implements Parcelable {
 
-    @SerializedName("id")
-    int id;
-
     @SerializedName("quantity")
     int quantity;
 
@@ -26,11 +23,14 @@ public class ProductItem implements Parcelable {
     @SerializedName("price")
     double price;
 
-    @SerializedName("img_url")
+    @SerializedName("image")
     String imageUrl;
 
     @SerializedName("message")
     String message;
+
+    @SerializedName("tag")
+    String tag;
 
     /**
      * Standard basic constructor for non-parcel
@@ -60,13 +60,13 @@ public class ProductItem implements Parcelable {
         // We just need to read back each
         // field in the order that it was
         // written to the parcel
-        id = in.readInt();
         quantity = in.readInt();
         name = in.readString();
         category = OrderItem.CATEGORY.valueOf(in.readString());
         price = in.readDouble();
         imageUrl = in.readString();
         message = in.readString();
+        tag = in.readString();
     }
 
     @Override
@@ -74,13 +74,14 @@ public class ProductItem implements Parcelable {
         // We just need to write each field into the
         // parcel. When we read from parcel, they
         // will come back in the same order
-        dest.writeInt(id);
         dest.writeInt(quantity);
         dest.writeString(name);
         dest.writeString(category.name());
         dest.writeDouble(price);
         dest.writeString(message);
         dest.writeString(imageUrl);
+        dest.writeString(tag);
+
     }
 
     /**
@@ -108,14 +109,6 @@ public class ProductItem implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getQuantity() {
@@ -164,5 +157,13 @@ public class ProductItem implements Parcelable {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 }

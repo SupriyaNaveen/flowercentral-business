@@ -24,7 +24,11 @@ public class UserPreference extends PreferenceActivity {
         return API_TOKEN;
     }
 
-    private final static String LOGIN_ACCESS_TOKEN = "login_access_token";
+    public static void setApiToken(String _token) {
+        writeString(mContext, API_TOKEN, _token);
+    }
+
+//    private final static String LOGIN_ACCESS_TOKEN = "login_access_token";
     private final static String VENDOR_LOGIN_STATUS = "vendor_login_status";
     private final static String VENDOR_LOGIN_MESSAGE = "vendor_login_message";
     private final static String VENDOR_SHOP_NAME = "vendor_shop_name";
@@ -114,13 +118,13 @@ public class UserPreference extends PreferenceActivity {
         editor.commit();
     }
 
-    public static String getAccessToken() {
-        return readString(mContext, LOGIN_ACCESS_TOKEN, null);
-    }
-
-    public static void setAccessToken(String _token) {
-        writeString(mContext, LOGIN_ACCESS_TOKEN, _token);
-    }
+//    public static String getAccessToken() {
+//        return readString(mContext, LOGIN_ACCESS_TOKEN, null);
+//    }
+//
+//    public static void setAccessToken(String _token) {
+//        writeString(mContext, LOGIN_ACCESS_TOKEN, _token);
+//    }
 
     public static String getVendorShopName() {
         return readString(mContext, VENDOR_SHOP_NAME, null);
@@ -164,7 +168,7 @@ public class UserPreference extends PreferenceActivity {
 
     public static Vendor getProfileInformation() {
         Vendor vendor = new Vendor();
-        vendor.setAccessToken(readString(mContext, LOGIN_ACCESS_TOKEN, null));
+        vendor.setApiToken(readString(mContext, API_TOKEN, null));
         vendor.setStatus(readString(mContext, VENDOR_LOGIN_STATUS, null));
         vendor.setMessage(readString(mContext, VENDOR_LOGIN_MESSAGE, null));
         VendorDetails vendorDetails = new VendorDetails();
@@ -177,7 +181,7 @@ public class UserPreference extends PreferenceActivity {
     }
 
     public static void setProfileInformation(Vendor vendor) {
-        setAccessToken(vendor.getAccessToken());
+        setApiToken(vendor.getApiToken());
         setVendorShopName(vendor.getVendorDetails().getVendorShopName());
         setVendorShopAddress(vendor.getVendorDetails().getVendorAddress());
         setVendorShopEmail(vendor.getVendorDetails().getVendorEmail());
@@ -186,7 +190,7 @@ public class UserPreference extends PreferenceActivity {
     }
 
     public static void deleteProfileInformation() {
-        setAccessToken(null);
+        setApiToken(null);
         setVendorShopName(null);
         setVendorShopAddress(null);
         setVendorShopEmail(null);
