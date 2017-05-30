@@ -11,8 +11,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -33,9 +31,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MapActivity extends Activity implements OnMapReadyCallback {
-
-    private static final int REQ_CODE_ACCESS_FINE_LOCATION = 100;
-    private static final String permission = Manifest.permission.ACCESS_FINE_LOCATION;
 
     private GoogleMap mGoogleMap;
     private double mLatitude;
@@ -73,10 +68,10 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
      * Request for the runtime permission (SDK >= Marshmallow devices)
      */
     private void requestPermission() {
-        if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
+        if (PermissionUtil.hasPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
             setMap();
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{permission}, REQ_CODE_ACCESS_FINE_LOCATION);
+            PermissionUtil.requestPermission(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PermissionUtil.REQUEST_CODE_LOCATION);
         }
     }
 
@@ -140,11 +135,11 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         switch (requestCode) {
-            case REQ_CODE_ACCESS_FINE_LOCATION:
+            case PermissionUtil.REQUEST_CODE_LOCATION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     setMap();
                 } else {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+                    if (PermissionUtil.showRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
                         snackBarRequestPermission();
                     } else {
                         snackBarRedirectToSettings();
@@ -183,7 +178,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                         Uri uri = Uri.fromParts("package", getPackageName(), null);
                         intent.setData(uri);
-                        startActivityForResult(intent, REQ_CODE_ACCESS_FINE_LOCATION);
+                        startActivityForResult(intent, PermissionUtil.REQUEST_CODE_LOCATION);
                     }
                 });
         snackbar.show();

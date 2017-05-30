@@ -56,7 +56,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             mActionBar = getSupportActionBar();
             if (mActionBar != null) {
                 mActionBar.setHomeButtonEnabled(true);
-                mActionBar.setTitle(getString(R.string.app_name));
                 mActionBar.setDisplayHomeAsUpEnabled(true);
                 mActionBar.setDisplayShowHomeEnabled(true);
             }

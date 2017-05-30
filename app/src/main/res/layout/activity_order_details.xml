@@ -3,13 +3,15 @@
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:weightSum="2"
     android:orientation="vertical">
 
     <include layout="@layout/layout_app_toolbar" />
 
-    <!--<ScrollView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -155,20 +157,26 @@
                     android:layout_weight="1" />
 
             </LinearLayout>
-
-            <TextView
-                style="@style/AppTheme.Title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp16"
-                android:text="@string/order_items" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/order_detail_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
         </LinearLayout>
-    <!--</ScrollView>-->
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:padding="@dimen/dp32">
+
+        <TextView
+            style="@style/AppTheme.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/order_items" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/order_detail_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
 </LinearLayout>

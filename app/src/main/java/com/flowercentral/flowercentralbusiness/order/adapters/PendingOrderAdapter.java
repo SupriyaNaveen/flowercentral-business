@@ -129,19 +129,26 @@ public class PendingOrderAdapter extends RecyclerView.Adapter<PendingOrderAdapte
         try {
             JSONObject requestObject = new JSONObject();
             requestObject.put("order_id", orderId);
-            marsAsDelieverd(requestObject);
-        }catch (JSONException e) {
+            markAsDelieverd(requestObject);
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void marsAsDelieverd(JSONObject requestObject) {
+    private void markAsDelieverd(JSONObject requestObject) {
 
         BaseModel<JSONObject> baseModel = new BaseModel<JSONObject>(mContext) {
             @Override
             public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
-                Snackbar.make(mRootLayout, "Order delivered status processed.", Snackbar.LENGTH_SHORT).show();
-                mRefreshViews.performRefreshView();
+                try {
+
+                    if (response.getInt("status") == 1) {
+                        Snackbar.make(mRootLayout, "Order delivered status processed.", Snackbar.LENGTH_SHORT).show();
+                        mRefreshViews.performRefreshView();
+                    }
+                } catch (JSONException e) {
+
+                }
             }
 
             @Override
@@ -179,7 +186,7 @@ public class PendingOrderAdapter extends RecyclerView.Adapter<PendingOrderAdapte
             }
         };
 
-        String url = QueryBuilder.getLoginUrl();
+        String url = QueryBuilder.getMarkDeliveredUrl();
         if (requestObject != null) {
             baseModel.executePostJsonRequest(url, requestObject, TAG);
         } else {

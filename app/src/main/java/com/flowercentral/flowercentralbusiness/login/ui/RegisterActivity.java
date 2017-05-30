@@ -14,12 +14,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -34,6 +35,7 @@ import com.flowercentral.flowercentralbusiness.login.ui.adapter.UploadListAdapte
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
 import com.flowercentral.flowercentralbusiness.util.MapActivity;
+import com.flowercentral.flowercentralbusiness.util.PermissionUtil;
 import com.flowercentral.flowercentralbusiness.util.Util;
 import com.flowercentral.flowercentralbusiness.volley.ErrorData;
 
@@ -55,8 +57,6 @@ import butterknife.OnClick;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private static final int REQ_CODE_READ_STORAGE = 100;
-    private static final String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
     private static final int TYPE_MAP = 3;
     private String TAG = RegisterActivity.class.getSimpleName();
     private static final int TYPE_DOC_UPLOAD = 1;
@@ -120,6 +120,11 @@ public class RegisterActivity extends AppCompatActivity {
     private ArrayList<Uri> mDocPathList = new ArrayList<>();
     private ArrayList<Uri> mImagePathList = new ArrayList<>();
 
+    @BindView(R.id.toolbar)
+    Toolbar mToolBar;
+
+    private ActionBar mActionBar;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,6 +154,30 @@ public class RegisterActivity extends AppCompatActivity {
             mFrameLayoutNoInternet.setVisibility(View.VISIBLE);
             mLinearLayoutRegister.setVisibility(View.GONE);
         }
+
+        setSupportActionBar(mToolBar);
+
+        if (mToolBar != null) {
+            setSupportActionBar(mToolBar);
+            mActionBar = getSupportActionBar();
+            if (mActionBar != null) {
+                mActionBar.setHomeButtonEnabled(true);
+                mActionBar.setTitle("");
+                mActionBar.setDisplayHomeAsUpEnabled(true);
+                mActionBar.setDisplayShowHomeEnabled(true);
+            }
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @OnClick(R.id.btn_register)
@@ -357,7 +386,7 @@ public class RegisterActivity extends AppCompatActivity {
      * Request for the runtime permission (SDK >= Marshmallow devices)
      */
     private void requestPermission() {
-        if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
+        if (PermissionUtil.hasPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
             if (mCurrentUploadType == TYPE_DOC_UPLOAD) {
                 browseDocuments();
@@ -365,7 +394,8 @@ public class RegisterActivity extends AppCompatActivity {
                 browsePictures();
             }
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{permission}, REQ_CODE_READ_STORAGE);
+            PermissionUtil.requestPermission(this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    PermissionUtil.REQUEST_CODE_READ_EXTERNAL_STORAGE);
         }
     }
 
@@ -374,7 +404,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         switch (requestCode) {
-            case REQ_CODE_READ_STORAGE:
+            case PermissionUtil.REQUEST_CODE_READ_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (mCurrentUploadType == TYPE_DOC_UPLOAD) {
                         browseDocuments();
@@ -382,7 +412,7 @@ public class RegisterActivity extends AppCompatActivity {
                         browsePictures();
                     }
                 } else {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+                    if (PermissionUtil.showRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                         snackBarRequestPermission();
                     } else {
                         snackBarRedirectToSettings();
@@ -421,7 +451,7 @@ public class RegisterActivity extends AppCompatActivity {
                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                         Uri uri = Uri.fromParts("package", getPackageName(), null);
                         intent.setData(uri);
-                        startActivityForResult(intent, REQ_CODE_READ_STORAGE);
+                        startActivityForResult(intent, PermissionUtil.REQUEST_CODE_READ_EXTERNAL_STORAGE);
                     }
                 });
         snackbar.show();

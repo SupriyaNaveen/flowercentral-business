@@ -20,12 +20,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flowercentral.flowercentralbusiness.R;
-import com.flowercentral.flowercentralbusiness.preference.UserPreference;
+import com.flowercentral.flowercentralbusiness.profile.model.ProfileDetails;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
 import com.flowercentral.flowercentralbusiness.util.MapActivity;
 import com.flowercentral.flowercentralbusiness.util.Util;
 import com.flowercentral.flowercentralbusiness.volley.ErrorData;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -156,21 +158,24 @@ public class UpdateProfile extends Fragment {
         };
 
         String url = QueryBuilder.getProfileInformationUrl();
-        try {
-            JSONObject requestObject = new JSONObject();
-            requestObject.put("profile_id", UserPreference.getApiToken());
-            if (requestObject != null) {
-                baseModel.executePostJsonRequest(url, requestObject, TAG);
-            } else {
-                Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();
-            }
-        } catch (JSONException e) {
-
-        }
+        baseModel.executeGetJsonRequest(url, TAG);
     }
 
     private void displayProfileInformation(JSONObject response) {
-        //TODO display the profile information.
+        ProfileDetails profileDetail = new Gson().<ProfileDetails>fromJson(String.valueOf(response),
+                new TypeToken<ProfileDetails>() {
+                }.getType());
+        mEditTextShopName.setText(profileDetail.getShopName());
+        mEditTextAddress.setText(profileDetail.getAddress());
+        mEditTextCity.setText(profileDetail.getCity());
+        mEditTextState.setText(profileDetail.getState());
+//        mEd.setText(profileDetail.getShopName());
+        mEditTextPhone1.setText(profileDetail.getPhone1());
+        mEditTextPhone2.setText(profileDetail.getPhone2());
+        mLatitude = profileDetail.getLatitude();
+        mLongitude = profileDetail.getLongitude();
+        mEditTextTIN.setText(profileDetail.getTinNumber());
+        mEditTextZip.setText(profileDetail.getPin());
     }
 
     @OnClick(R.id.btn_cancel)
@@ -190,7 +195,7 @@ public class UpdateProfile extends Fragment {
                     updateJson.put("shop_name", mEditTextShopName.getText());
                 }
                 if (mEditTextAddress.getText().length() > 0) {
-                    updateJson.put("add1", mEditTextAddress.getText());
+                    updateJson.put("address", mEditTextAddress.getText());
                     if (mLatitude == 0 || mLongitude == 0) {
                         isLocated(mEditTextAddress.getText().toString());
                     }
@@ -215,7 +220,7 @@ public class UpdateProfile extends Fragment {
                     updateJson.put("phone2", mEditTextPhone2.getText());
                 }
                 if (mEditTextTIN.getText().length() > 0) {
-                    updateJson.put("tin", mEditTextTIN.getText());
+                    updateJson.put("tin_num", mEditTextTIN.getText());
                 }
                 updateUser(mContext, updateJson);
             } catch (JSONException e) {
@@ -277,18 +282,22 @@ public class UpdateProfile extends Fragment {
     private void showUpdateSuccessMessage(final JSONObject response) {
 
         try {
-            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-            alertDialogBuilder.setMessage(response.getString("message"));
-            alertDialogBuilder.setPositiveButton("Okay",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //TODO
-                        }
-                    });
-            final AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.setCanceledOnTouchOutside(false);
-            alertDialog.show();
+            if (response.getInt("status") == 1) {
+
+                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                alertDialogBuilder.setMessage("Profile updated successfully");
+                alertDialogBuilder.setPositiveButton("Okay",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+                final AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.setCanceledOnTouchOutside(false);
+                alertDialog.show();
+            } else {
+                Snackbar.make(mFrameLayoutRoot, "Update profile failed", Snackbar.LENGTH_SHORT).show();
+            }
         } catch (JSONException e) {
             Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();
         }

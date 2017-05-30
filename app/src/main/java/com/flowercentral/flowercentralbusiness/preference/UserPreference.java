@@ -21,14 +21,14 @@ public class UserPreference extends PreferenceActivity {
     private final static String API_TOKEN = "api_token";
 
     public static String getApiToken() {
-        return API_TOKEN;
+        return readString(mContext, API_TOKEN, null);
     }
 
     public static void setApiToken(String _token) {
         writeString(mContext, API_TOKEN, _token);
     }
 
-//    private final static String LOGIN_ACCESS_TOKEN = "login_access_token";
+    //    private final static String LOGIN_ACCESS_TOKEN = "login_access_token";
     private final static String VENDOR_LOGIN_STATUS = "vendor_login_status";
     private final static String VENDOR_LOGIN_MESSAGE = "vendor_login_message";
     private final static String VENDOR_SHOP_NAME = "vendor_shop_name";

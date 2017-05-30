@@ -48,14 +48,21 @@ public class QueryBuilder {
     public static String getUpdateUrl() {
         StringBuilder sb = new StringBuilder();
         sb.append(BuildConfig.SERVER);
-        sb.append("update");
+        sb.append("update_profile");
         return sb.toString();
     }
 
     public static String getProfileInformationUrl() {
         StringBuilder sb = new StringBuilder();
         sb.append(BuildConfig.SERVER);
-        sb.append("profile");
+        sb.append("get_profile");
+        return sb.toString();
+    }
+
+    public static String getMarkDeliveredUrl() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(BuildConfig.SERVER);
+        sb.append("mark_delivered");
         return sb.toString();
     }
 }

@@ -205,6 +205,7 @@ public class PendingOrder extends Fragment {
         PendingOrderAdapter adapter = new PendingOrderAdapter(orderItemList, mRootLayout, new RefreshViews() {
             @Override
             public void performRefreshView() {
+                mSwipeRefreshLayout.setRefreshing(true);
                 refreshItems();
             }
         });

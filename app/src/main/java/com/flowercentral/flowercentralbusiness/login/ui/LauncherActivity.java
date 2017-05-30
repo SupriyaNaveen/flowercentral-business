@@ -1,14 +1,21 @@
 package com.flowercentral.flowercentralbusiness.login.ui;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -22,6 +29,7 @@ import com.flowercentral.flowercentralbusiness.login.ui.model.Vendor;
 import com.flowercentral.flowercentralbusiness.preference.UserPreference;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
+import com.flowercentral.flowercentralbusiness.util.PermissionUtil;
 import com.flowercentral.flowercentralbusiness.util.Util;
 import com.flowercentral.flowercentralbusiness.volley.ErrorData;
 import com.google.gson.Gson;
@@ -72,6 +80,10 @@ public class LauncherActivity extends AppCompatActivity {
     @BindView(R.id.txt_link_flower_central_account)
     TextView mTextViewRegisterAccount;
 
+    @BindView(R.id.toolbar)
+    Toolbar mToolBar;
+    private ActionBar mActionBar;
+
     /**
      * @param savedInstanceState
      */
@@ -109,6 +121,30 @@ public class LauncherActivity extends AppCompatActivity {
             mFrameLayoutNoInternet.setVisibility(View.VISIBLE);
             mLinearLayoutLogin.setVisibility(View.GONE);
         }
+
+        setSupportActionBar(mToolBar);
+
+        if (mToolBar != null) {
+            setSupportActionBar(mToolBar);
+            mActionBar = getSupportActionBar();
+            if (mActionBar != null) {
+                mActionBar.setHomeButtonEnabled(true);
+                mActionBar.setTitle("");
+                mActionBar.setDisplayHomeAsUpEnabled(true);
+                mActionBar.setDisplayShowHomeEnabled(true);
+            }
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -122,19 +158,7 @@ public class LauncherActivity extends AppCompatActivity {
 
         boolean isValidInput = isValidInput();
         if (isValidInput) {
-            try {
-                JSONObject user = new JSONObject();
-                user.put("username", mTextViewVendorName.getText());
-                user.put("password", mTextViewPassword.getText());
-                String android_id = Settings.Secure.getString(getContentResolver(),
-                        Settings.Secure.ANDROID_ID);
-                user.put("deviceid", android_id);
-                TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-                user.put("imei", telephonyManager.getDeviceId());
-                registerUser(mContext, user);
-            } catch (JSONException e) {
-                Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();
-            }
+           requestPermissionBeforeLogin();
         }
     }
 
@@ -255,5 +279,87 @@ public class LauncherActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Request for the runtime permission (SDK >= Marshmallow devices)
+     */
+    private void requestPermissionBeforeLogin() {
+        if (PermissionUtil.hasPermission(this, Manifest.permission.READ_PHONE_STATE)) {
+            performLogin();
+        } else {
+            PermissionUtil.requestPermission(this, new String[]{Manifest.permission.READ_PHONE_STATE},
+                    PermissionUtil.REQUEST_CODE_READ_PHONE_STATE);
+        }
+    }
+
+    private void performLogin() {
+        try {
+            JSONObject user = new JSONObject();
+            user.put("username", mTextViewVendorName.getText());
+            user.put("password", mTextViewPassword.getText());
+            String android_id = Settings.Secure.getString(getContentResolver(),
+                    Settings.Secure.ANDROID_ID);
+            user.put("deviceid", android_id);
+            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            user.put("imei", telephonyManager.getDeviceId());
+            registerUser(mContext, user);
+        } catch (JSONException e) {
+            Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case PermissionUtil.REQUEST_CODE_READ_PHONE_STATE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    performLogin();
+                } else {
+                    if (PermissionUtil.showRationale(this, Manifest.permission.READ_PHONE_STATE)) {
+                        snackBarRequestPermission();
+                    } else {
+                        snackBarRedirectToSettings();
+                    }
+                }
+                break;
+        }
+    }
+
+    /**
+     * Displays the snack bar to request the permission from user
+     */
+    private void snackBarRequestPermission() {
+        Snackbar snackbar = Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string
+                .s_required_permission_phone_state), Snackbar.LENGTH_INDEFINITE).setAction(getResources().getString(R.string
+                .s_action_request_again), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestPermissionBeforeLogin();
+            }
+        });
+        snackbar.show();
+    }
+
+    /**
+     * If the user checked "Never ask again" option and deny the permission then request dialog
+     * cannot be invoked. So display SnackBar to redirect to Settings to grant the permissions
+     */
+    private void snackBarRedirectToSettings() {
+        Snackbar snackbar = Snackbar.make(mFrameLayoutRoot, getResources()
+                .getString(R.string.s_required_permission_settings), Snackbar.LENGTH_INDEFINITE)
+                .setAction(getResources().getString(R.string.s_action_redirect_settings), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Navigate to app details settings
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getPackageName(), null);
+                        intent.setData(uri);
+                        startActivityForResult(intent, PermissionUtil.REQUEST_CODE_READ_PHONE_STATE);
+                    }
+                });
+        snackbar.show();
     }
 }

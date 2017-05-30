@@ -73,6 +73,7 @@
     <string name="s_required_permission_settings">Grant permission in setting.</string>
     <string name="s_action_redirect_settings">Settings</string>
     <string name="s_required_permission_read_storage">Grant permission to read storage.</string>
+    <string name="s_required_permission_phone_state">Grant permission to access phone state</string>
 
     <string name="order_details">Order Details</string>
     <string name="lbl_order_placed_schedule">Order Placed</string>
