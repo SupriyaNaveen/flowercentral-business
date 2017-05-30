@@ -72,4 +72,11 @@ public class QueryBuilder {
         sb.append("change_password");
         return sb.toString();
     }
+
+    public static String getFeedbackListUrl() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(BuildConfig.SERVER);
+        sb.append("feedbacks");
+        return sb.toString();
+    }
 }

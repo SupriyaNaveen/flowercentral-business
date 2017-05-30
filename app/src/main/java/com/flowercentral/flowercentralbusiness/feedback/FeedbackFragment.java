@@ -1,4 +1,4 @@
-package com.flowercentral.flowercentralbusiness.order;
+package com.flowercentral.flowercentralbusiness.feedback;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -15,8 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flowercentral.flowercentralbusiness.R;
-import com.flowercentral.flowercentralbusiness.order.adapters.CompletedOrderAdapter;
-import com.flowercentral.flowercentralbusiness.order.model.OrderItem;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
 import com.flowercentral.flowercentralbusiness.util.Util;
@@ -34,64 +32,48 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by admin on 17-05-2017.
+ * Created by admin on 19-05-2017.
  */
 
-public class CompletedOrder extends Fragment {
+public class FeedbackFragment extends Fragment {
 
-    private String TAG = CompletedOrder.class.getSimpleName();
+    private static final String TAG = FeedbackFragment.class.getSimpleName();
     private View view;
     private Context mContext;
 
-    @BindView(R.id.completed_order_recyclerview)
-    RecyclerView mOrderItemRecyclerView;
+    @BindView(R.id.feedback_recyclerview)
+    RecyclerView mFeedbackRecyclerView;
 
-    @BindView(R.id.textview_empty)
+    @BindView(R.id.root_layout)
+    RelativeLayout mRootLayout;
+
+    @BindView(R.id.text_view_empty)
     TextView mListEmptyMessageView;
 
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-    @BindView(R.id.root_layout)
-    RelativeLayout mRootLayout;
-
-    /**
-     * Default Constructor
-     */
-    public CompletedOrder() {
-    }
-
-    /**
-     * Instantiate completed order fragment.
-     *
-     * @return
-     */
-    public static CompletedOrder newInstance() {
-        CompletedOrder fragment = new CompletedOrder();
+    public static FeedbackFragment newInstance() {
+        FeedbackFragment fragment = new FeedbackFragment();
         return fragment;
     }
 
-    /**
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
-     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_completed_order, container, false);
+        view = inflater.inflate(R.layout.fragment_feedback, container, false);
         ButterKnife.bind(this, view);
 
         mContext = getActivity();
 
-        // use a linear layout manager
+        // For recycler view use a linear layout manager
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        mOrderItemRecyclerView.setLayoutManager(mLayoutManager);
+        mFeedbackRecyclerView.setLayoutManager(mLayoutManager);
 
         mSwipeRefreshLayout.setRefreshing(true);
-        getCompletedOrderItems();
+        getFeedbackItems();
 
+        //On swipe refresh the screen.
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -101,17 +83,14 @@ public class CompletedOrder extends Fragment {
         return view;
     }
 
-    /**
-     * On swipe refresh the layout.
-     */
     private void refreshItems() {
-        getCompletedOrderItems();
+        getFeedbackItems();
     }
 
     /**
-     * Get the completed order list and present it on UI.
+     * Get the pending order list and present it on UI.
      */
-    private void getCompletedOrderItems() {
+    private void getFeedbackItems() {
 
         //No internet connection then return
         if (!Util.checkInternet(mContext)) {
@@ -119,11 +98,13 @@ public class CompletedOrder extends Fragment {
             return;
         }
 
+        // Make web api call to get the pending order item list.
         BaseModel<JSONArray> baseModel = new BaseModel<JSONArray>(mContext) {
             @Override
             public void onSuccess(int statusCode, Map<String, String> headers, JSONArray response) {
-                List<OrderItem> orderItemList = constructOrderItemList(response);
-                updateCompletedOrderViews(orderItemList);
+                // Construct the order item list from web api response.
+                List<FeedbackItem> orderItemList = constructFeedbackItemList(response);
+                updateFeedbackListViews(orderItemList);
             }
 
             @Override
@@ -131,8 +112,8 @@ public class CompletedOrder extends Fragment {
                 hideRefreshLayout();
                 if (error != null) {
 
-                    List<OrderItem> orderItemList = new ArrayList<>();
-                    updateCompletedOrderViews(orderItemList);
+                    List<FeedbackItem> orderItemList = new ArrayList<>();
+                    updateFeedbackListViews(orderItemList);
 
                     error.setErrorMessage("Data fetch failed. Cause -> " + error.getErrorMessage());
                     switch (error.getErrorType()) {
@@ -168,7 +149,7 @@ public class CompletedOrder extends Fragment {
             }
         };
 
-        String url = QueryBuilder.getCompletedOrderListUrl();
+        String url = QueryBuilder.getFeedbackListUrl();
         baseModel.executeGetJsonArrayRequest(url, TAG);
     }
 
@@ -176,33 +157,35 @@ public class CompletedOrder extends Fragment {
      * @param response
      * @return
      */
-    private List<OrderItem> constructOrderItemList(JSONArray response) {
-        List<OrderItem> orderItemList = new Gson().<List<OrderItem>>fromJson(String.valueOf(response),
-                new TypeToken<List<OrderItem>>(){}.getType());
-        return orderItemList;
+    private List<FeedbackItem> constructFeedbackItemList(JSONArray response) {
+
+        List<FeedbackItem> feedbackItemList = new Gson().<List<FeedbackItem>>fromJson(String.valueOf(response),
+                new TypeToken<List<FeedbackItem>>(){}.getType());
+        return feedbackItemList;
     }
 
     /**
-     * Update view for ordered item list.
+     * Hide the swipe refresh layout.
+     * If the list is empty show empty view. Else show the recycler view.
      *
-     * @param orderItemList
+     * @param feedbackItemList
      */
-    private void updateCompletedOrderViews(List<OrderItem> orderItemList) {
+    private void updateFeedbackListViews(List<FeedbackItem> feedbackItemList) {
 
         hideRefreshLayout();
-        if (null == orderItemList || orderItemList.isEmpty()) {
+        if (null == feedbackItemList || feedbackItemList.isEmpty()) {
             mListEmptyMessageView.setVisibility(View.VISIBLE);
-            orderItemList = new ArrayList<>();
+            feedbackItemList = new ArrayList<>();
         } else {
             mListEmptyMessageView.setVisibility(View.GONE);
         }
 
-        CompletedOrderAdapter adapter = new CompletedOrderAdapter(orderItemList);
-        mOrderItemRecyclerView.setAdapter(adapter);
+        ViewFeedbackAdapter adapter = new ViewFeedbackAdapter(feedbackItemList, mRootLayout);
+        mFeedbackRecyclerView.setAdapter(adapter);
     }
 
     /**
-     * Hide the refresh layout.
+     * Hide the swipe refresh layout.
      */
     private void hideRefreshLayout() {
         mSwipeRefreshLayout.setRefreshing(false);

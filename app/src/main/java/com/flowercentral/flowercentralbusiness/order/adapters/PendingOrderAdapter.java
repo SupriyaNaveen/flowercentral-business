@@ -129,13 +129,13 @@ public class PendingOrderAdapter extends RecyclerView.Adapter<PendingOrderAdapte
         try {
             JSONObject requestObject = new JSONObject();
             requestObject.put("order_id", orderId);
-            markAsDelieverd(requestObject);
+            markAsDelivered(requestObject);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void markAsDelieverd(JSONObject requestObject) {
+    private void markAsDelivered(JSONObject requestObject) {
 
         BaseModel<JSONObject> baseModel = new BaseModel<JSONObject>(mContext) {
             @Override

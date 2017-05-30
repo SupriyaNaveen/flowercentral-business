@@ -93,6 +93,7 @@ public class PendingOrder extends Fragment {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mOrderItemRecyclerView.setLayoutManager(mLayoutManager);
 
+        mSwipeRefreshLayout.setRefreshing(true);
         getPendingOrderItems();
 
         //On swipe refresh the screen.
