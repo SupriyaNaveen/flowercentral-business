@@ -65,4 +65,11 @@ public class QueryBuilder {
         sb.append("mark_delivered");
         return sb.toString();
     }
+
+    public static String getChangePasswordUrl() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(BuildConfig.SERVER);
+        sb.append("change_password");
+        return sb.toString();
+    }
 }

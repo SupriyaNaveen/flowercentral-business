@@ -89,4 +89,9 @@
     <string name="title_change_password">Change Password</string>
     <string name="lbl_update">Update</string>
     <string name="lbl_cancel">Cancel</string>
+
+    <string name="lbl_old_password">Old Password</string>
+    <string name="lbl_new_password">New Password</string>
+    <string name="lbl_confirm_new_password">Confirm New Password</string>
+    <string name="lbl_reset_password">Reset Password</string>
 </resources>
