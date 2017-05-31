@@ -1,27 +1,18 @@
 <resources>
     <string name="app_name">Florist-Vendor</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">Florist\nBusiness</string>
 
     <!-- Activity -->
-    <string name="title_activity_splash">SplashActivity</string>
 
     <!-- Error Messages and Title -->
-    <string name="title_connection_time_out">Connection Timeout</string>
-    <string name="title_internet_unavailable">No Internet</string>
     <string name="msg_connection_time_out">Connection Timeout.</string>
     <string name="msg_internet_unavailable">Please check your Wifi or Internet Data and Try Again!</string>
-    <string name="msg_logout_success">You have been Successfully logged out.</string>
     <string name="msg_registering_user">Processing...</string>
-    <string name="msg_is_loggd_in_user">Logging in!!!</string>
     <string name="msg_reg_user_missing_input">Required parameters are missing. Please check and try again!</string>
 
     <!-- Login Page -->
-    <string name="lbl_lets_connect">Let\'s Connect With Us</string>
     <string name="lbl_need_flower_central_account"><u>Need Flower Central Account?</u></string>
     <string name="lbl_app_name">~ Flower Central ~</string>
     <string name="lbl_app_tag">Your one stop flower shop</string>
-    <string name="lbl_or">Or Sign-In With</string>
     <string name="btn_try_again">Try Again</string>
     <string name="lbl_vendor_name">Vendor Name</string>
     <string name="lbl_vendor_tin">TIN</string>
@@ -54,12 +45,11 @@
     <string name="title_completed_order">Completed Orders</string>
     <string name="empty_pending_order_items">No pending order items</string>
     <string name="empty_completed_order_items">No completed order items</string>
-    <string name="order_lbl_price">$%s</string>
-    <string name="order_lbl_quantity">Item: %s</string>
-    <string name="order_lbl_schedule">Schedule: %s</string>
-    <string name="order_lbl_address">Address: %s</string>
-    <string name="lbl_view_on_map">Address: %s</string>
-    <string name="lbl_status_pending">Pending</string>
+    <string name="order_format_price">$%s</string>
+    <string name="order_format_quantity">Item: %s</string>
+    <string name="order_format_schedule">Schedule: %s</string>
+    <string name="order_format_delivered_at">Delivered At: %s</string>
+    <string name="order_format_address">Address: %s</string>
     <string name="lbl_status_delivered">Delivered</string>
     <string name="btn_view_on_map">VIEW ON MAP</string>
     <string name="link_view_on_map"><u>View on map</u></string>
@@ -82,6 +72,7 @@
     <string name="lbl_is_scheduled_delievry">Scheduled Delivery</string>
     <string name="lbl_schedule">Schedule</string>
     <string name="lbl_status">Order Status</string>
+    <string name="lbl_delivered_at">Delivered At</string>
     <string name="order_items">Items</string>
     <string name="key_order_id">order_id</string>
     <string name="title_profile">Profile</string>
@@ -95,4 +86,37 @@
     <string name="lbl_confirm_new_password">Confirm New Password</string>
     <string name="lbl_reset_password">Reset Password</string>
     <string name="empty_feedback_list">No feedback items to show</string>
+
+    <string name="map_error_unable_locate_address">Unable to locate the address.</string>
+
+    <!-- Field validation error messages -->
+    <string name="fld_error_user_name">Please enter user name.</string>
+    <string name="fld_error_password">Please enter password.</string>
+    <string name="fld_error_vendor_name">Please enter vendor name.</string>
+    <string name="fld_error_address_for_map">Please enter address to locate on map.</string>
+    <string name="fld_error_old_password">Please enter old password.</string>
+    <string name="fld_error_new_password">Please enter new password.</string>
+    <string name="fld_error_confirm_password">Please enter confirm new password.</string>
+    <string name="message_password_mismatch">New password and confirm password does not match</string>
+
+    <!-- web api keys -->
+    <string name="api_key_username">username</string>
+    <string name="api_key_password">password</string>
+    <string name="api_key_imei">imei</string>
+    <string name="api_key_device_id">deviceid</string>
+    <string name="api_key_latitude">latitude</string>
+    <string name="api_key_longitude">longitude</string>
+    <string name="api_key_address">address</string>
+    <string name="api_key_shop_name">shop_name</string>
+    <string name="api_key_city">city</string>
+    <string name="api_key_state">state</string>
+    <string name="api_key_pin">pin</string>
+    <string name="api_key_phone1">phone1</string>
+    <string name="api_key_phone2">phone2</string>
+    <string name="api_key_tin_num">tin_num</string>
+    <string name="api_key_order_id">order_id</string>
+    <string name="api_key_timestamp">timestamp</string>
+    <string name="api_key_old_password">old_password</string>
+    <string name="api_key_new_password">new_pass</string>
+    <string name="api_key_confirm_password">confirm_new_password</string>
 </resources>

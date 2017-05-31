@@ -32,13 +32,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by admin on 19-05-2017.
+ *
  */
-
 public class FeedbackFragment extends Fragment {
 
     private static final String TAG = FeedbackFragment.class.getSimpleName();
-    private View view;
     private Context mContext;
 
     @BindView(R.id.feedback_recyclerview)
@@ -53,15 +51,25 @@ public class FeedbackFragment extends Fragment {
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
+    /**
+     *
+     * @return instance of fragment
+     */
     public static FeedbackFragment newInstance() {
-        FeedbackFragment fragment = new FeedbackFragment();
-        return fragment;
+        return new FeedbackFragment();
     }
 
+    /**
+     *
+     * @param inflater inflater
+     * @param container container
+     * @param savedInstanceState savedInstanceState
+     * @return view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_feedback, container, false);
+        View view = inflater.inflate(R.layout.fragment_feedback, container, false);
         ButterKnife.bind(this, view);
 
         mContext = getActivity();
@@ -83,12 +91,15 @@ public class FeedbackFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Refresh feedback items list.
+     */
     private void refreshItems() {
         getFeedbackItems();
     }
 
     /**
-     * Get the pending order list and present it on UI.
+     * Get the feedback items list and present it on UI.
      */
     private void getFeedbackItems() {
 
@@ -98,13 +109,13 @@ public class FeedbackFragment extends Fragment {
             return;
         }
 
-        // Make web api call to get the pending order item list.
+        // Make web api call to get the feedback item list.
         BaseModel<JSONArray> baseModel = new BaseModel<JSONArray>(mContext) {
             @Override
             public void onSuccess(int statusCode, Map<String, String> headers, JSONArray response) {
-                // Construct the order item list from web api response.
-                List<FeedbackItem> orderItemList = constructFeedbackItemList(response);
-                updateFeedbackListViews(orderItemList);
+                // Construct the feedback item list from web api response.
+                List<FeedbackItem> feedbackItemList = constructFeedbackItemList(response);
+                updateFeedbackListViews(feedbackItemList);
             }
 
             @Override
@@ -112,8 +123,8 @@ public class FeedbackFragment extends Fragment {
                 hideRefreshLayout();
                 if (error != null) {
 
-                    List<FeedbackItem> orderItemList = new ArrayList<>();
-                    updateFeedbackListViews(orderItemList);
+                    List<FeedbackItem> feedbackItemList = new ArrayList<>();
+                    updateFeedbackListViews(feedbackItemList);
 
                     error.setErrorMessage("Data fetch failed. Cause -> " + error.getErrorMessage());
                     switch (error.getErrorType()) {
@@ -154,21 +165,20 @@ public class FeedbackFragment extends Fragment {
     }
 
     /**
-     * @param response
-     * @return
+     * @param response response
+     * @return feedback item list
      */
     private List<FeedbackItem> constructFeedbackItemList(JSONArray response) {
 
-        List<FeedbackItem> feedbackItemList = new Gson().<List<FeedbackItem>>fromJson(String.valueOf(response),
+        return new Gson().fromJson(String.valueOf(response),
                 new TypeToken<List<FeedbackItem>>(){}.getType());
-        return feedbackItemList;
     }
 
     /**
      * Hide the swipe refresh layout.
      * If the list is empty show empty view. Else show the recycler view.
      *
-     * @param feedbackItemList
+     * @param feedbackItemList feedbackItemList
      */
     private void updateFeedbackListViews(List<FeedbackItem> feedbackItemList) {
 
@@ -180,7 +190,7 @@ public class FeedbackFragment extends Fragment {
             mListEmptyMessageView.setVisibility(View.GONE);
         }
 
-        ViewFeedbackAdapter adapter = new ViewFeedbackAdapter(feedbackItemList, mRootLayout);
+        ViewFeedbackAdapter adapter = new ViewFeedbackAdapter(feedbackItemList);
         mFeedbackRecyclerView.setAdapter(adapter);
     }
 

@@ -14,7 +14,6 @@
         android:src="@drawable/ic_portable_wifi_off_accent_50dp"/>
 
     <TextView
-        android:id="@+id/txt_err_msg"
         style="@style/AppTheme.Normal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

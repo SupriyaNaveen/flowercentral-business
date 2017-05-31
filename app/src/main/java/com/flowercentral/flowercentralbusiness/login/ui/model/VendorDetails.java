@@ -5,12 +5,9 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-
 /**
- * Created by admin on 23-05-2017.
+ *
  */
-
 public class VendorDetails implements Parcelable {
 
     @SerializedName("shop_name")
@@ -21,12 +18,12 @@ public class VendorDetails implements Parcelable {
 
     @SerializedName("address")
     private String vendorAddress;
-    private ArrayList<String> vendorImageList = new ArrayList<>();
+//    private ArrayList<String> vendorImageList = new ArrayList<>();
 
     public VendorDetails() {
     }
 
-    protected VendorDetails(Parcel in) {
+    private VendorDetails(Parcel in) {
         vendorShopName = in.readString();
         vendorEmail = in.readString();
         vendorAddress = in.readString();

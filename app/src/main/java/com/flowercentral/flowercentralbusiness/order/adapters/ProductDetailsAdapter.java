@@ -20,9 +20,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by admin on 18-05-2017.
+ *
  */
-
 public class ProductDetailsAdapter extends RecyclerView.Adapter<ProductDetailsAdapter.ViewHolder> {
 
     private List<ProductItem> mProductList;
@@ -43,7 +42,7 @@ public class ProductDetailsAdapter extends RecyclerView.Adapter<ProductDetailsAd
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.textViewProductDetails.setText(mProductList.get(position).getName());
-        holder.textViewProductPriceDetails.setText(mContext.getString(R.string.order_lbl_price, String.valueOf(mProductList.get(position).getPrice())));
+        holder.textViewProductPriceDetails.setText(String.valueOf(mProductList.get(position).getPrice()));
         holder.textViewProductQuantity.setText(String.valueOf(mProductList.get(position).getQuantity()));
 
 //        holder.textViewProductMessage.setText(mContext.getString(R.string.product_lbl_address, mProductList.get(position).getMessage()));

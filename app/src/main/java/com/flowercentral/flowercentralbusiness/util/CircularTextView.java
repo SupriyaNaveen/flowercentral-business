@@ -1,9 +1,5 @@
 package com.flowercentral.flowercentralbusiness.util;
 
-/**
- * Created by admin on 22-05-2017.
- */
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;

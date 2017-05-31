@@ -15,11 +15,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by admin on 19-05-2017.
+ *
  */
 public class ProfileFragment extends Fragment {
-
-    private View view;
 
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
@@ -36,25 +34,24 @@ public class ProfileFragment extends Fragment {
     /**
      * Instantiate the order fragment to hold pending order and completed order.
      *
-     * @return
+     * @return instance of fragment
      */
     public static ProfileFragment newInstance() {
-        ProfileFragment fragment = new ProfileFragment();
-        return fragment;
+        return new ProfileFragment();
     }
 
     /**
      * Set up view pager.
      *
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
+     * @param inflater inflater
+     * @param container container
+     * @param savedInstanceState savedInstance
+     * @return view
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, view);
         setupViewPager();
         return view;

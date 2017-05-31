@@ -1,6 +1,7 @@
 package com.flowercentral.flowercentralbusiness.login.ui;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,7 +15,6 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.telephony.TelephonyManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -45,9 +45,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by admin on 16-05-2017.
+ *
  */
-
 public class LauncherActivity extends AppCompatActivity {
 
     private static final String TAG = LauncherActivity.class.getSimpleName();
@@ -82,10 +81,9 @@ public class LauncherActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar mToolBar;
-    private ActionBar mActionBar;
 
     /**
-     * @param savedInstanceState
+     * @param savedInstanceState saved instance
      */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,7 +107,7 @@ public class LauncherActivity extends AppCompatActivity {
     /**
      * Check for internet connection and update view accordingly.
      *
-     * @param _context
+     * @param _context context
      */
     private void initializeActivity(Context _context) {
         //Check internet connectivity
@@ -126,7 +124,7 @@ public class LauncherActivity extends AppCompatActivity {
 
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);
-            mActionBar = getSupportActionBar();
+            ActionBar mActionBar = getSupportActionBar();
             if (mActionBar != null) {
                 mActionBar.setHomeButtonEnabled(true);
                 mActionBar.setTitle("");
@@ -165,20 +163,20 @@ public class LauncherActivity extends AppCompatActivity {
     /**
      * Validator class
      *
-     * @return
+     * @return is valid or not
      */
     private boolean isValidInput() {
         boolean isValid = true;
 
         if (mTextViewVendorName.getText().toString().isEmpty()) {
-            mTextViewVendorName.setError("Please enter vendor name.");
+            mTextViewVendorName.setError(getString(R.string.fld_error_user_name));
             isValid = false;
         } else {
             mTextViewVendorName.setError(null);
         }
 
         if (mTextViewPassword.getText().toString().isEmpty()) {
-            mTextViewPassword.setError("Please enter password.");
+            mTextViewPassword.setError(getString(R.string.fld_error_password));
             isValid = false;
         } else {
             mTextViewPassword.setError(null);
@@ -214,7 +212,7 @@ public class LauncherActivity extends AppCompatActivity {
         BaseModel<JSONObject> baseModel = new BaseModel<JSONObject>(_context) {
             @Override
             public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
-                Vendor vendor = new Gson().<Vendor>fromJson(String.valueOf(response),
+                Vendor vendor = new Gson().fromJson(String.valueOf(response),
                         new TypeToken<Vendor>() {
                         }.getType());
                 UserPreference.setProfileInformation(vendor);
@@ -293,16 +291,14 @@ public class LauncherActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("HardwareIds")
     private void performLogin() {
         try {
             JSONObject user = new JSONObject();
-            user.put("username", mTextViewVendorName.getText());
-            user.put("password", mTextViewPassword.getText());
-            String android_id = Settings.Secure.getString(getContentResolver(),
-                    Settings.Secure.ANDROID_ID);
-            user.put("deviceid", android_id);
-            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            user.put("imei", telephonyManager.getDeviceId());
+            user.put(getString(R.string.api_key_username), mTextViewVendorName.getText());
+            user.put(getString(R.string.api_key_password), mTextViewPassword.getText());
+            user.put(getString(R.string.api_key_device_id), Util.getDeviceId(this));
+            user.put(getString(R.string.api_key_imei), Util.getIEMINumber(this));
             registerUser(mContext, user);
         } catch (JSONException e) {
             Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();

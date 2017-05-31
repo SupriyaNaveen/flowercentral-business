@@ -26,9 +26,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by admin on 26-05-2017.
+ *
  */
-
 public class ChangePassword extends Fragment {
 
     private static final String TAG = ChangePassword.class.getSimpleName();
@@ -67,16 +66,16 @@ public class ChangePassword extends Fragment {
                     if (mEditTextNewPassword.getText().toString().equals(mEditTextConfirmNewPassword.getText().toString())) {
                         performResetPassword();
                     } else {
-                        Snackbar.make(mLinearRootLayout, "New password and confirm password does'nt match", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(mLinearRootLayout, getString(R.string.message_password_mismatch), Snackbar.LENGTH_SHORT).show();
                     }
                 } else {
-                    mEditTextConfirmNewPassword.setError("Please enter confirm new password");
+                    mEditTextConfirmNewPassword.setError(getString(R.string.fld_error_confirm_password));
                 }
             } else {
-                mEditTextNewPassword.setError("Please enter new password");
+                mEditTextNewPassword.setError(getString(R.string.fld_error_new_password));
             }
         } else {
-            mEditTextOldPassword.setError("Please enter old password");
+            mEditTextOldPassword.setError(getString(R.string.fld_error_old_password));
         }
     }
 
@@ -85,13 +84,13 @@ public class ChangePassword extends Fragment {
         try {
             JSONObject requestObject = new JSONObject();
             if (mEditTextOldPassword.getText().length() > 0) {
-                requestObject.put("old_password", mEditTextOldPassword.getText());
+                requestObject.put(getString(R.string.api_key_old_password), mEditTextOldPassword.getText());
             }
             if (mEditTextNewPassword.getText().length() > 0) {
-                requestObject.put("new_pass", mEditTextNewPassword.getText());
+                requestObject.put(getString(R.string.api_key_new_password), mEditTextNewPassword.getText());
             }
             if (mEditTextConfirmNewPassword.getText().length() > 0) {
-                requestObject.put("confirm_new_password", mEditTextConfirmNewPassword.getText());
+                requestObject.put(getString(R.string.api_key_confirm_password), mEditTextConfirmNewPassword.getText());
             }
 
             BaseModel<JSONObject> baseModel = new BaseModel<JSONObject>(mContext) {
@@ -146,13 +145,9 @@ public class ChangePassword extends Fragment {
             };
 
             String url = QueryBuilder.getChangePasswordUrl();
-            if (requestObject != null) {
-                baseModel.executePostJsonRequest(url, requestObject, TAG);
-            } else {
-                Snackbar.make(mLinearRootLayout, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();
-            }
+            baseModel.executePostJsonRequest(url, requestObject, TAG);
         } catch (JSONException e) {
-
+            e.printStackTrace();
         }
     }
 }

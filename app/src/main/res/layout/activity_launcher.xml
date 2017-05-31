@@ -76,13 +76,9 @@
             android:orientation="vertical"
             android:layout_marginTop="@dimen/dp10">
 
-            <include
-                android:id="@+id/wrapper_social_login"
-                layout="@layout/layout_login" />
+            <include layout="@layout/layout_login" />
 
-            <include
-                android:id="@+id/wrapper_app_rgistration"
-                layout="@layout/layout_app_registration" />
+            <include layout="@layout/layout_app_registration" />
 
         </LinearLayout>
 

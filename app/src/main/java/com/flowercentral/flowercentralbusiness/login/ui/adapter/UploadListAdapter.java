@@ -1,6 +1,5 @@
 package com.flowercentral.flowercentralbusiness.login.ui.adapter;
 
-import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,16 +16,25 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by admin on 25-05-2017.
+ *
  */
-
 public class UploadListAdapter extends RecyclerView.Adapter<UploadListAdapter.ViewHolder> {
     private final ArrayList<Uri> mUploadDataList;
 
-    public UploadListAdapter(Context context, ArrayList<Uri> values) {
+    /**
+     *
+     * @param values values
+     */
+    public UploadListAdapter(ArrayList<Uri> values) {
         this.mUploadDataList = values;
     }
 
+    /**
+     *
+     * @param parent parent
+     * @param viewType viewType
+     * @return view
+     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
@@ -34,23 +42,35 @@ public class UploadListAdapter extends RecyclerView.Adapter<UploadListAdapter.Vi
         return new ViewHolder(itemView);
     }
 
+    /**
+     *
+     * @param holder holder
+     * @param position position
+     */
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.textViewData.setText(mUploadDataList.get(position).getPath());
         holder.imageViewClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mUploadDataList.remove(position);
+                mUploadDataList.remove(holder.getAdapterPosition());
                 notifyDataSetChanged();
             }
         });
     }
 
+    /**
+     *
+     * @return size
+     */
     @Override
     public int getItemCount() {
         return mUploadDataList.size();
     }
 
+    /**
+     *
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.text_view_data)

@@ -15,12 +15,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by admin on 17-05-2017.
+ *
  */
-
 public class OrderFragment extends Fragment {
-
-    private View view;
 
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
@@ -37,25 +34,24 @@ public class OrderFragment extends Fragment {
     /**
      * Instantiate the order fragment to hold pending order and completed order.
      *
-     * @return
+     * @return instance
      */
     public static OrderFragment newInstance() {
-        OrderFragment fragment = new OrderFragment();
-        return fragment;
+        return new OrderFragment();
     }
 
     /**
      * Set up view pager.
      *
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
+     * @param inflater inflater
+     * @param container container
+     * @param savedInstanceState savedInstanceState
+     * @return view
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_order, container, false);
+        View view = inflater.inflate(R.layout.fragment_order, container, false);
         ButterKnife.bind(this, view);
         setupViewPager();
         return view;
@@ -66,8 +62,8 @@ public class OrderFragment extends Fragment {
      */
     private void setupViewPager() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
-        adapter.addFragment(new PendingOrder(), getString(R.string.title_pending_order));
-        adapter.addFragment(new CompletedOrder(), getString(R.string.title_completed_order));
+        adapter.addFragment(PendingOrder.newInstance(), getString(R.string.title_pending_order));
+        adapter.addFragment(CompletedOrder.newInstance(), getString(R.string.title_completed_order));
 
         mViewPager.setAdapter(adapter);
         mViewPager.setOffscreenPageLimit(2);

@@ -6,38 +6,30 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by admin on 26-05-2017.
+ *
  */
-
 public class ProductItem implements Parcelable {
 
     @SerializedName("quantity")
-    int quantity;
+    private int quantity;
 
     @SerializedName("flower")
-    String name;
+    private String name;
 
     @SerializedName("category")
-    OrderItem.CATEGORY category; //S,M,L,XL, XL+, All
+    private OrderItem.CATEGORY category; //S,M,L,XL, XL+, All
 
     @SerializedName("price")
-    double price;
+    private double price;
 
     @SerializedName("image")
-    String imageUrl;
+    private String imageUrl;
 
     @SerializedName("message")
-    String message;
+    private String message;
 
     @SerializedName("tag")
-    String tag;
-
-    /**
-     * Standard basic constructor for non-parcel
-     * object creation
-     */
-    public ProductItem() {
-    }
+    private String tag;
 
     /**
      * Constructor to use when re-constructing object
@@ -115,10 +107,6 @@ public class ProductItem implements Parcelable {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
     public String getName() {
         return name;
     }
@@ -131,24 +119,12 @@ public class ProductItem implements Parcelable {
         return category;
     }
 
-    public void setCategory(OrderItem.CATEGORY category) {
-        this.category = category;
-    }
-
     public double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
     public String getImageUrl() {
         return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 
     public String getMessage() {

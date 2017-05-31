@@ -2,6 +2,7 @@ package com.flowercentral.flowercentralbusiness.dashboard;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -16,16 +17,16 @@ import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.feedback.FeedbackFragment;
 import com.flowercentral.flowercentralbusiness.login.ui.LauncherActivity;
 import com.flowercentral.flowercentralbusiness.order.OrderFragment;
-import com.flowercentral.flowercentralbusiness.preference.UserPreference;
 import com.flowercentral.flowercentralbusiness.profile.ProfileFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by admin on 17-05-2017.
- */
+import static com.flowercentral.flowercentralbusiness.preference.UserPreference.deleteProfileInformation;
 
+/**
+ *
+ */
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.toolbar)
@@ -34,15 +35,13 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawer;
 
-    private ActionBarDrawerToggle mToggle;
-
     @BindView(R.id.nav_view_left)
     NavigationView mNavigationViewLeft;
 
     private ActionBar mActionBar;
 
     /**
-     * @param savedInstanceState
+     * @param savedInstanceState savedInstanceState
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +61,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             }
         }
 
-        mToggle = new ActionBarDrawerToggle(
+        ActionBarDrawerToggle mToggle = new ActionBarDrawerToggle(
                 this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawer.setDrawerListener(mToggle);
         mToggle.syncState();
@@ -89,11 +88,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     }
 
     /**
-     * @param item
-     * @return
+     * @param item item
+     * @return boolean
      */
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -126,7 +125,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 break;
 
             case R.id.nav_item_logout:
-                UserPreference.deleteProfileInformation();
+                deleteProfileInformation();
                 Intent mIntent = new Intent(DashboardActivity.this, LauncherActivity.class);
                 startActivity(mIntent);
                 finish();

@@ -52,9 +52,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by admin on 18-05-2017.
+ *
  */
-
 public class RegisterActivity extends AppCompatActivity {
 
     private static final int TYPE_MAP = 3;
@@ -123,8 +122,10 @@ public class RegisterActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar mToolBar;
 
-    private ActionBar mActionBar;
-
+    /**
+     *
+     * @param savedInstanceState instance
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,6 +138,10 @@ public class RegisterActivity extends AppCompatActivity {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
+    /**
+     *
+     * @param _context context
+     */
     private void initializeActivity(Context _context) {
         //Check internet connectivity
         if (Util.checkInternet(_context)) {
@@ -147,8 +152,8 @@ public class RegisterActivity extends AppCompatActivity {
             mListViewDoc.setLayoutManager(mLayoutManager);
             mLayoutManager = new LinearLayoutManager(this);
             mListViewImage.setLayoutManager(mLayoutManager);
-            mListViewDoc.setAdapter(new UploadListAdapter(this, mDocPathList));
-            mListViewImage.setAdapter(new UploadListAdapter(this, mImagePathList));
+            mListViewDoc.setAdapter(new UploadListAdapter(mDocPathList));
+            mListViewImage.setAdapter(new UploadListAdapter(mImagePathList));
 
         } else {
             mFrameLayoutNoInternet.setVisibility(View.VISIBLE);
@@ -159,7 +164,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);
-            mActionBar = getSupportActionBar();
+            ActionBar mActionBar = getSupportActionBar();
             if (mActionBar != null) {
                 mActionBar.setHomeButtonEnabled(true);
                 mActionBar.setTitle("");
@@ -169,6 +174,11 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     *
+     * @param item item
+     * @return true/false
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -188,35 +198,35 @@ public class RegisterActivity extends AppCompatActivity {
             try {
                 JSONObject register = new JSONObject();
                 if (mEditTextShopName.getText().length() > 0) {
-                    register.put("shop_name", mEditTextShopName.getText());
+                    register.put(getString(R.string.api_key_shop_name), mEditTextShopName.getText());
                 }
                 if (mEditTextAddress.getText().length() > 0) {
-                    register.put("add1", mEditTextAddress.getText());
+                    register.put(getString(R.string.api_key_address), mEditTextAddress.getText());
                     if (mLatitude == 0 || mLongitude == 0) {
                         isLocated(mEditTextAddress.getText().toString());
                     }
-                    register.put("latitude", mLatitude);
-                    register.put("longitude", mLongitude);
+                    register.put(getString(R.string.api_key_latitude), mLatitude);
+                    register.put(getString(R.string.api_key_longitude), mLongitude);
                 }
 
                 if (mEditTextCity.getText().length() > 0) {
-                    register.put("city", mEditTextCity.getText());
+                    register.put(getString(R.string.api_key_city), mEditTextCity.getText());
                 }
                 if (mEditTextState.getText().length() > 0) {
-                    register.put("state", mEditTextState.getText());
+                    register.put(getString(R.string.api_key_state), mEditTextState.getText());
                 }
                 if (mEditTextZip.getText().length() > 0) {
-                    register.put("pin", mEditTextZip.getText());
+                    register.put(getString(R.string.api_key_pin), mEditTextZip.getText());
                 }
 
                 if (mEditTextPhone1.getText().length() > 0) {
-                    register.put("phone1", mEditTextPhone1.getText());
+                    register.put(getString(R.string.api_key_phone1), mEditTextPhone1.getText());
                 }
                 if (mEditTextPhone2.getText().length() > 0) {
-                    register.put("phone2", mEditTextPhone2.getText());
+                    register.put(getString(R.string.api_key_phone2), mEditTextPhone2.getText());
                 }
                 if (mEditTextTIN.getText().length() > 0) {
-                    register.put("tin_number", mEditTextTIN.getText());
+                    register.put(getString(R.string.api_key_tin_num), mEditTextTIN.getText());
                 }
                 registerUser(mContext, register);
             } catch (JSONException e) {
@@ -314,7 +324,7 @@ public class RegisterActivity extends AppCompatActivity {
     private boolean isValidInput() {
         boolean isValid = true;
         if (mEditTextShopName.getText().toString().isEmpty()) {
-            mEditTextShopName.setError("Please enter vendor name.");
+            mEditTextShopName.setError(getString(R.string.fld_error_vendor_name));
             isValid = false;
         } else {
             mEditTextShopName.setError(null);
@@ -360,18 +370,17 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        UploadListAdapter listAdapter;
         switch (requestCode) {
             case TYPE_DOC_UPLOAD:
                 if(data != null) {
                     mDocPathList.add(data.getData());
-                    mListViewDoc.setAdapter(new UploadListAdapter(this, mDocPathList));
+                    mListViewDoc.setAdapter(new UploadListAdapter(mDocPathList));
                 }
                 break;
             case TYPE_PICTURES_UPLOAD:
                 if(data != null) {
                     mImagePathList.add(data.getData());
-                    mListViewImage.setAdapter(new UploadListAdapter(this, mImagePathList));
+                    mListViewImage.setAdapter(new UploadListAdapter(mImagePathList));
                 }
                 break;
             case TYPE_MAP:
@@ -469,7 +478,7 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivityForResult(mapIntent, TYPE_MAP);
             }
         } else {
-            Toast.makeText(this, "Please enter address to locate on map.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.fld_error_address_for_map), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -481,7 +490,7 @@ public class RegisterActivity extends AppCompatActivity {
         try {
             address = coder.getFromLocationName(strAddress, 5);
             if (address == null) {
-                Toast.makeText(this, "Unable to locate the address.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.map_error_unable_locate_address), Toast.LENGTH_LONG).show();
                 return false;
             }
 
@@ -490,7 +499,7 @@ public class RegisterActivity extends AppCompatActivity {
             mLatitude = location.getLatitude();
             return true;
         } catch (IOException e) {
-            Toast.makeText(this, "Unable to locate the address.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.map_error_unable_locate_address), Toast.LENGTH_LONG).show();
         }
         return false;
     }

@@ -4,31 +4,28 @@ import android.os.Parcel;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-
 /**
- * Created by admin on 30-05-2017.
+ *
  */
-
-public class FeedbackItem implements android.os.Parcelable {
+class FeedbackItem implements android.os.Parcelable {
 
     @SerializedName("rating")
-    int rating;
+    private int rating;
 
     @SerializedName("feedback")
-    String feedbackMessage;
+    private String feedbackMessage;
 
     @SerializedName("feedback_by")
-    String feedbackBy;
+    private String feedbackBy;
 
     @SerializedName("order_id")
-    ArrayList<Integer> orderList = new ArrayList<>();
+    private int feedbackOrderId;
 
-    protected FeedbackItem(Parcel in) {
+    private FeedbackItem(Parcel in) {
         rating = in.readInt();
         feedbackMessage = in.readString();
         feedbackBy = in.readString();
-        orderList = in.readArrayList(Integer.class.getClassLoader());
+        feedbackOrderId = in.readInt();
     }
 
     public static final Creator<FeedbackItem> CREATOR = new Creator<FeedbackItem>() {
@@ -53,38 +50,22 @@ public class FeedbackItem implements android.os.Parcelable {
         dest.writeInt(rating);
         dest.writeString(feedbackMessage);
         dest.writeString(feedbackBy);
-        dest.writeArray(orderList.toArray());
+        dest.writeInt(feedbackOrderId);
     }
 
-    public int getRating() {
+    int getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    public String getFeedbackMessage() {
+    String getFeedbackMessage() {
         return feedbackMessage;
     }
 
-    public void setFeedbackMessage(String feedbackMessage) {
-        this.feedbackMessage = feedbackMessage;
-    }
-
-    public String getFeedbackBy() {
+    String getFeedbackBy() {
         return feedbackBy;
     }
 
-    public void setFeedbackBy(String feedbackBy) {
-        this.feedbackBy = feedbackBy;
-    }
-
-    public ArrayList<Integer> getOrderList() {
-        return orderList;
-    }
-
-    public void setOrderList(ArrayList<Integer> orderList) {
-        this.orderList = orderList;
+    int getFeedbackOrderId() {
+        return feedbackOrderId;
     }
 }

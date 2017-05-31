@@ -9,44 +9,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by admin on 17-05-2017.
+ *
  */
-
 public class OrderDetailedItem implements Parcelable {
 
     @SerializedName("order_date")
-    String orderDate;
+    private String orderDate;
 
     @SerializedName("order_total")
-    String orderTotal;
+    private String orderTotal;
 
     @SerializedName("delivery_address")
-    String address;
+    private String address;
 
     @SerializedName("longitude")
-    String longitude;
+    private String longitude;
 
     @SerializedName("latitude")
-    String latitude;
+    private String latitude;
 
     @SerializedName("status")
-    DELIVERY_STATUS deliveryStatus; //0: pending, 1: delivered
+    private DELIVERY_STATUS deliveryStatus; //0: pending, 1: delivered
 
     @SerializedName("schedule_datetime")
-    String scheduleDateTime;
+    private String scheduleDateTime;
+
+    @SerializedName("delivered_at")
+    private String deliveredDateTime;
 
     @SerializedName("scheduled_delivery")
-    boolean isScheduledDelivery;
+    private boolean isScheduledDelivery;
 
     @SerializedName("products")
-    List<ProductItem> productItemList = new ArrayList<>();
-
-    /**
-     * Standard basic constructor for non-parcel
-     * object creation
-     */
-    public OrderDetailedItem() {
-    }
+    private List<ProductItem> productItemList = new ArrayList<>();
 
     /**
      * Constructor to use when re-constructing object
@@ -54,7 +49,7 @@ public class OrderDetailedItem implements Parcelable {
      *
      * @param in a parcel from which to read this object
      */
-    public OrderDetailedItem(Parcel in) {
+    private OrderDetailedItem(Parcel in) {
         readFromParcel(in);
     }
 
@@ -77,7 +72,8 @@ public class OrderDetailedItem implements Parcelable {
         deliveryStatus = DELIVERY_STATUS.valueOf(in.readString());
         scheduleDateTime = in.readString();
         isScheduledDelivery = in.readByte() != 0;
-        productItemList = in.readArrayList(ProductItem.class.getClassLoader());
+        in.readTypedList(productItemList, ProductItem.CREATOR);
+        deliveredDateTime = in.readString();
     }
 
     @Override
@@ -94,6 +90,7 @@ public class OrderDetailedItem implements Parcelable {
         dest.writeString(scheduleDateTime);
         dest.writeByte((byte) (isScheduledDelivery ? 1 : 0));
         dest.writeTypedList(productItemList);
+        dest.writeString(deliveredDateTime);
     }
 
     /**
@@ -123,38 +120,7 @@ public class OrderDetailedItem implements Parcelable {
         return 0;
     }
 
-
-    enum CATEGORY {
-        @SerializedName("S")
-        S,
-        @SerializedName("M")
-        M,
-        @SerializedName("L")
-        L,
-        @SerializedName("X")
-        XL,
-        @SerializedName("XXL")
-        XXL
-    }
-
-    public enum PAID_STATUS {
-        @SerializedName("1")
-        PENDING("Cash On Delivery"),
-        @SerializedName("0")
-        PAID("Paid Delivery");
-
-        PAID_STATUS(String s) {
-            this.paidStatus = s;
-        }
-
-        String paidStatus;
-
-        public String value() {
-            return paidStatus;
-        }
-    }
-
-    enum DELIVERY_STATUS {
+    public enum DELIVERY_STATUS {
         @SerializedName("Pending")
         PENDING,
         @SerializedName("Delivered")
@@ -165,71 +131,39 @@ public class OrderDetailedItem implements Parcelable {
         return orderDate;
     }
 
-    public void setOrderDate(String orderDate) {
-        this.orderDate = orderDate;
-    }
-
     public String getOrderTotal() {
         return orderTotal;
-    }
-
-    public void setOrderTotal(String orderTotal) {
-        this.orderTotal = orderTotal;
     }
 
     public String getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getLongitude() {
         return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
     }
 
     public String getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
-
     public DELIVERY_STATUS getDeliveryStatus() {
         return deliveryStatus;
-    }
-
-    public void setDeliveryStatus(DELIVERY_STATUS deliveryStatus) {
-        this.deliveryStatus = deliveryStatus;
     }
 
     public String getScheduleDateTime() {
         return scheduleDateTime;
     }
 
-    public void setScheduleDateTime(String scheduleDateTime) {
-        this.scheduleDateTime = scheduleDateTime;
-    }
-
-    public boolean isScheduledDelivery() {
-        return isScheduledDelivery;
-    }
-
-    public void setScheduledDelivery(boolean scheduledDelivery) {
-        isScheduledDelivery = scheduledDelivery;
-    }
-
     public List<ProductItem> getProductItemList() {
         return productItemList;
     }
 
-    public void setProductItemList(List<ProductItem> productItemList) {
-        this.productItemList = productItemList;
+    public String getDeliveredDateTime() {
+        return deliveredDateTime;
+    }
+
+    public boolean isScheduledDelivery() {
+        return isScheduledDelivery;
     }
 }

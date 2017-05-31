@@ -28,13 +28,11 @@ public class NotificationFireBaseMessagingService extends FirebaseMessagingServi
         // When the user taps on the notification they are returned to the app. Messages containing both notification
         // and data payloads are treated as notification messages. The Firebase console always sends notification
         // messages. For more see: https://firebase.google.com/docs/cloud-messaging/concept-options
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
+//        final int d = Log.d(TAG, "From: " + remoteMessage.getFrom());
 
-        if (remoteMessage.getNotification() != null) {
-            NotificationData notification = new NotificationData();
-            notification.setNotificationServerId(remoteMessage.getMessageId());
-//            notification.setOrderAddress(remoteMessage.getData().get("OrderAddress"));
-        }
+//        if (remoteMessage.getNotification() != null) {
+//            NotificationData notification = new NotificationData();
+//        }
 
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {

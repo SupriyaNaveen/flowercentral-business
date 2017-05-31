@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.flowercentral.flowercentralbusiness.order.model.OrderDetailedItem;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
 import com.flowercentral.flowercentralbusiness.util.MapActivity;
+import com.flowercentral.flowercentralbusiness.util.Util;
 import com.flowercentral.flowercentralbusiness.volley.ErrorData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -26,10 +28,9 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -37,12 +38,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by admin on 26-05-2017.
+ *
  */
-
 public class OrderDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = OrderDetailsActivity.class.getSimpleName();
+    private final String srcFormat = "yyyy-MM-dd HH:mm";
+
     @BindView(R.id.toolbar)
     Toolbar mToolBar;
 
@@ -73,7 +75,11 @@ public class OrderDetailsActivity extends AppCompatActivity {
     @BindView(R.id.view_on_map)
     TextView mTextViewViewOnMap;
 
-    private ActionBar mActionBar;
+    @BindView(R.id.order_delivered_at)
+    TextView mTextViewOrderDeliveredAt;
+
+    @BindView(R.id.delivered_at_wrapper)
+    LinearLayout mDeliveredAtWrapper;
 
     private OrderDetailedItem mOrderItem;
 
@@ -88,7 +94,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);
-            mActionBar = getSupportActionBar();
+            ActionBar mActionBar = getSupportActionBar();
             if (mActionBar != null) {
                 mActionBar.setHomeButtonEnabled(true);
                 mActionBar.setTitle(getString(R.string.app_name));
@@ -109,7 +115,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         BaseModel<JSONObject> baseModel = new BaseModel<JSONObject>(this) {
             @Override
             public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
-                OrderDetailedItem orderDetailedItem = new Gson().<OrderDetailedItem>fromJson(String.valueOf(response),
+                OrderDetailedItem orderDetailedItem = new Gson().fromJson(String.valueOf(response),
                         new TypeToken<OrderDetailedItem>() {
                         }.getType());
                 updateView(orderDetailedItem);
@@ -153,36 +159,30 @@ public class OrderDetailsActivity extends AppCompatActivity {
         String url = QueryBuilder.getOrderDetailsUrl();
         try {
             JSONObject requestObject = new JSONObject();
-            requestObject.put("order_id", orderId);
-            SimpleDateFormat formatSrc = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            requestObject.put("timestamp", formatSrc.format(Calendar.getInstance().getTime()));
-            if (requestObject != null) {
-                baseModel.executePostJsonRequest(url, requestObject, TAG);
-            } else {
-                Snackbar.make(mLinearLayoutRoot, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();
-            }
+            requestObject.put(getString(R.string.api_key_order_id), orderId);
+            SimpleDateFormat formatSrc = new SimpleDateFormat(srcFormat, Locale.getDefault());
+            requestObject.put(getString(R.string.api_key_timestamp), formatSrc.format(Calendar.getInstance().getTime()));
+            baseModel.executePostJsonRequest(url, requestObject, TAG);
         } catch (JSONException e) {
-
+            e.printStackTrace();
         }
     }
 
     private void updateView(OrderDetailedItem orderDetailedItem) {
 
+        String destFormat = "dd EEE yyyy, hh:mm a";
         mOrderItem = orderDetailedItem;
 
         mTextViewOrderPlaced.setText(orderDetailedItem.getOrderDate());
-        mTextViewIsScheduledDelivery.setText(orderDetailedItem.getOrderTotal());
+        mTextViewIsScheduledDelivery.setText(orderDetailedItem.isScheduledDelivery() ? "Yes" : "No");
         mTextViewOrderTotal.setText(orderDetailedItem.getOrderTotal());
         mTextViewOrderStatus.setText(String.valueOf(orderDetailedItem.getDeliveryStatus()));
 
-        SimpleDateFormat formatSrc = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        SimpleDateFormat formatDest = new SimpleDateFormat("dd EEE yyyy, hh:mm a");
-        Date date = null;
-        try {
-            date = formatSrc.parse(orderDetailedItem.getScheduleDateTime());
-            mTextViewOrderSchedule.setText(formatDest.format(date));
-        } catch (ParseException e) {
-            e.printStackTrace();
+        mTextViewOrderSchedule.setText(Util.formatDate(orderDetailedItem.getScheduleDateTime(), srcFormat, destFormat));
+
+        if (orderDetailedItem.getDeliveryStatus() == OrderDetailedItem.DELIVERY_STATUS.DELIVERED) {
+            mDeliveredAtWrapper.setVisibility(View.VISIBLE);
+            mTextViewOrderDeliveredAt.setText(Util.formatDate(orderDetailedItem.getDeliveredDateTime(), srcFormat, destFormat));
         }
 
         mTextViewOrderDeliveryAddress.setText(orderDetailedItem.getAddress());
@@ -214,10 +214,10 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 mapIntent.putExtra(getString(R.string.key_is_draggable), false);
                 startActivity(mapIntent);
             } catch (NumberFormatException e) {
-                Snackbar.make(mLinearLayoutRoot, "Unable to locate address.", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(mLinearLayoutRoot, getString(R.string.map_error_unable_locate_address), Snackbar.LENGTH_SHORT).show();
             }
         } else {
-            Snackbar.make(mLinearLayoutRoot, "Unable to locate address.", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mLinearLayoutRoot, getString(R.string.map_error_unable_locate_address), Snackbar.LENGTH_SHORT).show();
         }
     }
 }

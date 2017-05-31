@@ -34,13 +34,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by admin on 17-05-2017.
+ *
  */
-
 public class CompletedOrder extends Fragment {
 
     private String TAG = CompletedOrder.class.getSimpleName();
-    private View view;
     private Context mContext;
 
     @BindView(R.id.completed_order_recyclerview)
@@ -56,31 +54,24 @@ public class CompletedOrder extends Fragment {
     RelativeLayout mRootLayout;
 
     /**
-     * Default Constructor
-     */
-    public CompletedOrder() {
-    }
-
-    /**
      * Instantiate completed order fragment.
      *
-     * @return
+     * @return instance of fragment
      */
     public static CompletedOrder newInstance() {
-        CompletedOrder fragment = new CompletedOrder();
-        return fragment;
+        return new CompletedOrder();
     }
 
     /**
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
+     * @param inflater inflater
+     * @param container container
+     * @param  savedInstanceState savedInstanceState
+     * @return view
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_completed_order, container, false);
+        View view = inflater.inflate(R.layout.fragment_completed_order, container, false);
         ButterKnife.bind(this, view);
 
         mContext = getActivity();
@@ -173,19 +164,18 @@ public class CompletedOrder extends Fragment {
     }
 
     /**
-     * @param response
-     * @return
+     * @param response response
+     * @return list of order items
      */
     private List<OrderItem> constructOrderItemList(JSONArray response) {
-        List<OrderItem> orderItemList = new Gson().<List<OrderItem>>fromJson(String.valueOf(response),
+        return new Gson().fromJson(String.valueOf(response),
                 new TypeToken<List<OrderItem>>(){}.getType());
-        return orderItemList;
     }
 
     /**
      * Update view for ordered item list.
      *
-     * @param orderItemList
+     * @param orderItemList order item list
      */
     private void updateCompletedOrderViews(List<OrderItem> orderItemList) {
 

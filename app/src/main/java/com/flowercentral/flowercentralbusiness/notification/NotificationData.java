@@ -5,10 +5,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by admin on 25-05-2017.
+ *
  */
-
-public class NotificationData implements Parcelable {
+class NotificationData implements Parcelable {
 
     public static final Parcelable.Creator<NotificationData> CREATOR = new Parcelable.Creator<NotificationData>() {
         @Override
@@ -22,14 +21,12 @@ public class NotificationData implements Parcelable {
         }
     };
     private Integer NotificationId;
-    private String NotificationServerId;
-    //pending
     private String NotificationType;
 
-    public NotificationData() {
+    NotificationData() {
     }
 
-    protected NotificationData(Parcel in) {
+    private NotificationData(Parcel in) {
         this.NotificationId = in.readInt();
         this.NotificationType = in.readString();
     }
@@ -41,28 +38,8 @@ public class NotificationData implements Parcelable {
         return bundle;
     }
 
-    public Integer getNotificationId() {
-        return NotificationId;
-    }
-
-    public void setNotificationId(Integer notificationId) {
-        NotificationId = notificationId;
-    }
-
-    public String getNotificationServerId() {
-        return NotificationServerId;
-    }
-
-    public void setNotificationServerId(String notificationServerId) {
-        NotificationServerId = notificationServerId;
-    }
-
-    public String getNotificationType() {
+    private String getNotificationType() {
         return NotificationType;
-    }
-
-    public void setNotificationType(String notificationType) {
-        NotificationType = notificationType;
     }
 
     @Override

@@ -34,13 +34,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by admin on 17-05-2017.
+ *
  */
-
 public class PendingOrder extends Fragment {
 
     private String TAG = PendingOrder.class.getSimpleName();
-    private View view;
     private Context mContext;
 
     @BindView(R.id.pending_order_recyclerview)
@@ -68,23 +66,22 @@ public class PendingOrder extends Fragment {
     /**
      * Fragment instance to instantiate pending order.
      *
-     * @return
+     * @return instance
      */
     public static PendingOrder newInstance() {
-        PendingOrder fragment = new PendingOrder();
-        return fragment;
+        return new PendingOrder();
     }
 
     /**
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
+     * @param inflater inflater
+     * @param container container
+     * @param savedInstanceState savedInstance
+     * @return view
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_pending_order, container, false);
+        View view = inflater.inflate(R.layout.fragment_pending_order, container, false);
         ButterKnife.bind(this, view);
 
         mContext = getActivity();
@@ -177,21 +174,20 @@ public class PendingOrder extends Fragment {
     }
 
     /**
-     * @param response
-     * @return
+     * @param response response
+     * @return order item list
      */
     private List<OrderItem> constructOrderItemList(JSONArray response) {
 
-        List<OrderItem> orderItemList = new Gson().<List<OrderItem>>fromJson(String.valueOf(response),
+        return new Gson().fromJson(String.valueOf(response),
                 new TypeToken<List<OrderItem>>(){}.getType());
-        return orderItemList;
     }
 
     /**
      * Hide the swipe refresh layout.
      * If the list is empty show empty view. Else show the recycler view.
      *
-     * @param orderItemList
+     * @param orderItemList order item list
      */
     private void updatePendingOrderViews(List<OrderItem> orderItemList) {
 

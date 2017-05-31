@@ -66,7 +66,6 @@
                         android:theme="@style/AppTheme.Normal" />
 
                     <TextView
-                        android:id="@+id/order_desc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/order_details"
@@ -109,6 +108,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:theme="@style/AppTheme.Normal" />
+
+                <TextView
+                    android:id="@+id/order_delivered_at"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/AppTheme.Normal"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/order_address"

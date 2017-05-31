@@ -29,9 +29,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-/**
- * Created by Ashish Upadhyay on 7/18/16.
- */
 public abstract class BaseModel<T> implements Response.ErrorListener, HttpResponseListener<T> {
 
     public static final int AUTHENTICATION_ERROR = 401;
@@ -68,12 +65,10 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
                 String s = new String(dataU);
                 try {
                     JSONObject obj = new JSONObject(s);
-                    if (obj != null) {
-                        if (!obj.isNull("errorCode")) {
-                            String code = obj.getString("errorCode");
-                            errorData.setErrorCodeOfResponseData(code);
-                            errorData.setErrorMessage(obj.getString("errorMessage"));
-                        }
+                    if (!obj.isNull("errorCode")) {
+                        String code = obj.getString("errorCode");
+                        errorData.setErrorCodeOfResponseData(code);
+                        errorData.setErrorMessage(obj.getString("errorMessage"));
                     }
 
                 } catch (JSONException e) {
@@ -121,11 +116,9 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
                     String s = new String(data);
                     try {
                         JSONObject obj = new JSONObject(s);
-                        if (obj != null) {
-                            if (!obj.isNull("errorCode")) {
-                                String code = obj.getString("errorCode");
-                                errorData.setErrorCodeOfResponseData(code);
-                            }
+                        if (!obj.isNull("errorCode")) {
+                            String code = obj.getString("errorCode");
+                            errorData.setErrorCodeOfResponseData(code);
                         }
 
                     } catch (JSONException e) {
@@ -228,7 +221,7 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
 
     public void executeGetJsonArrayRequest(String url, @Nullable String tag) {
         if (RestUtil.isNetworkAvailable(mContext)) {
-            JSONObject params = appendCommonParams(mContext, new JSONObject());
+//            JSONObject params = appendCommonParams(mContext, new JSONObject());
             CustomJsonArrayObjectRequest request = new CustomJsonArrayObjectRequest(Request.Method.GET, url, null, listener, this);
             request.setRetryPolicy(new DefaultRetryPolicy(MY_SOCKET_TIMEOUT_MS,
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -245,15 +238,15 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
         }
     }
 
-    private void addCommonHeaderParams(Request request) {
-        try {
-            if (request.getHeaders() != null) {
-                request.getHeaders().putAll(getCommonAuthorizationHeader());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    private void addCommonHeaderParams(Request request) {
+//        try {
+//            if (request.getHeaders() != null) {
+//                request.getHeaders().putAll(getCommonAuthorizationHeader());
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 /*
     public void processRequest(Context mContext,Request request)
     {
@@ -290,7 +283,7 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
     }
 
     private Map<String, String> getCommonAuthorizationHeader() {
-        Map<String, String> headerValues = new HashMap<String, String>();
+        Map<String, String> headerValues = new HashMap<>();
         try {
            /* Logger.logInfo(TAG, "getCommonAuthorizationHeader","Access token " + StorageManager.getApiToken());
             Logger.logInfo(TAG,"getCommonAuthorizationHeader", "Refresh token " + StorageManager.getRefreshToken());
@@ -317,7 +310,7 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
     }
 
 
-    public static String getVersionName(Context mContext) {
+    private static String getVersionName(Context mContext) {
         String versionName = null;
         try {
             PackageInfo pInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
@@ -331,7 +324,7 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
         return versionName;
     }
 
-    public static int getVersionCode(Context mContext) {
+    private static int getVersionCode(Context mContext) {
         int versionCode = 0;
         try {
             PackageInfo pInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);

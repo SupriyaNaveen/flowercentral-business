@@ -6,45 +6,44 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by admin on 30-05-2017.
+ *
  */
-
 public class ProfileDetails implements Parcelable {
 
     @SerializedName("shop_name")
-    String shopName;
+    private String shopName;
 
     @SerializedName("address")
-    String address;
+    private String address;
 
     @SerializedName("city")
-    String city;
+    private String city;
 
     @SerializedName("state")
-    String state;
+    private String state;
 
     @SerializedName("country")
-    String country;
+    private String country;
 
     @SerializedName("pin")
-    String pin;
+    private String pin;
 
     @SerializedName("latitude")
-    Double latitude;
+    private Double latitude;
 
     @SerializedName("longitude")
-    Double longitude;
+    private Double longitude;
 
     @SerializedName("phone1")
-    String phone1;
+    private String phone1;
 
     @SerializedName("phone2")
-    String phone2;
+    private String phone2;
 
     @SerializedName("tin_num")
-    String tinNumber;
+    private String tinNumber;
 
-    protected ProfileDetails(Parcel in) {
+    private ProfileDetails(Parcel in) {
         shopName = in.readString();
         address = in.readString();
         city = in.readString();
@@ -55,6 +54,7 @@ public class ProfileDetails implements Parcelable {
         phone1 = in.readString();
         phone2 = in.readString();
         tinNumber = in.readString();
+        pin = in.readString();
     }
 
     public static final Creator<ProfileDetails> CREATOR = new Creator<ProfileDetails>() {
@@ -93,87 +93,43 @@ public class ProfileDetails implements Parcelable {
         return shopName;
     }
 
-    public void setShopName(String shopName) {
-        this.shopName = shopName;
-    }
-
     public String getAddress() {
         return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public String getCity() {
         return city;
     }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
-
     public String getState() {
         return state;
     }
 
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
+//    public String getCountry() {
+//        return country;
+//    }
 
     public String getPin() {
         return pin;
-    }
-
-    public void setPin(String pin) {
-        this.pin = pin;
     }
 
     public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
-
     public Double getLongitude() {
         return longitude;
-    }
-
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
     }
 
     public String getPhone1() {
         return phone1;
     }
 
-    public void setPhone1(String phone1) {
-        this.phone1 = phone1;
-    }
-
     public String getPhone2() {
         return phone2;
     }
 
-    public void setPhone2(String phone2) {
-        this.phone2 = phone2;
-    }
-
     public String getTinNumber() {
         return tinNumber;
-    }
-
-    public void setTinNumber(String tinNumber) {
-        this.tinNumber = tinNumber;
     }
 }

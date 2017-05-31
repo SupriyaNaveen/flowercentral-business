@@ -10,13 +10,6 @@ import com.flowercentral.flowercentralbusiness.setting.AppConstant;
 import com.flowercentral.flowercentralbusiness.util.Logger;
 import com.flowercentral.flowercentralbusiness.util.Util;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 
 /**
  * Created by Ashish Upadhyay on 3/23/2016.

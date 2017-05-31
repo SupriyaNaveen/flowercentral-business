@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.profile.model.ProfileDetails;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
@@ -39,10 +40,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-/**
- * Created by admin on 26-05-2017.
- */
 
 public class UpdateProfile extends Fragment {
 
@@ -91,6 +88,7 @@ public class UpdateProfile extends Fragment {
 
     private double mLongitude;
     private double mLatitude;
+    private MaterialDialog mProgressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -162,14 +160,13 @@ public class UpdateProfile extends Fragment {
     }
 
     private void displayProfileInformation(JSONObject response) {
-        ProfileDetails profileDetail = new Gson().<ProfileDetails>fromJson(String.valueOf(response),
+        ProfileDetails profileDetail = new Gson().fromJson(String.valueOf(response),
                 new TypeToken<ProfileDetails>() {
                 }.getType());
         mEditTextShopName.setText(profileDetail.getShopName());
         mEditTextAddress.setText(profileDetail.getAddress());
         mEditTextCity.setText(profileDetail.getCity());
         mEditTextState.setText(profileDetail.getState());
-//        mEd.setText(profileDetail.getShopName());
         mEditTextPhone1.setText(profileDetail.getPhone1());
         mEditTextPhone2.setText(profileDetail.getPhone2());
         mLatitude = profileDetail.getLatitude();
@@ -186,42 +183,42 @@ public class UpdateProfile extends Fragment {
     @OnClick(R.id.btn_update)
     void updateSelected() {
 
-        //TODO Put the id of the profile which is to be edited.
         boolean isValidInput = isValidInput();
         if (isValidInput) {
             try {
                 JSONObject updateJson = new JSONObject();
                 if (mEditTextShopName.getText().length() > 0) {
-                    updateJson.put("shop_name", mEditTextShopName.getText());
+                    updateJson.put(getString(R.string.api_key_shop_name), mEditTextShopName.getText());
                 }
                 if (mEditTextAddress.getText().length() > 0) {
-                    updateJson.put("address", mEditTextAddress.getText());
+                    updateJson.put(getString(R.string.api_key_address), mEditTextAddress.getText());
                     if (mLatitude == 0 || mLongitude == 0) {
                         isLocated(mEditTextAddress.getText().toString());
                     }
-                    updateJson.put("latitude", mLatitude);
-                    updateJson.put("longitude", mLongitude);
+                    updateJson.put(getString(R.string.api_key_latitude), mLatitude);
+                    updateJson.put(getString(R.string.api_key_longitude), mLongitude);
                 }
 
                 if (mEditTextCity.getText().length() > 0) {
-                    updateJson.put("city", mEditTextCity.getText());
+                    updateJson.put(getString(R.string.api_key_city), mEditTextCity.getText());
                 }
                 if (mEditTextState.getText().length() > 0) {
-                    updateJson.put("state", mEditTextState.getText());
+                    updateJson.put(getString(R.string.api_key_state), mEditTextState.getText());
                 }
                 if (mEditTextZip.getText().length() > 0) {
-                    updateJson.put("pin", mEditTextZip.getText());
+                    updateJson.put(getString(R.string.api_key_pin), mEditTextZip.getText());
                 }
 
                 if (mEditTextPhone1.getText().length() > 0) {
-                    updateJson.put("phone1", mEditTextPhone1.getText());
+                    updateJson.put(getString(R.string.api_key_phone1), mEditTextPhone1.getText());
                 }
                 if (mEditTextPhone2.getText().length() > 0) {
-                    updateJson.put("phone2", mEditTextPhone2.getText());
+                    updateJson.put(getString(R.string.api_key_phone2), mEditTextPhone2.getText());
                 }
                 if (mEditTextTIN.getText().length() > 0) {
-                    updateJson.put("tin_num", mEditTextTIN.getText());
+                    updateJson.put(getString(R.string.api_key_tin_num), mEditTextTIN.getText());
                 }
+                mProgressDialog = Util.showProgressDialog(getActivity(), getString(R.string.msg_registering_user), null, false);
                 updateUser(mContext, updateJson);
             } catch (JSONException e) {
 
@@ -234,11 +231,13 @@ public class UpdateProfile extends Fragment {
         BaseModel<JSONObject> baseModel = new BaseModel<JSONObject>(_context) {
             @Override
             public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
+                dismissDialog();
                 showUpdateSuccessMessage(response);
             }
 
             @Override
             public void onError(ErrorData error) {
+                dismissDialog();
                 if (error != null) {
                     error.setErrorMessage("Update failed. Cause -> " + error.getErrorMessage());
                     switch (error.getErrorType()) {
@@ -306,7 +305,7 @@ public class UpdateProfile extends Fragment {
     private boolean isValidInput() {
         boolean isValid = true;
         if (mEditTextShopName.getText().toString().isEmpty()) {
-            mEditTextShopName.setError("Please enter vendor name.");
+            mEditTextShopName.setError(getString(R.string.fld_error_vendor_name));
             isValid = false;
         } else {
             mEditTextShopName.setError(null);
@@ -338,7 +337,7 @@ public class UpdateProfile extends Fragment {
                 startActivityForResult(mapIntent, TYPE_MAP);
             }
         } else {
-            Toast.makeText(getActivity(), "Please enter address to locate on map.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), getString(R.string.fld_error_address_for_map), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -350,7 +349,7 @@ public class UpdateProfile extends Fragment {
         try {
             address = coder.getFromLocationName(strAddress, 5);
             if (address == null) {
-                Toast.makeText(getActivity(), "Unable to locate the address.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getString(R.string.map_error_unable_locate_address), Toast.LENGTH_LONG).show();
                 return false;
             }
 
@@ -359,8 +358,19 @@ public class UpdateProfile extends Fragment {
             mLatitude = location.getLatitude();
             return true;
         } catch (IOException e) {
-            Toast.makeText(getActivity(), "Unable to locate the address.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), getString(R.string.map_error_unable_locate_address), Toast.LENGTH_LONG).show();
         }
         return false;
+    }
+
+    public void dismissDialog() {
+        try {
+            if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                mProgressDialog.dismiss();
+                mProgressDialog = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

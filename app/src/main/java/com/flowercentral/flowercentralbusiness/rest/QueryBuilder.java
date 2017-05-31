@@ -3,80 +3,57 @@ package com.flowercentral.flowercentralbusiness.rest;
 import com.flowercentral.flowercentralbusiness.BuildConfig;
 
 /**
- * Created by Ashish Upadhyay on 11/20/16.
+ *
  */
-
 public class QueryBuilder {
 
-    private static String profileUpdateUrl;
-
     public static String getLoginUrl() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(BuildConfig.SERVER);
-        sb.append("login");
-        return sb.toString();
+        return BuildConfig.SERVER +
+                "login";
     }
 
     public static String getPendingOrderListUrl() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(BuildConfig.SERVER);
-        sb.append("pending");
-        return sb.toString();
+        return BuildConfig.SERVER +
+                "pending";
     }
 
     public static String getCompletedOrderListUrl() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(BuildConfig.SERVER);
-        sb.append("delivered");
-        return sb.toString();
+        return BuildConfig.SERVER +
+                "delivered";
     }
 
     public static String getRegisterUrl() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(BuildConfig.SERVER);
-        sb.append("registration");
-        return sb.toString();
+        return BuildConfig.SERVER +
+                "registration";
     }
 
     public static String getOrderDetailsUrl() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(BuildConfig.SERVER);
-        sb.append("order_details");
-        return sb.toString();
+        return BuildConfig.SERVER +
+                "order_details";
     }
 
     public static String getUpdateUrl() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(BuildConfig.SERVER);
-        sb.append("update_profile");
-        return sb.toString();
+        return BuildConfig.SERVER +
+                "update_profile";
     }
 
     public static String getProfileInformationUrl() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(BuildConfig.SERVER);
-        sb.append("get_profile");
-        return sb.toString();
+        return BuildConfig.SERVER +
+                "get_profile";
     }
 
     public static String getMarkDeliveredUrl() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(BuildConfig.SERVER);
-        sb.append("mark_delivered");
-        return sb.toString();
+        return BuildConfig.SERVER +
+                "mark_delivered";
     }
 
     public static String getChangePasswordUrl() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(BuildConfig.SERVER);
-        sb.append("change_password");
-        return sb.toString();
+        return BuildConfig.SERVER +
+                "change_password";
     }
 
     public static String getFeedbackListUrl() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(BuildConfig.SERVER);
-        sb.append("feedbacks");
-        return sb.toString();
+        return BuildConfig.SERVER +
+                "feedbacks";
     }
 }

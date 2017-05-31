@@ -79,7 +79,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
         try {
             mGoogleMap.setMyLocationEnabled(true);
         } catch (SecurityException e) {
-
+            e.printStackTrace();
         }
         LatLng location = new LatLng(mLatitude, mLongitude);
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16));
@@ -119,13 +119,13 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
 
     private String getCityName() {
         Geocoder geocoder = new Geocoder(MapActivity.this, Locale.getDefault());
-        List<Address> addresses = null;
+        List<Address> addresses;
         String cityName = mAddress;
         try {
             addresses = geocoder.getFromLocation(mLatitude, mLongitude, 1);
             cityName = addresses.get(0).getAddressLine(0);
-        } catch (IOException e) {
-        } catch (IndexOutOfBoundsException e) {
+        } catch (IOException | IndexOutOfBoundsException e) {
+            e.printStackTrace();
         }
         return cityName;
     }

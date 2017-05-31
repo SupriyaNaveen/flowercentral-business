@@ -6,9 +6,8 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by admin on 23-05-2017.
+ *
  */
-
 public class Vendor implements Parcelable {
 
     @SerializedName("status")
@@ -23,11 +22,11 @@ public class Vendor implements Parcelable {
     @SerializedName("user_details")
     private VendorDetails vendorDetails;
 
-    protected Vendor(Parcel in) {
+    private Vendor(Parcel in) {
         status = in.readString();
         apiToken = in.readString();
         message = in.readString();
-        vendorDetails = (VendorDetails) in.readParcelable(VendorDetails.class.getClassLoader());
+        vendorDetails = in.readParcelable(VendorDetails.class.getClassLoader());
     }
 
     public static final Creator<Vendor> CREATOR = new Creator<Vendor>() {

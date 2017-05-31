@@ -29,6 +29,7 @@
             </intent-filter>
         </activity>
 
+        <!-- Map -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCw728HNYd8DDi5UYtTP_lpzAgn9NzRWQ4" />
@@ -36,6 +37,7 @@
         <activity
             android:name="com.flowercentral.flowercentralbusiness.dashboard.DashboardActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
 
         <activity
@@ -44,7 +46,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme" />
 
-        <activity android:name=".util.MapActivity" />
+        <activity
+            android:name=".util.MapActivity"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".notification.NotificationFireBaseMessagingService"
@@ -61,9 +65,18 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".notification.NotificationOverlay"/>
+        <activity
+            android:name=".notification.NotificationOverlay"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
-        <activity android:name=".order.OrderDetailsActivity"/>
+        <activity
+            android:name=".order.OrderDetailsActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

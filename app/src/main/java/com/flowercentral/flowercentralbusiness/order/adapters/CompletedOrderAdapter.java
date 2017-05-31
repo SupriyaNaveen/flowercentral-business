@@ -17,20 +17,17 @@ import com.flowercentral.flowercentralbusiness.order.OrderDetailsActivity;
 import com.flowercentral.flowercentralbusiness.order.model.OrderItem;
 import com.flowercentral.flowercentralbusiness.util.CircularTextView;
 import com.flowercentral.flowercentralbusiness.util.MapActivity;
+import com.flowercentral.flowercentralbusiness.util.Util;
 import com.squareup.picasso.Picasso;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by admin on 17-05-2017.
+ *
  */
-
 public class CompletedOrderAdapter extends RecyclerView.Adapter<CompletedOrderAdapter.ViewHolder> {
 
     private List<OrderItem> mOrderItemList;
@@ -50,46 +47,46 @@ public class CompletedOrderAdapter extends RecyclerView.Adapter<CompletedOrderAd
 
     @Override
     public void onBindViewHolder(CompletedOrderAdapter.ViewHolder holder, final int position) {
-        holder.textViewOrderDetails.setText(mOrderItemList.get(position).getName());
 
-        holder.textViewOrderPriceDetails.setText(mContext.getString(R.string.order_lbl_price, String.valueOf(mOrderItemList.get(position).getPrice())));
-        holder.textViewPaidStatus.setText(mOrderItemList.get(position).getPaidStatus().value());
-        holder.textViewOrderQuantity.setText(mContext.getString(R.string.order_lbl_quantity, String.valueOf(mOrderItemList.get(position).getQuantity())));
+        final OrderItem orderItem = mOrderItemList.get(position);
+        String srcFormat = "yyyy-MM-dd HH:mm";
+        String destFormat = "dd EEE yyyy, hh:mm a";
+        holder.textViewOrderDetails.setText(orderItem.getName());
 
-        SimpleDateFormat formatSrc = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        SimpleDateFormat formatDest = new SimpleDateFormat("dd EEE yyyy, hh:mm a");
-        Date date = null;
-        try {
-            date = formatSrc.parse(mOrderItemList.get(position).getScheduleDateTime());
-            holder.textViewOrderSchedule.setText(mContext.getString(R.string.order_lbl_schedule, formatDest.format(date)));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        holder.textViewOrderPriceDetails.setText(mContext.getString(R.string.order_format_price, String.valueOf(orderItem.getPrice())));
+        holder.textViewPaidStatus.setText(orderItem.getPaidStatus().value());
+        holder.textViewOrderQuantity.setText(mContext.getString(R.string.order_format_quantity, String.valueOf(orderItem.getQuantity())));
 
-        holder.textViewOrderAddress.setText(mContext.getString(R.string.order_lbl_address, mOrderItemList.get(position).getAddress()));
+        String dateStr = Util.formatDate(orderItem.getScheduleDateTime(), srcFormat, destFormat);
+        holder.textViewOrderSchedule.setText(mContext.getString(R.string.order_format_schedule, dateStr));
+
+        holder.textViewOrderDeliveredAt.setVisibility(View.VISIBLE);
+        dateStr = Util.formatDate(orderItem.getDeliveredSchedule(), srcFormat, destFormat);
+        holder.textViewOrderDeliveredAt.setText(mContext.getString(R.string.order_format_delivered_at, dateStr));
+
+        holder.textViewOrderAddress.setText(mContext.getString(R.string.order_format_address, orderItem.getAddress()));
 
         holder.buttonDeliveryStatus.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorGreen));
-//        holder.textViewDeliveryStatus.setText(String.valueOf(mOrderItemList.get(position).getDeliveryStatus()));
 
         Picasso.
                 with(mContext).
-                load(mOrderItemList.get(position).getImageUrl()).
+                load(orderItem.getImageUrl()).
                 into(holder.orderItemImage);
 
-        holder.circularTextViewCategory.setText(String.valueOf(mOrderItemList.get(position).getCategory()));
+        holder.circularTextViewCategory.setText(String.valueOf(orderItem.getCategory()));
 
         holder.relativeLayoutMaps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     Intent mapIntent = new Intent(mContext, MapActivity.class);
-                    mapIntent.putExtra(mContext.getString(R.string.key_latitude), Double.parseDouble(mOrderItemList.get(position).getLatitude()));
-                    mapIntent.putExtra(mContext.getString(R.string.key_longitude), Double.parseDouble(mOrderItemList.get(position).getLongitude()));
-                    mapIntent.putExtra(mContext.getString(R.string.key_address), mOrderItemList.get(position).getAddress());
+                    mapIntent.putExtra(mContext.getString(R.string.key_latitude), Double.parseDouble(orderItem.getLatitude()));
+                    mapIntent.putExtra(mContext.getString(R.string.key_longitude), Double.parseDouble(orderItem.getLongitude()));
+                    mapIntent.putExtra(mContext.getString(R.string.key_address), orderItem.getAddress());
                     mapIntent.putExtra(mContext.getString(R.string.key_is_draggable), false);
                     mContext.startActivity(mapIntent);
                 } catch (NumberFormatException e) {
-
+                    e.printStackTrace();
                 }
             }
         });
@@ -98,7 +95,7 @@ public class CompletedOrderAdapter extends RecyclerView.Adapter<CompletedOrderAd
             @Override
             public void onClick(View v) {
                 Intent orderDetailIntent = new Intent(mContext, OrderDetailsActivity.class);
-                orderDetailIntent.putExtra(mContext.getString(R.string.key_order_id), mOrderItemList.get(position).getId());
+                orderDetailIntent.putExtra(mContext.getString(R.string.key_order_id), orderItem.getId());
                 mContext.startActivity(orderDetailIntent);
             }
         });
@@ -146,6 +143,9 @@ public class CompletedOrderAdapter extends RecyclerView.Adapter<CompletedOrderAd
 
         @BindView(R.id.order_detail_container)
         LinearLayout linearLayoutOrderDetailContainer;
+
+        @BindView(R.id.order_delivered_at)
+        TextView textViewOrderDeliveredAt;
 
         public ViewHolder(View view) {
             super(view);

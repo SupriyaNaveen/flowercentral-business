@@ -6,56 +6,48 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by admin on 17-05-2017.
+ *
  */
-
 public class OrderItem implements Parcelable {
 
     @SerializedName("id")
-    int id;
+    private int id;
 
     @SerializedName("quantity")
-    int quantity;
+    private int quantity;
 
     @SerializedName("flower")
-    String name;
+    private String name;
 
     @SerializedName("category")
-    CATEGORY category; //S,M,L,XL, XL+, All
+    private CATEGORY category; //S,M,L,XL, XL+, All
 
     @SerializedName("price")
-    double price;
+    private double price;
 
     @SerializedName("payment_status")
-    PAID_STATUS paidStatus; // 0: not paid, 1: paid
+    private PAID_STATUS paidStatus; // 0: not paid, 1: paid
 
     @SerializedName("Status")
-    DELIVERY_STATUS deliveryStatus; //0: pending, 1: delivered
+    private DELIVERY_STATUS deliveryStatus; //0: pending, 1: delivered
 
     @SerializedName("Schedule_datetime")
-    String scheduleDateTime;
+    private String scheduleDateTime;
 
     @SerializedName("Address")
-    String address;
+    private String address;
 
     @SerializedName("longitude")
-    String longitude;
+    private String longitude;
 
     @SerializedName("latitude")
-    String latitude;
+    private String latitude;
 
     @SerializedName("img_url")
-    String imageUrl;
+    private String imageUrl;
 
     @SerializedName("delivered_at")
-    String deliveredSchedule;
-
-    /**
-     * Standard basic constructor for non-parcel
-     * object creation
-     */
-    public OrderItem() {
-    }
+    private String deliveredSchedule;
 
     /**
      * Constructor to use when re-constructing object
@@ -63,7 +55,7 @@ public class OrderItem implements Parcelable {
      *
      * @param in a parcel from which to read this object
      */
-    public OrderItem(Parcel in) {
+    OrderItem(Parcel in) {
         readFromParcel(in);
     }
 
@@ -171,7 +163,7 @@ public class OrderItem implements Parcelable {
         }
     }
 
-    enum DELIVERY_STATUS {
+    private enum DELIVERY_STATUS {
         @SerializedName("Pending")
         PENDING,
         @SerializedName("Delivered")
@@ -190,96 +182,48 @@ public class OrderItem implements Parcelable {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public CATEGORY getCategory() {
         return category;
     }
 
-    public void setCategory(CATEGORY category) {
-        this.category = category;
-    }
-
     public double getPrice() {
         return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 
     public PAID_STATUS getPaidStatus() {
         return paidStatus;
     }
 
-    public void setPaidStatus(PAID_STATUS paidStatus) {
-        this.paidStatus = paidStatus;
-    }
-
-    public DELIVERY_STATUS getDeliveryStatus() {
-        return deliveryStatus;
-    }
-
-    public void setDeliveryStatus(DELIVERY_STATUS deliveryStatus) {
-        this.deliveryStatus = deliveryStatus;
-    }
+//    public DELIVERY_STATUS getDeliveryStatus() {
+//        return deliveryStatus;
+//    }
 
     public String getScheduleDateTime() {
         return scheduleDateTime;
-    }
-
-    public void setScheduleDateTime(String scheduleDateTime) {
-        this.scheduleDateTime = scheduleDateTime;
     }
 
     public String getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getLongitude() {
         return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
     }
 
     public String getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
-
     public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public String getDeliveredSchedule() {
         return deliveredSchedule;
-    }
-
-    public void setDeliveredSchedule(String deliveredSchedule) {
-        this.deliveredSchedule = deliveredSchedule;
     }
 
     public static Creator getCREATOR() {
