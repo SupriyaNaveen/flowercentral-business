@@ -61,4 +61,14 @@ public class QueryBuilder {
         return BuildConfig.SERVER +
                 "accept_order";
     }
+
+    public static String getShopPictureUrl() {
+        return BuildConfig.SERVER +
+                "shop_picture";
+    }
+
+    public static String getRemovePictureUrl() {
+        return BuildConfig.SERVER +
+                "remove_shop_picture";
+    }
 }
