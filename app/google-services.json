@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "664133550762-206a00dksv1vh047l9d2qgejeqbrcoj1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.flowercentral.flowercentralbusiness",
+            "certificate_hash": "0ddae46ff78726d080fa0de25367944256c1616f"
+          }
+        },
+        {
           "client_id": "664133550762-fhi35tp8l707u9bcmaosidreg5j3vkhc.apps.googleusercontent.com",
           "client_type": 3
         }

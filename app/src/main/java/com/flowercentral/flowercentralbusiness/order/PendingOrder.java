@@ -1,9 +1,14 @@
 package com.flowercentral.flowercentralbusiness.order;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +24,7 @@ import com.flowercentral.flowercentralbusiness.order.adapters.PendingOrderAdapte
 import com.flowercentral.flowercentralbusiness.order.model.OrderItem;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
+import com.flowercentral.flowercentralbusiness.setting.AppConstant;
 import com.flowercentral.flowercentralbusiness.util.Util;
 import com.flowercentral.flowercentralbusiness.volley.ErrorData;
 import com.google.gson.Gson;
@@ -73,8 +79,8 @@ public class PendingOrder extends Fragment {
     }
 
     /**
-     * @param inflater inflater
-     * @param container container
+     * @param inflater           inflater
+     * @param container          container
      * @param savedInstanceState savedInstance
      * @return view
      */
@@ -100,7 +106,21 @@ public class PendingOrder extends Fragment {
                 refreshItems();
             }
         });
+
         return view;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver,
+                new IntentFilter(AppConstant.BROADCAST_ACTION_ORDER_ACCEPTED));
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onDestroy() {
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mMessageReceiver);
+        super.onDestroy();
     }
 
     private void refreshItems() {
@@ -180,7 +200,8 @@ public class PendingOrder extends Fragment {
     private List<OrderItem> constructOrderItemList(JSONArray response) {
 
         return new Gson().fromJson(String.valueOf(response),
-                new TypeToken<List<OrderItem>>(){}.getType());
+                new TypeToken<List<OrderItem>>() {
+                }.getType());
     }
 
     /**
@@ -215,4 +236,12 @@ public class PendingOrder extends Fragment {
     private void hideRefreshLayout() {
         mSwipeRefreshLayout.setRefreshing(false);
     }
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mSwipeRefreshLayout.setRefreshing(true);
+            refreshItems();
+        }
+    };
 }

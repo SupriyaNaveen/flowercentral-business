@@ -32,7 +32,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@drawable/rounded_corner_border"
+                    android:background="@drawable/button_transparent"
                     android:text="@string/lbl_update" />
 
                 <Button
@@ -40,7 +40,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@drawable/rounded_corner_border"
+                    android:background="@drawable/button_transparent"
                     android:text="@string/lbl_cancel"
                     android:layout_marginStart="@dimen/dp2"/>
 

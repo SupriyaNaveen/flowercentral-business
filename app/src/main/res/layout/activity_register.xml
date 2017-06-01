@@ -63,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp16"
                     android:text="@string/lbl_register"
-                    android:background="@drawable/rounded_corner_border"/>
+                    android:background="@drawable/button_transparent"/>
 
             </LinearLayout>
         </ScrollView>

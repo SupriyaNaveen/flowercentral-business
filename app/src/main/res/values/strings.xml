@@ -119,4 +119,7 @@
     <string name="api_key_old_password">old_password</string>
     <string name="api_key_new_password">new_pass</string>
     <string name="api_key_confirm_password">confirm_new_password</string>
+    <string name="lbl_accept">Accept</string>
+    <string name="lbl_reject">Reject</string>
+    <string name="api_res_status">status</string>
 </resources>

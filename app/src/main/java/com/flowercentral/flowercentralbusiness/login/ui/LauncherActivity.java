@@ -26,6 +26,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.dashboard.DashboardActivity;
 import com.flowercentral.flowercentralbusiness.login.ui.model.Vendor;
+import com.flowercentral.flowercentralbusiness.notification.NotificationMessageHandler;
 import com.flowercentral.flowercentralbusiness.preference.UserPreference;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
@@ -102,6 +103,10 @@ public class LauncherActivity extends AppCompatActivity {
             initializeActivity(mContext);
         }
 
+        Bundle bundle = getIntent().getExtras();
+        if (null != bundle) {
+            NotificationMessageHandler.getInstance().handleNotificationData(this, bundle);
+        }
     }
 
     /**

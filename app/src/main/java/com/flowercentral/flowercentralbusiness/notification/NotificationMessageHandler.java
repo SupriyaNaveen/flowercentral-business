@@ -24,9 +24,9 @@ import java.util.Set;
 public class NotificationMessageHandler {
 
     // Will queue the notification, or else replace the notification.
-    public static int mNotificationId = 0;
+    private static int mNotificationId = 0;
 
-    private static final String TAG = NotificationMessageHandler.class.getSimpleName();
+    //    private static final String TAG = NotificationMessageHandler.class.getSimpleName();
     private static NotificationMessageHandler notificationMessageHandler;
 
     public static NotificationMessageHandler getInstance() {
@@ -40,14 +40,15 @@ public class NotificationMessageHandler {
      * Create and show a simple notification containing the received FCM message.
      * When app is in foreground.
      *
-     * @param messageBody FCM message body received.
-     * @param
+     * @param context          context
+     * @param messageTitle     title
+     * @param messageBody      body
+     * @param notificationData data
      */
-    public void handleNotificationData(Context context, String messageTitle, String messageBody, Map<String, String> notificationData) {
+    void handleNotificationData(Context context, String messageTitle, String messageBody, Map<String, String> notificationData) {
 
-        Map<String, String> map = notificationData;
-        if (map.containsKey("NotificationType")) {
-            String valueStr = map.get("NotificationType");
+        if (notificationData.containsKey("NotificationType")) {
+            String valueStr = notificationData.get("NotificationType");
             switch (valueStr) {
                 case "Pending":
                     parseNotificationData(context, messageTitle, messageBody, notificationData.entrySet());
@@ -62,10 +63,23 @@ public class NotificationMessageHandler {
         Bitmap largeIcon = BitmapFactory.decodeResource(context.getResources(),
                 R.drawable.ic_pinterest);
 
+        int orderId = 0;
+        for (Map.Entry<String, String> entry : entries) {
+            if (entry.getKey().compareTo(context.getString(R.string.key_order_id)) == 0) {
+                try {
+                    orderId = Integer.parseInt(entry.getValue());
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
         if (isUserAlreadyLoggedIn()) {
             intent = new Intent(context, NotificationOverlay.class);
+            intent.putExtra(context.getString(R.string.key_order_id), orderId);
         } else {
             intent = new Intent(context, LauncherActivity.class);
+            intent.putExtra(context.getString(R.string.key_order_id), orderId);
         }
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -91,17 +105,19 @@ public class NotificationMessageHandler {
     /**
      * When app running in background.
      *
-     * @param context
-     * @param bundle
+     * @param context context
+     * @param bundle  bundle
      */
     public void handleNotificationData(Context context, Bundle bundle) {
 
         if (bundle.containsKey("NotificationType")) {
             String valueString = bundle.getString("NotificationType");
-            switch (valueString) {
-                case "Case":
-                    parseNotificationData(context, bundle);
-                    break;
+            if (valueString != null) {
+                switch (valueString) {
+                    case "Pending":
+                        parseNotificationData(context, bundle);
+                        break;
+                }
             }
         }
     }
@@ -109,15 +125,20 @@ public class NotificationMessageHandler {
     private void parseNotificationData(Context context, Bundle bundle) {
 
         Intent intent;
+        int orderId = 0;
         if (null != bundle) {
             try {
+                orderId = bundle.getInt(context.getString(R.string.key_order_id));
             } catch (NumberFormatException e) {
+                e.printStackTrace();
             }
         }
         if (isUserAlreadyLoggedIn()) {
             intent = new Intent(context, NotificationOverlay.class);
+            intent.putExtra(context.getString(R.string.key_order_id), orderId);
         } else {
             intent = new Intent(context, LauncherActivity.class);
+            intent.putExtra(context.getString(R.string.key_order_id), orderId);
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(intent);

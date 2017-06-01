@@ -18,4 +18,6 @@ public final class AppConstant {
     public static final int LOG_LEVEL_DEBUG = 2;
     public static final int LOG_LEVEL_WARN = 3;
     public static final int LOG_LEVEL_INFO = 4;
+
+    public static final String BROADCAST_ACTION_ORDER_ACCEPTED = "broadcast.action.order_accepted";
 }

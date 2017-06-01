@@ -56,4 +56,9 @@ public class QueryBuilder {
         return BuildConfig.SERVER +
                 "feedbacks";
     }
+
+    public static String getAcceptOrderUrl() {
+        return BuildConfig.SERVER +
+                "accept_order";
+    }
 }
