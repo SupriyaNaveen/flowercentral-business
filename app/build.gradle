@@ -68,3 +68,5 @@ dependencies {
     compile 'com.google.firebase:firebase-messaging:9.8.0'
     compile 'org.jetbrains:annotations-java5:15.0'
 }
+
+apply plugin: 'com.google.gms.google-services'
