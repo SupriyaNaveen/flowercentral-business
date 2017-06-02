@@ -3,7 +3,6 @@ package com.flowercentral.flowercentralbusiness.dao;
 import android.util.Log;
 
 import com.flowercentral.flowercentralbusiness.preference.UserPreference;
-import com.flowercentral.flowercentralbusiness.util.Util;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -18,6 +17,8 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+
+import static com.flowercentral.flowercentralbusiness.util.Util.streamToString;
 
 /**
  * This utility class provides an abstraction layer for sending multipart HTTP
@@ -49,7 +50,7 @@ public class MultipartUtility {
             throws IOException {
         this.charset = charset;
 
-        // creates a unique boundary based on time stamp 
+        // creates a unique boundary based on time stamp
         boundary = "===" + System.currentTimeMillis() + "===";
 
         URL url = new URL(requestURL);
@@ -135,36 +136,36 @@ public class MultipartUtility {
     }
 
     /**
-     * Completes the request and receives response from the server. 
-     * @return a list of Strings as response in case the server returned 
-     * status OK, otherwise an exception is thrown. 
+     * Completes the request and receives response from the server.
+     * @return a list of Strings as response in case the server returned
+     * status OK, otherwise an exception is thrown.
      * @throws IOException
-     */ 
-    /* 
-    public List<String> finish() throws IOException { 
-        List<String> response = new ArrayList<String>(); 
-  
-        writer.append(LINE_FEED).flush(); 
-        writer.append("--" + boundary + "--").append(LINE_FEED); 
-        writer.close(); 
-  
-        // checks server's status code first 
-        int status = httpConn.getResponseCode(); 
-        if (status == HttpURLConnection.HTTP_OK) { 
-            BufferedReader reader = new BufferedReader(new InputStreamReader( 
-                    httpConn.getInputStream())); 
-            String line = null; 
-            while ((line = reader.readLine()) != null) { 
-                response.add(line); 
-            } 
-            reader.close(); 
-            httpConn.disconnect(); 
-        } else { 
-            throw new IOException("Server returned non-OK status: " + status); 
-        } 
-  
-        return response; 
-    } 
+     */
+    /*
+    public List<String> finish() throws IOException {
+        List<String> response = new ArrayList<String>();
+
+        writer.append(LINE_FEED).flush();
+        writer.append("--" + boundary + "--").append(LINE_FEED);
+        writer.close();
+
+        // checks server's status code first
+        int status = httpConn.getResponseCode();
+        if (status == HttpURLConnection.HTTP_OK) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    httpConn.getInputStream()));
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                response.add(line);
+            }
+            reader.close();
+            httpConn.disconnect();
+        } else {
+            throw new IOException("Server returned non-OK status: " + status);
+        }
+
+        return response;
+    }
     */
 
     /**
@@ -181,11 +182,11 @@ public class MultipartUtility {
         writer.append("--" + boundary + "--").append(LINE_FEED);
         writer.close();
 
-        // checks server's status code first 
+        // checks server's status code first
         int status = httpConn.getResponseCode();
         if (status == HttpURLConnection.HTTP_OK) {
             InputStream in = new BufferedInputStream(httpConn.getInputStream());
-            response = Util.streamToString(in);
+            response = streamToString(in);
             in.close();
             httpConn.disconnect();
         } else {
@@ -214,10 +215,10 @@ public class MultipartUtility {
 
             return result;
         } catch (Exception e) {
-            // TODO: handle exception 
+            // TODO: handle exception
             Log.e("InputStream", "Error : " + e.toString());
             return result;
         }
 
     }
-} 
+}

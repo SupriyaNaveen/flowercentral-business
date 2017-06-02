@@ -1,6 +1,7 @@
 package com.flowercentral.flowercentralbusiness.login.ui;
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,6 +9,8 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -20,6 +23,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -31,9 +35,15 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.flowercentral.flowercentralbusiness.R;
+import com.flowercentral.flowercentralbusiness.dao.MultipartUtility;
 import com.flowercentral.flowercentralbusiness.login.ui.adapter.UploadListAdapter;
+import com.flowercentral.flowercentralbusiness.login.ui.model.FileDetails;
+import com.flowercentral.flowercentralbusiness.login.ui.model.RegisterVendorDetails;
+import com.flowercentral.flowercentralbusiness.profile.model.ProfileDetails;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
+import com.flowercentral.flowercentralbusiness.setting.AppConstant;
+import com.flowercentral.flowercentralbusiness.util.Logger;
 import com.flowercentral.flowercentralbusiness.util.MapActivity;
 import com.flowercentral.flowercentralbusiness.util.PermissionUtil;
 import com.flowercentral.flowercentralbusiness.util.Util;
@@ -50,6 +60,8 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static android.os.Build.VERSION_CODES.HONEYCOMB;
 
 /**
  *
@@ -116,14 +128,17 @@ public class RegisterActivity extends AppCompatActivity {
 
     private double mLongitude;
     private double mLatitude;
-    private ArrayList<Uri> mDocPathList = new ArrayList<>();
-    private ArrayList<Uri> mImagePathList = new ArrayList<>();
 
     @BindView(R.id.toolbar)
     Toolbar mToolBar;
 
+    private UploadListAdapter mDocUploadAdapter;
+    private UploadListAdapter mImageUploadAdapter;
+
+    private RegisterVendorDetails mRegisterVendorDetails = new RegisterVendorDetails();
+    private UploadFilesAsync mUploadFileAsync;
+
     /**
-     *
      * @param savedInstanceState instance
      */
     @Override
@@ -139,7 +154,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     /**
-     *
      * @param _context context
      */
     private void initializeActivity(Context _context) {
@@ -152,8 +166,12 @@ public class RegisterActivity extends AppCompatActivity {
             mListViewDoc.setLayoutManager(mLayoutManager);
             mLayoutManager = new LinearLayoutManager(this);
             mListViewImage.setLayoutManager(mLayoutManager);
-            mListViewDoc.setAdapter(new UploadListAdapter(mDocPathList));
-            mListViewImage.setAdapter(new UploadListAdapter(mImagePathList));
+
+            mDocUploadAdapter = new UploadListAdapter(mRegisterVendorDetails.getUploadDocList());
+            mListViewDoc.setAdapter(mDocUploadAdapter);
+
+            mImageUploadAdapter = new UploadListAdapter(mRegisterVendorDetails.getUploadImageList());
+            mListViewImage.setAdapter(mImageUploadAdapter);
 
         } else {
             mFrameLayoutNoInternet.setVisibility(View.VISIBLE);
@@ -175,7 +193,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     /**
-     *
      * @param item item
      * @return true/false
      */
@@ -195,44 +212,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         boolean isValidInput = isValidInput();
         if (isValidInput) {
-            try {
-                JSONObject register = new JSONObject();
-                if (mEditTextShopName.getText().length() > 0) {
-                    register.put(getString(R.string.api_key_shop_name), mEditTextShopName.getText());
-                }
-                if (mEditTextAddress.getText().length() > 0) {
-                    register.put(getString(R.string.api_key_address), mEditTextAddress.getText());
-                    if (mLatitude == 0 || mLongitude == 0) {
-                        isLocated(mEditTextAddress.getText().toString());
-                    }
-                    register.put(getString(R.string.api_key_latitude), mLatitude);
-                    register.put(getString(R.string.api_key_longitude), mLongitude);
-                }
-
-                if (mEditTextCity.getText().length() > 0) {
-                    register.put(getString(R.string.api_key_city), mEditTextCity.getText());
-                }
-                if (mEditTextState.getText().length() > 0) {
-                    register.put(getString(R.string.api_key_state), mEditTextState.getText());
-                }
-                if (mEditTextZip.getText().length() > 0) {
-                    register.put(getString(R.string.api_key_pin), mEditTextZip.getText());
-                }
-
-                if (mEditTextPhone1.getText().length() > 0) {
-                    register.put(getString(R.string.api_key_phone1), mEditTextPhone1.getText());
-                }
-                if (mEditTextPhone2.getText().length() > 0) {
-                    register.put(getString(R.string.api_key_phone2), mEditTextPhone2.getText());
-                }
-                if (mEditTextTIN.getText().length() > 0) {
-                    register.put(getString(R.string.api_key_tin_num), mEditTextTIN.getText());
-                }
-                registerUser(mContext, register);
-            } catch (JSONException e) {
-
-                Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();
-            }
+            uploadData();
         }
     }
 
@@ -372,15 +352,68 @@ public class RegisterActivity extends AppCompatActivity {
 
         switch (requestCode) {
             case TYPE_DOC_UPLOAD:
-                if(data != null) {
-                    mDocPathList.add(data.getData());
-                    mListViewDoc.setAdapter(new UploadListAdapter(mDocPathList));
+                if (data != null) {
+                    if (mRegisterVendorDetails.getUploadDocList() == null) {
+                        mRegisterVendorDetails.setUploadDocList(new ArrayList<FileDetails>());
+                    }
+                    try {
+                        Uri contentUri = data.getData();
+                        if (contentUri != null) {
+                            ContentResolver contentResolver = this.getContentResolver();
+                            String mime = contentResolver.getType(contentUri);
+                            String realPath = Util.getPath(mContext, contentUri);
+
+                            FileDetails fileDetails = new FileDetails();
+
+                            fileDetails.setFilePath(realPath);
+                            fileDetails.setFileType(mime);
+                            fileDetails.setUri(contentUri.toString());
+
+                            mRegisterVendorDetails.addDocumentToList(fileDetails);
+                            mDocUploadAdapter.notifyDataSetChanged();
+
+                        } else {
+                            Toast.makeText(mContext, "Error: Unable to get path", Toast.LENGTH_LONG).show();
+                            Log.e(TAG, "Error: unable to get path, content uri is null");
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(mContext, "Data is null", Toast.LENGTH_SHORT).show();
                 }
+
                 break;
             case TYPE_PICTURES_UPLOAD:
-                if(data != null) {
-                    mImagePathList.add(data.getData());
-                    mListViewImage.setAdapter(new UploadListAdapter(mImagePathList));
+                if (data != null) {
+                    if (mRegisterVendorDetails.getUploadImageList() == null) {
+                        mRegisterVendorDetails.setUploadImageList(new ArrayList<FileDetails>());
+                    }
+                    try {
+                        Uri contentUri = data.getData();
+                        if (contentUri != null) {
+                            ContentResolver contentResolver = this.getContentResolver();
+                            String mime = contentResolver.getType(contentUri);
+                            String realPath = Util.getPath(mContext, contentUri);
+
+                            FileDetails fileDetails = new FileDetails();
+
+                            fileDetails.setFilePath(realPath);
+                            fileDetails.setFileType(mime);
+                            fileDetails.setUri(contentUri.toString());
+
+                            mRegisterVendorDetails.addImageToList(fileDetails);
+                            mImageUploadAdapter.notifyDataSetChanged();
+
+                        } else {
+                            Toast.makeText(mContext, "Error: Unable to get path", Toast.LENGTH_LONG).show();
+                            Log.e(TAG, "Error: unable to get path, content uri is null");
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(mContext, "Data is null", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case TYPE_MAP:
@@ -395,7 +428,8 @@ public class RegisterActivity extends AppCompatActivity {
      * Request for the runtime permission (SDK >= Marshmallow devices)
      */
     private void requestPermission() {
-        if (PermissionUtil.hasPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+        if (PermissionUtil.hasPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) &&
+                PermissionUtil.hasPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
 
             if (mCurrentUploadType == TYPE_DOC_UPLOAD) {
                 browseDocuments();
@@ -403,7 +437,8 @@ public class RegisterActivity extends AppCompatActivity {
                 browsePictures();
             }
         } else {
-            PermissionUtil.requestPermission(this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+            PermissionUtil.requestPermission(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     PermissionUtil.REQUEST_CODE_READ_EXTERNAL_STORAGE);
         }
     }
@@ -414,14 +449,16 @@ public class RegisterActivity extends AppCompatActivity {
 
         switch (requestCode) {
             case PermissionUtil.REQUEST_CODE_READ_EXTERNAL_STORAGE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                     if (mCurrentUploadType == TYPE_DOC_UPLOAD) {
                         browseDocuments();
                     } else {
                         browsePictures();
                     }
                 } else {
-                    if (PermissionUtil.showRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    if (PermissionUtil.showRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                            || PermissionUtil.showRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         snackBarRequestPermission();
                     } else {
                         snackBarRedirectToSettings();
@@ -502,5 +539,130 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this, getString(R.string.map_error_unable_locate_address), Toast.LENGTH_LONG).show();
         }
         return false;
+    }
+
+    private void uploadData() {
+
+        ProfileDetails profileDetails = new ProfileDetails();
+        if (mEditTextShopName.getText().length() > 0) {
+            profileDetails.setShopName(mEditTextShopName.getText().toString());
+        }
+        if (mEditTextAddress.getText().length() > 0) {
+            profileDetails.setAddress(mEditTextAddress.getText().toString());
+            if (mLatitude == 0 || mLongitude == 0) {
+                isLocated(mEditTextAddress.getText().toString());
+            }
+            profileDetails.setLatitude(mLatitude);
+            profileDetails.setLongitude(mLongitude);
+        }
+
+        if (mEditTextCity.getText().length() > 0) {
+            profileDetails.setCity(mEditTextCity.getText().toString());
+        }
+        if (mEditTextState.getText().length() > 0) {
+            profileDetails.setState(mEditTextState.getText().toString());
+        }
+        if (mEditTextZip.getText().length() > 0) {
+            profileDetails.setPin(mEditTextZip.getText().toString());
+        }
+
+        if (mEditTextPhone1.getText().length() > 0) {
+            profileDetails.setPhone1(mEditTextPhone1.getText().toString());
+        }
+        if (mEditTextPhone2.getText().length() > 0) {
+            profileDetails.setPhone2(mEditTextPhone2.getText().toString());
+        }
+        if (mEditTextTIN.getText().length() > 0) {
+            profileDetails.setTinNumber(mEditTextTIN.getText().toString());
+        }
+
+        mRegisterVendorDetails.setProfileDetails(profileDetails);
+        mUploadFileAsync = new UploadFilesAsync();
+        if (mUploadFileAsync.getStatus() != AsyncTask.Status.RUNNING) {
+            if (HONEYCOMB <= Build.VERSION.SDK_INT) {
+                mUploadFileAsync.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mRegisterVendorDetails);
+            } else {
+                mUploadFileAsync.execute(mRegisterVendorDetails);
+            }
+        }
+    }
+
+    // Asynchronous Task
+    private class UploadFilesAsync extends AsyncTask<RegisterVendorDetails, Void, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgressDialog = Util.showProgressDialog(RegisterActivity.this, "Upload", getResources().getString(R.string.msg_uploading_data), false);
+        }
+
+        @Override
+        protected Boolean doInBackground(RegisterVendorDetails... params) {
+            if (mUploadFileAsync.isCancelled()) {
+                return false;
+            }
+            boolean status = false;
+            RegisterVendorDetails registerVendorDetails = params[0];
+            String url = QueryBuilder.getRegisterUrl();
+            String charset = "UTF-8";
+            try {
+                if (registerVendorDetails != null) {
+                    MultipartUtility multipart = new MultipartUtility(url, charset);
+
+                    ProfileDetails profileDetails = registerVendorDetails.getProfileDetails();
+                    multipart.addFormField(getString(R.string.api_key_shop_name), profileDetails.getShopName());
+                    multipart.addFormField(getString(R.string.api_key_address), profileDetails.getAddress());
+                    multipart.addFormField(getString(R.string.api_key_latitude), String.valueOf(profileDetails.getLatitude()));
+                    multipart.addFormField(getString(R.string.api_key_longitude), String.valueOf(profileDetails.getLongitude()));
+                    multipart.addFormField(getString(R.string.api_key_city), profileDetails.getCity());
+                    multipart.addFormField(getString(R.string.api_key_state), profileDetails.getState());
+                    multipart.addFormField(getString(R.string.api_key_pin), profileDetails.getPin());
+                    multipart.addFormField(getString(R.string.api_key_phone1), profileDetails.getPhone1());
+                    multipart.addFormField(getString(R.string.api_key_phone2), profileDetails.getPhone2());
+                    multipart.addFormField(getString(R.string.api_key_tin_num), profileDetails.getTinNumber());
+
+                    //TODO
+//                    ArrayList<FileDetails> dataList = registerVendorDetails.getUploadDocList();
+//                    if (dataList.size() > 0) {
+//                        for (int i = 0; i < dataList.size(); i++) {
+//                            FileDetails fileDetails = dataList.get(i);
+//                            File file = new File(fileDetails.getFilePath());
+//                            multipart.addFilePart("file" + String.valueOf(i), file);
+//                        }
+//                    }
+//
+//                    dataList = registerVendorDetails.getUploadImageList();
+//                    if (dataList.size() > 0) {
+//                        for (int i = 0; i < dataList.size(); i++) {
+//                            FileDetails fileDetails = dataList.get(i);
+//                            File file = new File(fileDetails.getFilePath());
+//                            multipart.addFilePart("file" + String.valueOf(i), file);
+//                        }
+//                    }
+                    String response = multipart.finish();
+                    Logger.log(TAG, "doInBackground : ", response, AppConstant.LOG_LEVEL_INFO);
+                    status = true;
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                status = false;
+            }
+            return status;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean _status) {
+            super.onPostExecute(_status);
+            dismissDialog();
+            if (_status) {
+                mRegisterVendorDetails.setUploadDocList(new ArrayList<FileDetails>());
+                mRegisterVendorDetails.setUploadImageList(new ArrayList<FileDetails>());
+                mDocUploadAdapter.notifyDataSetChanged();
+                mImageUploadAdapter.notifyDataSetChanged();
+                Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_data_upload_succes), Snackbar.LENGTH_SHORT).show();
+            } else {
+                Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_data_upload_failed), Snackbar.LENGTH_SHORT).show();
+            }
+        }
     }
 }

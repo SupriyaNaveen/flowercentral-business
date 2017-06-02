@@ -1,6 +1,5 @@
 package com.flowercentral.flowercentralbusiness.login.ui.adapter;
 
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.flowercentral.flowercentralbusiness.R;
+import com.flowercentral.flowercentralbusiness.login.ui.model.FileDetails;
 
 import java.util.ArrayList;
 
@@ -19,13 +19,13 @@ import butterknife.ButterKnife;
  *
  */
 public class UploadListAdapter extends RecyclerView.Adapter<UploadListAdapter.ViewHolder> {
-    private final ArrayList<Uri> mUploadDataList;
+    private final ArrayList<FileDetails> mUploadDataList;
 
     /**
      *
      * @param values values
      */
-    public UploadListAdapter(ArrayList<Uri> values) {
+    public UploadListAdapter(ArrayList<FileDetails> values) {
         this.mUploadDataList = values;
     }
 
@@ -49,7 +49,7 @@ public class UploadListAdapter extends RecyclerView.Adapter<UploadListAdapter.Vi
      */
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.textViewData.setText(mUploadDataList.get(position).getPath());
+        holder.textViewData.setText(mUploadDataList.get(position).getmUri());
         holder.imageViewClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
