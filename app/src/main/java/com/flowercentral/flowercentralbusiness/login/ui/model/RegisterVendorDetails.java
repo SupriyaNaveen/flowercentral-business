@@ -45,4 +45,12 @@ public class RegisterVendorDetails {
     public void addImageToList(FileDetails fileDetails) {
         uploadImageList.add(fileDetails);
     }
+
+    public void removeDocList() {
+        uploadDocList.clear();
+    }
+
+    public void removeImageList() {
+        uploadImageList.clear();
+    }
 }

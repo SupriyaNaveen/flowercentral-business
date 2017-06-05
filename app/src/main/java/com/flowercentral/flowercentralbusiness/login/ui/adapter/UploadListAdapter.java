@@ -49,7 +49,7 @@ public class UploadListAdapter extends RecyclerView.Adapter<UploadListAdapter.Vi
      */
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.textViewData.setText(mUploadDataList.get(position).getmUri());
+        holder.textViewData.setText(mUploadDataList.get(position).getFileName());
         holder.imageViewClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

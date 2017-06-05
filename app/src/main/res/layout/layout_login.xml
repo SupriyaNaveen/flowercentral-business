@@ -20,7 +20,8 @@
             android:drawablePadding="@dimen/dp10"
             android:imeOptions="actionNext"
             android:maxLines="1"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:inputType="text"/>
 
     </android.support.design.widget.TextInputLayout>
 

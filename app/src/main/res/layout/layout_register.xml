@@ -29,6 +29,7 @@
                     android:drawableLeft="@drawable/ic_person_outline_white_24dp"
                     android:drawablePadding="@dimen/dp10"
                     android:imeOptions="actionNext"
+                    android:inputType="text"
                     android:maxLines="1"
                     android:singleLine="true" />
 
@@ -47,7 +48,8 @@
                     android:drawablePadding="@dimen/dp10"
                     android:imeOptions="actionNext"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:inputType="text"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -69,7 +71,8 @@
                         android:drawableStart="@drawable/ic_person_outline_white_24dp"
                         android:imeOptions="actionNext"
                         android:maxLines="1"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:inputType="textPostalAddress"/>
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
@@ -87,7 +90,8 @@
                     android:drawablePadding="@dimen/dp10"
                     android:imeOptions="actionNext"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:inputType="text"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -103,7 +107,8 @@
                     android:layout_marginLeft="@dimen/dp32"
                     android:imeOptions="actionNext"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:inputType="text" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -119,7 +124,8 @@
                     android:layout_marginLeft="@dimen/dp32"
                     android:imeOptions="actionNext"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:inputType="number"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -128,8 +134,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
-                android:text="@string/link_view_on_map"
-                android:layout_marginTop="@dimen/dp16"/>
+                android:layout_marginTop="@dimen/dp16"
+                android:text="@string/link_view_on_map" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -144,7 +150,8 @@
                     android:drawablePadding="@dimen/dp10"
                     android:imeOptions="actionNext"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:inputType="phone"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -160,7 +167,8 @@
                     android:layout_marginLeft="@dimen/dp32"
                     android:imeOptions="actionNext"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:inputType="phone" />
 
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>

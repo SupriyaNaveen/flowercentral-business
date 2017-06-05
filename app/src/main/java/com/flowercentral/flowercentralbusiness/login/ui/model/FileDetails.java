@@ -6,6 +6,7 @@ public class FileDetails {
     private String mUri;
     private String mFilePath;
     private String mFileType;
+    private String mFileName;
 
     public int getID() {
         return mID;
@@ -23,7 +24,7 @@ public class FileDetails {
         this.mFileType = fileType;
     }
 
-    public String getmUri() {
+    public String getUri() {
         return mUri;
     }
 
@@ -37,5 +38,13 @@ public class FileDetails {
 
     public void setFilePath(String filePath) {
         this.mFilePath = filePath;
+    }
+
+    public String getFileName() {
+        return mFileName;
+    }
+
+    public void setFileName(String mFileName) {
+        this.mFileName = mFileName;
     }
 }

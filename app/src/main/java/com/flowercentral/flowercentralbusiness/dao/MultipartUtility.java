@@ -175,7 +175,7 @@ public class MultipartUtility {
      * status OK, otherwise an exception is thrown.
      * @throws IOException
      */
-    public String finish() throws IOException {
+    public String finish(int resCode) throws IOException {
         String response = "";
 
         writer.append(LINE_FEED).flush();
@@ -184,7 +184,7 @@ public class MultipartUtility {
 
         // checks server's status code first
         int status = httpConn.getResponseCode();
-        if (status == HttpURLConnection.HTTP_OK) {
+        if (status == resCode) {
             InputStream in = new BufferedInputStream(httpConn.getInputStream());
             response = streamToString(in);
             in.close();

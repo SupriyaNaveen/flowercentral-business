@@ -52,7 +52,9 @@ import com.flowercentral.flowercentralbusiness.volley.ErrorData;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -368,6 +370,7 @@ public class RegisterActivity extends AppCompatActivity {
                             fileDetails.setFilePath(realPath);
                             fileDetails.setFileType(mime);
                             fileDetails.setUri(contentUri.toString());
+                            fileDetails.setFileName(contentUri.getLastPathSegment());
 
                             mRegisterVendorDetails.addDocumentToList(fileDetails);
                             mDocUploadAdapter.notifyDataSetChanged();
@@ -401,6 +404,7 @@ public class RegisterActivity extends AppCompatActivity {
                             fileDetails.setFilePath(realPath);
                             fileDetails.setFileType(mime);
                             fileDetails.setUri(contentUri.toString());
+                            fileDetails.setFileName(contentUri.getLastPathSegment());
 
                             mRegisterVendorDetails.addImageToList(fileDetails);
                             mImageUploadAdapter.notifyDataSetChanged();
@@ -621,25 +625,24 @@ public class RegisterActivity extends AppCompatActivity {
                     multipart.addFormField(getString(R.string.api_key_phone2), profileDetails.getPhone2());
                     multipart.addFormField(getString(R.string.api_key_tin_num), profileDetails.getTinNumber());
 
-                    //TODO
-//                    ArrayList<FileDetails> dataList = registerVendorDetails.getUploadDocList();
-//                    if (dataList.size() > 0) {
-//                        for (int i = 0; i < dataList.size(); i++) {
-//                            FileDetails fileDetails = dataList.get(i);
-//                            File file = new File(fileDetails.getFilePath());
-//                            multipart.addFilePart("file" + String.valueOf(i), file);
-//                        }
-//                    }
-//
-//                    dataList = registerVendorDetails.getUploadImageList();
-//                    if (dataList.size() > 0) {
-//                        for (int i = 0; i < dataList.size(); i++) {
-//                            FileDetails fileDetails = dataList.get(i);
-//                            File file = new File(fileDetails.getFilePath());
-//                            multipart.addFilePart("file" + String.valueOf(i), file);
-//                        }
-//                    }
-                    String response = multipart.finish();
+                    ArrayList<FileDetails> dataList = registerVendorDetails.getUploadDocList();
+                    if (dataList.size() > 0) {
+                        for (int i = 0; i < dataList.size(); i++) {
+                            FileDetails fileDetails = dataList.get(i);
+                            File file = new File(fileDetails.getFilePath());
+                            multipart.addFilePart("verification_docs" + String.valueOf(i), file);
+                        }
+                    }
+
+                    dataList = registerVendorDetails.getUploadImageList();
+                    if (dataList.size() > 0) {
+                        for (int i = 0; i < dataList.size(); i++) {
+                            FileDetails fileDetails = dataList.get(i);
+                            File file = new File(fileDetails.getFilePath());
+                            multipart.addFilePart("shop_images" + String.valueOf(i), file);
+                        }
+                    }
+                    String response = multipart.finish(HttpURLConnection.HTTP_CREATED);
                     Logger.log(TAG, "doInBackground : ", response, AppConstant.LOG_LEVEL_INFO);
                     status = true;
                 }
@@ -655,9 +658,10 @@ public class RegisterActivity extends AppCompatActivity {
             super.onPostExecute(_status);
             dismissDialog();
             if (_status) {
-                mRegisterVendorDetails.setUploadDocList(new ArrayList<FileDetails>());
-                mRegisterVendorDetails.setUploadImageList(new ArrayList<FileDetails>());
+                mRegisterVendorDetails.removeDocList();
                 mDocUploadAdapter.notifyDataSetChanged();
+
+                mRegisterVendorDetails.removeImageList();
                 mImageUploadAdapter.notifyDataSetChanged();
                 Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_data_upload_succes), Snackbar.LENGTH_SHORT).show();
             } else {
