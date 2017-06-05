@@ -11,25 +11,21 @@ import com.flowercentral.flowercentralbusiness.util.Logger;
 import com.flowercentral.flowercentralbusiness.util.Util;
 
 
-/**
- * Created by Ashish Upadhyay on 3/23/2016.
- */
-public class LocalDAO {
+class LocalDAO {
 
     private static final String TAG = LocalDAO.class.getSimpleName();
-    private Context mContext;
     private DBHelper mDBHelper;
     private SQLiteDatabase mIPostOp;
 
     public LocalDAO(Context _ctx) {
-        mContext = _ctx;
+//        Context mContext = _ctx;
         // Get dbHelper instance
-        mDBHelper = DBHelper.getInstance(mContext, AppConstant.LOCAL_DB_NAME);
+        mDBHelper = DBHelper.getInstance(_ctx, AppConstant.LOCAL_DB_NAME);
         mIPostOp = mDBHelper.getDatabase();
     }
 
     public boolean addPostOpInstructions(String _data) {
-        boolean status = false;
+        boolean status;
 
         try {
             if (_data != null && !_data.isEmpty()) {
@@ -47,11 +43,7 @@ public class LocalDAO {
 
                 long rowID = mIPostOp.insert("post_op_instructions", null, contentValues);
 
-                if (rowID == -1) {
-                    status = false;
-                } else {
-                    status = true;
-                }
+                status = rowID != -1;
 
             } else {
                 Logger.log(TAG, "addPostOpInstructions", "No data available to add into local database.", AppConstant.LOG_LEVEL_INFO);
@@ -61,20 +53,17 @@ public class LocalDAO {
         } catch (SQLException sqlEx) {
             Logger.log(TAG, "addPostOpInstructions", sqlEx.getMessage(), AppConstant.LOG_LEVEL_ERR);
             status = false;
-        } catch (Exception ex) {
-            Logger.log(TAG, "addPostOpInstructions", ex.getMessage(), AppConstant.LOG_LEVEL_ERR);
-            status = false;
-        } finally {
-            if (mIPostOp != null && mIPostOp.isOpen()) {
-                //mIPostOp.close();
-                //mIPostOp = null;
-            }
+//        } finally {
+//            if (mIPostOp != null && mIPostOp.isOpen()) {
+//                mIPostOp.close();
+//                mIPostOp = null;
+//            }
         }
         return status;
     }
 
     private boolean deletePostOpInstructions() {
-        boolean status = false;
+        boolean status;
         try {
             String sqlQuery = "DELETE FROM post_op_instructions";
             if (mIPostOp == null) {
@@ -85,14 +74,11 @@ public class LocalDAO {
         } catch (SQLException sqlEx) {
             Logger.log(TAG, "deletePostOpInstructions", sqlEx.getMessage(), AppConstant.LOG_LEVEL_ERR);
             status = false;
-        } catch (Exception ex) {
-            Logger.log(TAG, "deletePostOpInstructions", ex.getMessage(), AppConstant.LOG_LEVEL_ERR);
-            status = false;
-        } finally {
-            if (mIPostOp != null && mIPostOp.isOpen()) {
-                //mIPostOp.close();
-                //mIPostOp = null;
-            }
+//        }  finally {
+//            if (mIPostOp != null && mIPostOp.isOpen()) {
+//                mIPostOp.close();
+//                mIPostOp = null;
+//            }
         }
         return status;
     }
@@ -110,7 +96,7 @@ public class LocalDAO {
             cursor = mIPostOp.rawQuery(sqlQuery, null);
             if (cursor != null) {
                 cursor.moveToFirst();
-                while (cursor.isAfterLast() == false) {
+                while (!cursor.isAfterLast()) {
                     data = cursor.getString(cursor.getColumnIndex("data"));
                     cursor.moveToNext();
                 }
@@ -123,18 +109,14 @@ public class LocalDAO {
             Logger.log(TAG, "getPostOpInstruction", sqlEx.getMessage(), AppConstant.LOG_LEVEL_ERR);
             data = null;
 
-        } catch (Exception ex) {
-            Logger.log(TAG, "getPostOpInstruction", ex.getMessage(), AppConstant.LOG_LEVEL_ERR);
-            data = null;
         } finally {
             if (cursor != null) {
                 cursor.close();
-                cursor = null;
             }
-            if (mIPostOp != null && mIPostOp.isOpen()) {
-                //mIPostOp.close();
-                //mIPostOp = null;
-            }
+//            if (mIPostOp != null && mIPostOp.isOpen()) {
+//                mIPostOp.close();
+//                mIPostOp = null;
+//            }
         }
 
         return data;

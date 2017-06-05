@@ -5,10 +5,6 @@ import android.util.Patterns;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by Ashish on 10/15/16.
- */
-
 public class Validator {
     private static final String NUMBER_PATTERN = "";
     private static final String CHARACTER_PATTERN = "^[a-zA-Z]+$";
@@ -18,7 +14,7 @@ public class Validator {
 
     public static boolean validateEmail(String _email){
 
-        boolean status = false;
+        boolean status;
 
         if(_email != null && _email.trim().length() > 0){
 
@@ -33,13 +29,13 @@ public class Validator {
 
     public static boolean validateNumber(String _number, String _pattern){
 
-        boolean status = false;
+        boolean status;
 
         if(_pattern == null){
             _pattern = NUMBER_PATTERN;
         }
 
-        if((_number != null && _number.trim().length() > 0) && (_pattern != null && _pattern.trim().length() > 0)){
+        if(_number != null && _number.trim().length() > 0 && _pattern.trim().length() > 0){
 
             Pattern pattern = Pattern.compile(_pattern);
             Matcher matcher = pattern.matcher(_number);
@@ -52,13 +48,13 @@ public class Validator {
 
     public static boolean validateCharacterOnly(String _text, String _pattern){
 
-        boolean status = false;
+        boolean status;
 
         if(_pattern == null){
             _pattern = CHARACTER_PATTERN;
         }
 
-        if((_text != null && _text.trim().length() > 0 )  && (_pattern != null && _pattern.trim().length() > 0)){
+        if((_text != null) && (_text.trim().length() > 0) && (_pattern.trim().length() > 0)){
 
             Pattern pattern = Pattern.compile(_pattern);
             Matcher matcher = pattern.matcher(_text);
@@ -71,13 +67,13 @@ public class Validator {
 
     public static boolean validateCharacterWithSpaceOnly(String _text, String _pattern){
 
-        boolean status = false;
+        boolean status;
 
         if(_pattern == null){
             _pattern = CHARACTER_SPACE_PATTERN;
         }
 
-        if((_text != null && _text.trim().length() > 0 )  && (_pattern != null && _pattern.trim().length() > 0)){
+        if(_text != null && _text.trim().length() > 0 && _pattern.trim().length() > 0){
 
             Pattern pattern = Pattern.compile(_pattern);
             Matcher matcher = pattern.matcher(_text);
@@ -90,13 +86,13 @@ public class Validator {
 
     public static boolean validateCharacterWithNumberAndSpaceOnly(String _text, String _pattern){
 
-        boolean status = false;
+        boolean status;
 
         if(_pattern == null){
             _pattern = CHARACTER_WITH_NUMBER_SPACE_PATTERN;
         }
 
-        if((_text != null && _text.trim().length() > 0 )  && (_pattern != null && _pattern.trim().length() > 0)){
+        if(_text != null && _text.trim().length() > 0 && _pattern.trim().length() > 0){
 
             Pattern pattern = Pattern.compile(_pattern);
             Matcher matcher = pattern.matcher(_text);
@@ -110,7 +106,7 @@ public class Validator {
 
     public static boolean validatePhoneNumber(String _phoneNumber){
 
-        boolean status = false;
+        boolean status;
 
         if(_phoneNumber != null && _phoneNumber.trim().length() > 0){
 
@@ -124,14 +120,10 @@ public class Validator {
     }
 
     public static boolean checkFixedLength(String _text, int _length){
-        boolean status = false;
+        boolean status;
         if(_text != null){
             int len = _text.trim().length();
-            if(len == _length){
-                status = true;
-            }else{
-                status = false;
-            }
+            status = len == _length;
 
         }else{
             status = false;
@@ -140,14 +132,10 @@ public class Validator {
     }
 
     public static boolean checkLengthInRange(String _text, int _minLength, int _maxLength){
-        boolean status = false;
+        boolean status;
         if(_text != null){
             int len = _text.trim().length();
-            if(len >= _minLength && len <=_maxLength){
-                status = true;
-            }else{
-                status = false;
-            }
+            status = len >= _minLength && len <= _maxLength;
 
         }else{
             status = false;
@@ -156,14 +144,10 @@ public class Validator {
     }
 
     public static boolean checkMinLength(String _text, int _length){
-        boolean status = false;
+        boolean status;
         if(_text != null){
             int len = _text.trim().length();
-            if(len >= _length){
-                status = true;
-            }else{
-                status = false;
-            }
+            status = len >= _length;
 
         }else{
             status = false;

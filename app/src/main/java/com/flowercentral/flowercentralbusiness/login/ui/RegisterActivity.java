@@ -40,14 +40,12 @@ import com.flowercentral.flowercentralbusiness.login.ui.adapter.UploadListAdapte
 import com.flowercentral.flowercentralbusiness.login.ui.model.FileDetails;
 import com.flowercentral.flowercentralbusiness.login.ui.model.RegisterVendorDetails;
 import com.flowercentral.flowercentralbusiness.profile.model.ProfileDetails;
-import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
 import com.flowercentral.flowercentralbusiness.setting.AppConstant;
 import com.flowercentral.flowercentralbusiness.util.Logger;
 import com.flowercentral.flowercentralbusiness.util.MapActivity;
 import com.flowercentral.flowercentralbusiness.util.PermissionUtil;
 import com.flowercentral.flowercentralbusiness.util.Util;
-import com.flowercentral.flowercentralbusiness.volley.ErrorData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,7 +55,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -215,65 +212,6 @@ public class RegisterActivity extends AppCompatActivity {
         boolean isValidInput = isValidInput();
         if (isValidInput) {
             uploadData();
-        }
-    }
-
-    private void registerUser(Context _context, JSONObject _user) {
-        //Start Progress dialog
-        dismissDialog();
-
-        mProgressDialog = Util.showProgressDialog(_context, null, getString(R.string.msg_registering_user), false);
-
-        BaseModel<JSONObject> baseModel = new BaseModel<JSONObject>(_context) {
-            @Override
-            public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
-                //CLose Progress dialog
-                dismissDialog();
-                showRegisterSuccessMessage(response);
-            }
-
-            @Override
-            public void onError(ErrorData error) {
-                //Close Progress dialog
-                dismissDialog();
-
-                if (error != null) {
-                    error.setErrorMessage("Register failed. Cause -> " + error.getErrorMessage());
-                    switch (error.getErrorType()) {
-                        case NETWORK_NOT_AVAILABLE:
-                            Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();
-                            break;
-                        case INTERNAL_SERVER_ERROR:
-                            Snackbar.make(mFrameLayoutRoot, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
-                            break;
-                        case CONNECTION_TIMEOUT:
-                            Snackbar.make(mFrameLayoutRoot, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
-                            break;
-                        case APPLICATION_ERROR:
-                            Snackbar.make(mFrameLayoutRoot, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
-                            break;
-                        case INVALID_INPUT_SUPPLIED:
-                            Snackbar.make(mFrameLayoutRoot, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
-                            break;
-                        case AUTHENTICATION_ERROR:
-                            Snackbar.make(mFrameLayoutRoot, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
-                            break;
-                        case UNAUTHORIZED_ERROR:
-                            Snackbar.make(mFrameLayoutRoot, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
-                            break;
-                        default:
-                            Snackbar.make(mFrameLayoutRoot, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
-                            break;
-                    }
-                }
-            }
-        };
-
-        String url = QueryBuilder.getRegisterUrl();
-        if (_user != null) {
-            baseModel.executePostJsonRequest(url, _user, TAG);
-        } else {
-            Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -594,6 +532,7 @@ public class RegisterActivity extends AppCompatActivity {
     // Asynchronous Task
     private class UploadFilesAsync extends AsyncTask<RegisterVendorDetails, Void, Boolean> {
 
+        JSONObject responseObject;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -611,7 +550,7 @@ public class RegisterActivity extends AppCompatActivity {
             String charset = "UTF-8";
             try {
                 if (registerVendorDetails != null) {
-                    MultipartUtility multipart = new MultipartUtility(url, charset);
+                    MultipartUtility multipart = new MultipartUtility(url, charset, RegisterActivity.this);
 
                     ProfileDetails profileDetails = registerVendorDetails.getProfileDetails();
                     multipart.addFormField(getString(R.string.api_key_shop_name), profileDetails.getShopName());
@@ -643,8 +582,13 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
                     String response = multipart.finish(HttpURLConnection.HTTP_CREATED);
-                    Logger.log(TAG, "doInBackground : ", response, AppConstant.LOG_LEVEL_INFO);
-                    status = true;
+                    responseObject = new JSONObject(response);
+                    if(responseObject.getString(getString(R.string.api_res_status)).compareTo("success") > 0 ) {
+                        Logger.log(TAG, "doInBackground : ", response, AppConstant.LOG_LEVEL_INFO);
+                        status = true;
+                    } else {
+                        status = false;
+                    }
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -663,7 +607,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 mRegisterVendorDetails.removeImageList();
                 mImageUploadAdapter.notifyDataSetChanged();
-                Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_data_upload_succes), Snackbar.LENGTH_SHORT).show();
+                showRegisterSuccessMessage(responseObject);
             } else {
                 Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_data_upload_failed), Snackbar.LENGTH_SHORT).show();
             }

@@ -6,9 +6,6 @@ import com.android.volley.toolbox.StringRequest;
 
 import java.util.Map;
 
-/**
- * Created by Ashish Upadhyay on 7/19/16.
- */
 public class CustomStringRequest extends StringRequest {
 
     private HttpResponseListener responseListener;

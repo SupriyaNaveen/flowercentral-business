@@ -63,6 +63,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
         ActionBarDrawerToggle mToggle = new ActionBarDrawerToggle(
                 this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        //noinspection deprecation
         mDrawer.setDrawerListener(mToggle);
         mToggle.syncState();
 
@@ -125,7 +126,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 break;
 
             case R.id.nav_item_logout:
-                deleteProfileInformation();
+                deleteProfileInformation(this);
                 Intent mIntent = new Intent(DashboardActivity.this, LauncherActivity.class);
                 startActivity(mIntent);
                 finish();

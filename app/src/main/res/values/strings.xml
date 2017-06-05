@@ -6,7 +6,7 @@
     <!-- Error Messages and Title -->
     <string name="msg_connection_time_out">Connection Timeout.</string>
     <string name="msg_internet_unavailable">Please check your Wifi or Internet Data and Try Again!</string>
-    <string name="msg_registering_user">Processing...</string>
+    <string name="msg_registering_user">Processing &#8230;</string>
     <string name="msg_reg_user_missing_input">Required parameters are missing. Please check and try again!</string>
 
     <!-- Login Page -->
@@ -128,4 +128,5 @@
     <string name="msg_uploading_data">Please wait! uploading data to server</string>
     <string name="msg_data_upload_succes">Data upload success.</string>
     <string name="msg_data_upload_failed">Data upload failed.</string>
+    <string name="api_res_message">message</string>
 </resources>

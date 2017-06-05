@@ -297,7 +297,7 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
             }*/
             headerValues.put("Content-Type", "application/json");
             headerValues.put("Accept", "application/json");
-            String apiToken = UserPreference.getApiToken();
+            String apiToken = UserPreference.getApiToken(mContext);
             if (apiToken != null && !apiToken.isEmpty()) {
                 headerValues.put("Authorization", "Bearer " + apiToken);
             }

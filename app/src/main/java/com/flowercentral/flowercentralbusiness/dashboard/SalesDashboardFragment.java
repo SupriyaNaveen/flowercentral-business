@@ -10,24 +10,16 @@ import com.flowercentral.flowercentralbusiness.R;
 
 import butterknife.ButterKnife;
 
-/**
- * Created by admin on 19-05-2017.
- */
-
 public class SalesDashboardFragment extends Fragment {
 
-    private View view;
-
     public static SalesDashboardFragment newInstance() {
-        SalesDashboardFragment fragment = new SalesDashboardFragment();
-        fragment = new SalesDashboardFragment();
-        return fragment;
+        return new SalesDashboardFragment();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_order, container, false);
+        View view = inflater.inflate(R.layout.fragment_order, container, false);
         ButterKnife.bind(this, view);
         return view;
     }

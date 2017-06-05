@@ -15,10 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-/**
- * Created by Ashish Upadhyay on 3/23/2016.
- */
-public class DBHelper extends SQLiteOpenHelper {
+class DBHelper extends SQLiteOpenHelper {
     /**
      * Created by Ashish Upadhyay on 9/12/2015.
      */
@@ -27,13 +24,9 @@ public class DBHelper extends SQLiteOpenHelper {
     private static SQLiteDatabase sqliteDb;
     private static DBHelper instance;
     private static final int DATABASE_VERSION = AppConstant.DB_VERSION;
-    // the default database path is : /data/data/pkgNameOfYourApplication/databases/
-    private static String DB_PATH = "";
-    private static String DB_PATH_PREFIX = "/data/data/";
+    private static String DB_PATH_PREFIX;
+
     private static String DB_PATH_SUFFIX = "/databases/";
-
-    private Context context;
-
 
     /**
      * Constructor
@@ -43,10 +36,10 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param _factory : Cursor Factory
      * @param _version : DB version
      */
-    public DBHelper(Context _context, String _name, SQLiteDatabase.CursorFactory _factory,
-                    int _version) {
+    private DBHelper(Context _context, String _name, SQLiteDatabase.CursorFactory _factory,
+                     int _version) {
         super(_context, _name, _factory, _version);
-        this.context = _context;
+        DB_PATH_PREFIX = _context.getFilesDir().getPath();
         Logger.printLogToFile("Create or Open Database : " + _name);
     }
 
@@ -83,7 +76,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param _databaseName : database name
      * @return singleton instance
      */
-    public static final DBHelper getInstance(Context _context, String _databaseName) {
+    public static DBHelper getInstance(Context _context, String _databaseName) {
         initialize(_context, _databaseName);
         return instance;
     }
@@ -93,18 +86,8 @@ public class DBHelper extends SQLiteOpenHelper {
      *
      * @return SQLiteDatabase instance
      */
-    public SQLiteDatabase getDatabase() {
+    SQLiteDatabase getDatabase() {
         return sqliteDb;
-    }
-
-    /**
-     * Method for Copy the database from asset directory to application's data directory
-     *
-     * @param _databaseName : database name
-     * @throws IOException : exception if file does not exists
-     */
-    public void copyDatabase(String _databaseName) throws IOException {
-        copyDatabase(context, _databaseName);
     }
 
     /**
@@ -112,7 +95,7 @@ public class DBHelper extends SQLiteOpenHelper {
      *
      * @param _context      : application context
      * @param _databaseName : database name
-     * @throws : IOException, if file does not exists
+     * @throws IOException exception
      */
     private static void copyDatabase(Context _context, String _databaseName) throws IOException {
         // Open your local database as the input stream
@@ -122,37 +105,33 @@ public class DBHelper extends SQLiteOpenHelper {
         // Check if the path exists or not, if not then create
         String dataDir = DB_PATH_PREFIX + _context.getPackageName() + DB_PATH_SUFFIX;
         File dbFile = new File(dataDir);
+        boolean isDirCreated = false;
         if (!dbFile.exists()) {
-            dbFile.mkdir();
-        }
-        // Copy the file into data directory
-        Logger.printLogToFile("Copying local database into : " + outFileName);
-
-        // Open the empty database as the output stream
-        OutputStream myOutput = new FileOutputStream(outFileName);
-
-        // transfer bytes from the input file to the output file
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = myInput.read(buffer)) > 0) {
-            myOutput.write(buffer, 0, length);
+            isDirCreated = dbFile.mkdir();
         }
 
-        // Close the streams
-        myOutput.flush();
-        myOutput.close();
-        myInput.close();
-        Logger.printLogToFile("Database (" + _databaseName + ") copied successfully!");
-    }
+        if(isDirCreated) {
+            // Copy the file into data directory
+            Logger.printLogToFile("Copying local database into : " + outFileName);
 
-    /**
-     * Method to check if database exists in application's data directory
-     *
-     * @param _databaseName : database name
-     * @return : boolean (true if exists)
-     */
-    public boolean checkDatabase(String _databaseName) {
-        return checkDatabase(context, _databaseName);
+            // Open the empty database as the output stream
+            OutputStream myOutput = new FileOutputStream(outFileName);
+
+            // transfer bytes from the input file to the output file
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = myInput.read(buffer)) > 0) {
+                myOutput.write(buffer, 0, length);
+            }
+
+            // Close the streams
+            myOutput.flush();
+            myOutput.close();
+            myInput.close();
+            Logger.printLogToFile("Database (" + _databaseName + ") copied successfully!");
+        } else {
+            Logger.printLogToFile("Database (" + _databaseName + ") copy failed");
+        }
     }
 
     /**
@@ -163,7 +142,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @return : true ? false
      */
     private static boolean checkDatabase(Context _context, String _databaseName) {
-        SQLiteDatabase checkDB = null;
+        SQLiteDatabase checkDB;
         boolean result = false;
         try {
             String myPath = getDatabasePath(_context, _databaseName);
@@ -184,16 +163,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /***
-     * Method that returns database path in the application's data directory
-     *
-     * @param _databaseName : database name
-     * @return : complete path
-     */
-    public String getDatabasePath(String _databaseName) {
-        return getDatabasePath(context, _databaseName);
-    }
-
-    /***
      * Static Method that returns database path in the application's data directory
      *
      * @param _context      : application context
@@ -201,20 +170,17 @@ public class DBHelper extends SQLiteOpenHelper {
      * @return : complete path
      */
     private static String getDatabasePath(Context _context, String _databaseName) {
-        DB_PATH = DB_PATH_PREFIX + _context.getPackageName() + DB_PATH_SUFFIX
+        return DB_PATH_PREFIX + _context.getPackageName() + DB_PATH_SUFFIX
                 + _databaseName;
-        return DB_PATH;
     }
 
     @Override
     public void onCreate(SQLiteDatabase _db) {
-        // TODO Auto-generated method stub
         Log.e(TAG, "OnCreate :: Called ");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase _db, int _oldVersion, int _newVersion) {
-        // TODO Auto-generated method stub
         Log.e(TAG, "OnCreate :: Upgrade ");
     }
 }

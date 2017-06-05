@@ -87,8 +87,5 @@ public class VendorDetails implements Parcelable {
 //        this.vendorImageList = vendorImageList;
 //    }
 
-    public static Creator<VendorDetails> getCREATOR() {
-        return CREATOR;
-    }
 }
 

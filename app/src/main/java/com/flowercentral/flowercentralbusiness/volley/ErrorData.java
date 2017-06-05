@@ -1,8 +1,5 @@
 package com.flowercentral.flowercentralbusiness.volley;
 
-/**
- * Created by Ashish Upadhyay on 7/18/16.
- */
 public class ErrorData {
 
     private int errorCode;
@@ -11,7 +8,7 @@ public class ErrorData {
     private String errorCodeOfResponseData;
     private ERROR_TYPE errorType = ERROR_TYPE.APPLICATION_ERROR;
 
-    public static enum ERROR_TYPE {NETWORK_NOT_AVAILABLE, INTERNAL_SERVER_ERROR, CONNECTION_TIMEOUT, APPLICATION_ERROR, UNAUTHORIZED_ERROR, AUTHENTICATION_ERROR, INVALID_INPUT_SUPPLIED, SERVER_ERROR}
+    public enum ERROR_TYPE {NETWORK_NOT_AVAILABLE, INTERNAL_SERVER_ERROR, CONNECTION_TIMEOUT, APPLICATION_ERROR, UNAUTHORIZED_ERROR, AUTHENTICATION_ERROR, INVALID_INPUT_SUPPLIED, SERVER_ERROR}
 
     @Override
     public String toString() {
@@ -37,10 +34,6 @@ public class ErrorData {
         this.errorMessage = errorMessage;
     }
 
-    public String getErrorCodeOfResponseData() {
-        return errorCodeOfResponseData;
-    }
-
     public void setErrorCodeOfResponseData(String errorCodeOfResponseData) {
         this.errorCodeOfResponseData = errorCodeOfResponseData;
     }
@@ -53,10 +46,6 @@ public class ErrorData {
         this.errorType = errorType;
     }
 
-    public int getErrorCode() {
-        return errorCode;
-    }
-
     public void setErrorCode(int errorCode) {
         this.errorCode = errorCode;
     }
@@ -67,10 +56,6 @@ public class ErrorData {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
-    }
-
-    public long getNetworkTimems() {
-        return networkTimems;
     }
 
     public void setNetworkTimems(long networkTimems) {

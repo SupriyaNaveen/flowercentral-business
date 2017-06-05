@@ -4,15 +4,11 @@ import com.flowercentral.flowercentralbusiness.profile.model.ProfileDetails;
 
 import java.util.ArrayList;
 
-/**
- * Created by Supriya on 02-06-2017.
- */
-
 public class RegisterVendorDetails {
 
-    ProfileDetails profileDetails;
-    ArrayList<FileDetails> uploadDocList = new ArrayList<>();
-    ArrayList<FileDetails> uploadImageList = new ArrayList<>();
+    private ProfileDetails profileDetails;
+    private ArrayList<FileDetails> uploadDocList = new ArrayList<>();
+    private ArrayList<FileDetails> uploadImageList = new ArrayList<>();
 
     public ProfileDetails getProfileDetails() {
         return profileDetails;

@@ -1,5 +1,6 @@
 package com.flowercentral.flowercentralbusiness.util;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.ContentUris;
 import android.content.Context;
@@ -11,7 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.Settings;
+import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -30,10 +31,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
-/**
- * Created by Ashish Upadhyay on 9/29/2016.
- */
-
 public class Util {
     private static final String TAG = Util.class.getSimpleName();
 
@@ -44,15 +41,11 @@ public class Util {
      * @return boolean
      */
     public static boolean checkInternet(Context _context) {
-        boolean isConnected = false;
+        boolean isConnected;
         try {
             ConnectivityManager connectivityManager = (ConnectivityManager) _context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-            if (activeNetwork != null) {
-                isConnected = activeNetwork.isConnectedOrConnecting();
-            } else {
-                isConnected = false;
-            }
+            isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
         } catch (Exception ex) {
             isConnected = false;
@@ -115,8 +108,9 @@ public class Util {
      * @param _context : Context
      * @return _imei : String
      */
+    @SuppressLint("HardwareIds")
     public static String getIEMINumber(Context _context) {
-        String imeiNumber = null;
+        String imeiNumber;
         try {
             TelephonyManager telephonyManger = (TelephonyManager) _context.getSystemService(Context.TELEPHONY_SERVICE);
             imeiNumber = telephonyManger.getDeviceId();
@@ -135,10 +129,11 @@ public class Util {
      * @param _context : Context
      * @return deviceID : String
      */
+    @SuppressLint("HardwareIds")
     public static String getDeviceId(Context _context) {
-        String deviceId = null;
+        String deviceId;
         try {
-            deviceId = Settings.Secure.getString(_context.getContentResolver(), Settings.Secure.ANDROID_ID);
+            deviceId = Secure.getString(_context.getContentResolver(), Secure.ANDROID_ID);
         } catch (Exception ex) {
             deviceId = null;
             ex.printStackTrace();
@@ -178,7 +173,7 @@ public class Util {
     /**
      * Get Android version
      *
-     * @return
+     * @return string
      */
     public static String getAndroidVersion() {
         // Android VERSION
@@ -193,11 +188,11 @@ public class Util {
     /**
      * Get Current date & time
      *
-     * @param _dateFormat
-     * @return
+     * @param _dateFormat dateformat
+     * @return string
      */
     public static String getCurrentDateTimeStamp(String _dateFormat) {
-        DateFormat dateFormat = new SimpleDateFormat(_dateFormat);
+        DateFormat dateFormat = new SimpleDateFormat(_dateFormat, Locale.getDefault());
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
         return dateFormat.format(calendar.getTime());
     }
@@ -208,10 +203,10 @@ public class Util {
     }
 
     public static String formatDate(String _date, String _fromFormat, String _toFormat) {
-        String strDate = "";
+        String strDate;
         try {
-            SimpleDateFormat format1 = new SimpleDateFormat(_fromFormat);
-            SimpleDateFormat format2 = new SimpleDateFormat(_toFormat);
+            SimpleDateFormat format1 = new SimpleDateFormat(_fromFormat, Locale.getDefault());
+            SimpleDateFormat format2 = new SimpleDateFormat(_toFormat, Locale.getDefault());
             Date date = format1.parse(_date);
             strDate = format2.format(date);
         } catch (Exception e) {
@@ -228,7 +223,7 @@ public class Util {
      * @param requireWriteAccess : write access is required or not
      * @return boolean
      */
-    public static boolean hasStorage(boolean requireWriteAccess) {
+    static boolean hasStorage(boolean requireWriteAccess) {
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state)) {
             return true;
@@ -246,7 +241,6 @@ public class Util {
      *
      * @param context The context.
      * @param uri     The Uri to query.
-     * @author paulburke
      */
     public static String getPath(final Context context, final Uri uri) {
 
@@ -320,8 +314,8 @@ public class Util {
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      */
-    public static String getDataColumn(Context context, Uri uri, String selection,
-                                       String[] selectionArgs) {
+    private static String getDataColumn(Context context, Uri uri, String selection,
+                                        String[] selectionArgs) {
 
         Cursor cursor = null;
         final String column = "_data";
@@ -348,7 +342,7 @@ public class Util {
      * @param uri The Uri to check.
      * @return Whether the Uri authority is ExternalStorageProvider.
      */
-    public static boolean isExternalStorageDocument(Uri uri) {
+    private static boolean isExternalStorageDocument(Uri uri) {
         return "com.android.externalstorage.documents".equals(uri.getAuthority());
     }
 
@@ -356,7 +350,7 @@ public class Util {
      * @param uri The Uri to check.
      * @return Whether the Uri authority is DownloadsProvider.
      */
-    public static boolean isDownloadsDocument(Uri uri) {
+    private static boolean isDownloadsDocument(Uri uri) {
         return "com.android.providers.downloads.documents".equals(uri.getAuthority());
     }
 
@@ -364,7 +358,7 @@ public class Util {
      * @param uri The Uri to check.
      * @return Whether the Uri authority is MediaProvider.
      */
-    public static boolean isMediaDocument(Uri uri) {
+    private static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
     }
 
@@ -388,7 +382,7 @@ public class Util {
     }
 
     public static String streamToString(InputStream stream) throws IOException {
-        int n = 0;
+        int n;
         char[] buffer = new char[1024 * 4];
         InputStreamReader reader = new InputStreamReader(stream, "UTF8");
         StringWriter writer = new StringWriter();

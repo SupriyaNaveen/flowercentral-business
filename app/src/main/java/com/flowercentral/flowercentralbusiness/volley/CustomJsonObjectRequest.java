@@ -12,13 +12,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Ashish Upadhyay on 7/19/16.
+ *
  */
 public class CustomJsonObjectRequest extends JsonObjectRequest {
 
     private HttpResponseListener responseListener;
     private NetworkResponse networkResponse;
-    Map<String, String> headerValues;
+    private Map<String, String> headerValues;
 
     public CustomJsonObjectRequest(int method, String Url, JSONObject jsonObjectData, Response.Listener listener, Response.ErrorListener errorListener) {
         super(method, Url, jsonObjectData, listener, errorListener);
@@ -36,7 +36,7 @@ public class CustomJsonObjectRequest extends JsonObjectRequest {
     public void appendHeaderValues(Map<String, String> headers) {
         if (headers != null) {
             if (headerValues == null) {
-                headerValues = new HashMap<String, String>();
+                headerValues = new HashMap<>();
 
             }
             headerValues.putAll(headers);

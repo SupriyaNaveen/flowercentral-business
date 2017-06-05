@@ -10,23 +10,16 @@ import com.flowercentral.flowercentralbusiness.R;
 
 import butterknife.ButterKnife;
 
-/**
- * Created by admin on 19-05-2017.
- */
-
 public class HelpFragment extends Fragment {
 
-    private View view;
-
     public static HelpFragment newInstance() {
-        HelpFragment fragment = new HelpFragment();
-        return fragment;
+        return new HelpFragment();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_help, container, false);
+        View view = inflater.inflate(R.layout.fragment_help, container, false);
         ButterKnife.bind(this, view);
         return view;
     }

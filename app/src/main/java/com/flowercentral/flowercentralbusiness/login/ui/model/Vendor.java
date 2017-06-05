@@ -91,8 +91,4 @@ public class Vendor implements Parcelable {
     public void setVendorDetails(VendorDetails vendorDetails) {
         this.vendorDetails = vendorDetails;
     }
-
-    public static Creator<Vendor> getCREATOR() {
-        return CREATOR;
-    }
 }

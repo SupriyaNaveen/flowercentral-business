@@ -7,10 +7,6 @@ import android.net.NetworkInfo;
 import com.flowercentral.flowercentralbusiness.setting.AppConstant;
 import com.flowercentral.flowercentralbusiness.util.Logger;
 
-/**
- * Created by Ashish Upadhyay on 7/18/16.
- */
-
 public class RestUtil {
 
     private static String TAG = RestUtil.class.getSimpleName();

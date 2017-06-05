@@ -11,15 +11,11 @@ import org.json.JSONArray;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Ashish Upadhyay on 12/4/2016.
- */
-
 public class CustomJsonArrayObjectRequest extends JsonArrayRequest {
 
     private HttpResponseListener responseListener;
     private NetworkResponse networkResponse;
-    Map<String, String> headerValues;
+    private Map<String, String> headerValues;
 
     public CustomJsonArrayObjectRequest(String url, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
         super(url, listener, errorListener);
@@ -41,7 +37,7 @@ public class CustomJsonArrayObjectRequest extends JsonArrayRequest {
     public void appendHeaderValues(Map<String, String> headers) {
         if (headers != null) {
             if (headerValues == null) {
-                headerValues = new HashMap<String, String>();
+                headerValues = new HashMap<>();
 
             }
             headerValues.putAll(headers);

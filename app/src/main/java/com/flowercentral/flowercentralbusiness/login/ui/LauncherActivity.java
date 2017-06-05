@@ -91,12 +91,12 @@ public class LauncherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         mContext = this;
-        if (UserPreference.getApiToken() != null) {
+        if (UserPreference.getApiToken(this) != null) {
             Intent intent = new Intent(LauncherActivity.this, DashboardActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(intent);
             finish();
-            overridePendingTransition(0,0);
+            overridePendingTransition(0, 0);
         } else {
             setContentView(R.layout.activity_launcher);
             ButterKnife.bind(this);
@@ -155,13 +155,13 @@ public class LauncherActivity extends AppCompatActivity {
      */
     @OnClick(R.id.btn_login)
     void loginSelected() {
-        if (UserPreference.getApiToken() != null) {
-            UserPreference.deleteProfileInformation();
+        if (UserPreference.getApiToken(this) != null) {
+            UserPreference.deleteProfileInformation(this);
         }
 
         boolean isValidInput = isValidInput();
         if (isValidInput) {
-           requestPermissionBeforeLogin();
+            requestPermissionBeforeLogin();
         }
     }
 
@@ -220,7 +220,7 @@ public class LauncherActivity extends AppCompatActivity {
                 Vendor vendor = new Gson().fromJson(String.valueOf(response),
                         new TypeToken<Vendor>() {
                         }.getType());
-                UserPreference.setProfileInformation(vendor);
+                UserPreference.setProfileInformation(mContext, vendor);
                 //CLose Progress dialog
                 dismissDialog();
                 mContext.startActivity(new Intent(LauncherActivity.this, DashboardActivity.class));

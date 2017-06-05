@@ -43,7 +43,7 @@ public class ProfileDetails implements Parcelable {
     @SerializedName("tin_num")
     private String tinNumber;
 
-    public ProfileDetails(Parcel in) {
+    private ProfileDetails(Parcel in) {
         shopName = in.readString();
         address = in.readString();
         city = in.readString();
@@ -153,9 +153,9 @@ public class ProfileDetails implements Parcelable {
         this.state = state;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
+//    public void setCountry(String country) {
+//        this.country = country;
+//    }
 
     public void setPin(String pin) {
         this.pin = pin;

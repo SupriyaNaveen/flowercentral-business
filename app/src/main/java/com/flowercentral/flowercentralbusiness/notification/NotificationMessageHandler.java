@@ -74,7 +74,7 @@ public class NotificationMessageHandler {
             }
         }
 
-        if (isUserAlreadyLoggedIn()) {
+        if (isUserAlreadyLoggedIn(context)) {
             intent = new Intent(context, NotificationOverlay.class);
             intent.putExtra(context.getString(R.string.key_order_id), orderId);
         } else {
@@ -133,7 +133,7 @@ public class NotificationMessageHandler {
                 e.printStackTrace();
             }
         }
-        if (isUserAlreadyLoggedIn()) {
+        if (isUserAlreadyLoggedIn(context)) {
             intent = new Intent(context, NotificationOverlay.class);
             intent.putExtra(context.getString(R.string.key_order_id), orderId);
         } else {
@@ -144,9 +144,9 @@ public class NotificationMessageHandler {
         context.startActivity(intent);
     }
 
-    private boolean isUserAlreadyLoggedIn() {
+    private boolean isUserAlreadyLoggedIn(Context context) {
         Boolean isUserAlreadyLoggedIn = false;
-        if (UserPreference.getApiToken() != null) {
+        if (UserPreference.getApiToken(context) != null) {
             isUserAlreadyLoggedIn = true;
         }
         return isUserAlreadyLoggedIn;
