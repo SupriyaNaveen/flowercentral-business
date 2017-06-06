@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
@@ -46,7 +46,7 @@ public class ChangePassword extends Fragment {
     Button mButtonResetPassword;
 
     @BindView(R.id.root_layout)
-    LinearLayout mLinearRootLayout;
+    ScrollView mLinearRootLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -97,10 +97,10 @@ public class ChangePassword extends Fragment {
                 @Override
                 public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
                     try {
-                        if (response.getInt("status") == 1) {
-                            mEditTextOldPassword.setText("");
+                        if (response.getInt(getString(R.string.api_res_status)) == 1) {
                             mEditTextNewPassword.setText("");
                             mEditTextConfirmNewPassword.setText("");
+                            mEditTextOldPassword.setText("");
                             Snackbar.make(mLinearRootLayout, "Password reset successful", Snackbar.LENGTH_SHORT).show();
                         } else {
                             Snackbar.make(mLinearRootLayout, "Password reset failed", Snackbar.LENGTH_SHORT).show();

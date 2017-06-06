@@ -7,12 +7,13 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fadeScrollbars="false">
+        android:fadeScrollbars="false"
+        android:padding="@dimen/dp16">
 
         <LinearLayout
             android:id="@+id/register_wrapper"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             android:orientation="vertical"
             android:visibility="visible">
@@ -33,16 +34,17 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/button_transparent"
-                    android:text="@string/lbl_update" />
+                    android:text="@string/lbl_update"
+                    android:layout_marginEnd="@dimen/dp10"/>
 
                 <Button
                     android:id="@+id/btn_cancel"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp10"
                     android:layout_weight="1"
                     android:background="@drawable/button_transparent"
-                    android:text="@string/lbl_cancel"
-                    android:layout_marginStart="@dimen/dp2"/>
+                    android:text="@string/lbl_cancel" />
 
             </LinearLayout>
 

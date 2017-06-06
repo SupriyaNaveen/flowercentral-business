@@ -110,8 +110,6 @@ public class Logger {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } else {
-                logError(Logger.class.getSimpleName(), "print to file", "Dir creation failed");
             }
         }
     }

@@ -57,16 +57,35 @@ class ShopPicturesAdapter extends RecyclerView.Adapter<ShopPicturesAdapter.ViewH
 
     @Override
     public void onBindViewHolder(final ShopPicturesAdapter.ViewHolder holder, int position) {
-        Picasso.
-                with(mContext).
-                load(shopPicturesList.get(position).getImageUrl()).
-                into(holder.shopImage);
-        holder.textViewRemove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                removePicture(shopPicturesList.get(holder.getAdapterPosition()).getPictureId());
-            }
-        });
+
+        if(position < shopPicturesList.size()) {
+            holder.shopImage.setVisibility(View.VISIBLE);
+            holder.textViewRemove.setVisibility(View.VISIBLE);
+            holder.uploadImage.setVisibility(View.GONE);
+
+            Picasso.
+                    with(mContext).
+                    load(shopPicturesList.get(position).getImageUrl()).
+                    into(holder.shopImage);
+
+            holder.textViewRemove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    removePicture(shopPicturesList.get(holder.getAdapterPosition()).getPictureId());
+                }
+            });
+        } else {
+            holder.shopImage.setVisibility(View.GONE);
+            holder.textViewRemove.setVisibility(View.GONE);
+            holder.uploadImage.setVisibility(View.VISIBLE);
+
+            holder.uploadImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        }
     }
 
     private void removePicture(String pictureId) {
@@ -145,13 +164,16 @@ class ShopPicturesAdapter extends RecyclerView.Adapter<ShopPicturesAdapter.ViewH
 
     @Override
     public int getItemCount() {
-        return shopPicturesList.size();
+        return shopPicturesList.size() + 1;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.image_view_shop_picture)
         ImageView shopImage;
+
+        @BindView(R.id.text_view_picture_upload)
+        TextView uploadImage;
 
         @BindView(R.id.text_view_remove)
         TextView textViewRemove;

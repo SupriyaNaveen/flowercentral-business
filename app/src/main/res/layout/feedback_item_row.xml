@@ -1,62 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="@dimen/dp10"
-    android:layout_marginLeft="@dimen/dp10"
-    android:layout_marginRight="@dimen/dp10"
-    android:layout_marginStart="@dimen/dp10"
-    android:layout_marginTop="@dimen/dp10"
-    app:cardBackgroundColor="@color/colorWhite">
+    android:orientation="horizontal"
+    android:weightSum="1">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/dp16">
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.2"
+        android:padding="@dimen/dp16"
+        android:layout_marginTop="@dimen/dp10">
 
-        <RatingBar
-            android:id="@+id/feedback_rating"
-            android:layout_width="wrap_content"
+        <com.flowercentral.flowercentralbusiness.util.CircularTextView
+            android:id="@+id/feedback_profile_pic"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="?android:attr/ratingBarStyleSmall"
-            android:numStars="5"
-            android:stepSize="1"
-            android:isIndicator="true"
-            android:progressBackgroundTint="@android:color/black"
-            tools:targetApi="lollipop" />
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.8"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/dp16"
+        android:paddingEnd="@dimen/dp16">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RatingBar
+                android:id="@+id/feedback_rating"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:progressBackgroundTint="@android:color/white"
+                android:stepSize="1"
+                tools:targetApi="lollipop"
+                android:layout_centerVertical="true"/>
+
+            <TextView
+                android:id="@+id/feedback_message_by"
+                style="@style/AppTheme.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@id/feedback_rating"
+                android:layout_centerVertical="true"/>
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/text_view_feedback_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.Normal" />
+            android:theme="@style/AppTheme.Label" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/feedback_order_details"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/dp5">
-
-            <TextView
-                android:id="@+id/feedback_message_by"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:textColor="@color/colorPrimary" />
-
-            <TextView
-                android:id="@+id/feedback_order_details"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp10"
-                android:drawableEnd="@drawable/ic_arrow_right_black_24dp"
-                android:layout_alignParentEnd="true"
-                android:text="View order details"
-                style="@style/AppTheme.Normal"
-                android:gravity="center"/>
-        </RelativeLayout>
+            android:layout_gravity="end|center_vertical"
+            android:drawableEnd="@drawable/ic_arrow_right_white_24dp"
+            android:text="View order details"
+            android:theme="@style/AppTheme.Label" />
     </LinearLayout>
-</android.support.v7.widget.CardView>
+</LinearLayout>

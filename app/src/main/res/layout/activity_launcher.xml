@@ -53,8 +53,9 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_pinterest" />
+                android:layout_height="@dimen/dp100"
+                android:src="@drawable/flower_central_logo"
+                android:scaleType="fitCenter"/>
 
             <TextView
                 style="@style/AppTheme.Title"

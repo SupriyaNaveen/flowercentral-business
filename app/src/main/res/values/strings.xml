@@ -21,7 +21,7 @@
     <string name="lbl_forgot_password"><u>Forgot Password?</u></string>
 
     <!-- Register -->
-    <string name="lbl_register">Register</string>
+    <string name="lbl_register">REGISTER</string>
     <string name="lbl_address">Address</string>
     <string name="lbl_state">State</string>
     <string name="lbl_city">City</string>
@@ -129,4 +129,5 @@
     <string name="msg_data_upload_succes">Data upload success.</string>
     <string name="msg_data_upload_failed">Data upload failed.</string>
     <string name="api_res_message">message</string>
+    <string name="btn_upload_pictures">Upload\nPictures</string>
 </resources>

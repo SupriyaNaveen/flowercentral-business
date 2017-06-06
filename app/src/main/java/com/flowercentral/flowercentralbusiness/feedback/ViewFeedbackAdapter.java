@@ -2,6 +2,7 @@ package com.flowercentral.flowercentralbusiness.feedback;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.order.OrderDetailsActivity;
+import com.flowercentral.flowercentralbusiness.util.CircularTextView;
 
 import java.util.List;
 
@@ -26,7 +28,7 @@ class ViewFeedbackAdapter extends RecyclerView.Adapter<ViewFeedbackAdapter.ViewH
     private Context mContext;
 
     /**
-     * @param list       list
+     * @param list list
      */
     ViewFeedbackAdapter(List<FeedbackItem> list) {
         this.mFeedbackItemList = list;
@@ -55,19 +57,24 @@ class ViewFeedbackAdapter extends RecyclerView.Adapter<ViewFeedbackAdapter.ViewH
      */
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.ratingBarFeedback.setRating(mFeedbackItemList.get(position).getRating());
 
-        holder.textViewFeedbackMessage.setText(mFeedbackItemList.get(position).getFeedbackMessage());
-        holder.textViewFeedbackBy.setText(mFeedbackItemList.get(position).getFeedbackBy());
+        final FeedbackItem feedbackItem = mFeedbackItemList.get(position);
+        holder.ratingBarFeedback.setRating(feedbackItem.getRating());
+
+        holder.textViewFeedbackMessage.setText(feedbackItem.getFeedbackMessage());
+        holder.textViewFeedbackBy.setText(feedbackItem.getFeedbackBy());
 
         holder.textViewFeedbackOrderDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent orderDetailIntent = new Intent(mContext, OrderDetailsActivity.class);
-                orderDetailIntent.putExtra(mContext.getString(R.string.key_order_id), mFeedbackItemList.get(holder.getAdapterPosition()).getFeedbackOrderId());
+                orderDetailIntent.putExtra(mContext.getString(R.string.key_order_id), feedbackItem.getFeedbackOrderId());
                 mContext.startActivity(orderDetailIntent);
             }
         });
+
+        if (feedbackItem.getFeedbackBy().length() > 0)
+            holder.circularTextViewFeedback.setText(String.valueOf(feedbackItem.getFeedbackBy().charAt(0)));
     }
 
     /**
@@ -96,9 +103,17 @@ class ViewFeedbackAdapter extends RecyclerView.Adapter<ViewFeedbackAdapter.ViewH
         @BindView(R.id.feedback_order_details)
         TextView textViewFeedbackOrderDetails;
 
+        @BindView(R.id.feedback_profile_pic)
+        CircularTextView circularTextViewFeedback;
+
         public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+
+            circularTextViewFeedback.setStrokeWidth(1);
+            circularTextViewFeedback.setStrokeColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+            circularTextViewFeedback.setSolidColor(ContextCompat.getColor(mContext, R.color.colorWhite));
+            circularTextViewFeedback.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
         }
     }
 }

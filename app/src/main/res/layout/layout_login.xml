@@ -16,11 +16,10 @@
             android:id="@+id/textview_vendor_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_person_outline_white_24dp"
+            android:drawableStart="@drawable/ic_person_outline_white_24dp"
             android:drawablePadding="@dimen/dp10"
             android:imeOptions="actionNext"
             android:maxLines="1"
-            android:singleLine="true"
             android:inputType="text"/>
 
     </android.support.design.widget.TextInputLayout>
@@ -34,12 +33,11 @@
             android:id="@+id/textview_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_person_outline_white_24dp"
+            android:drawableStart="@drawable/ic_key_white_24dp"
             android:drawablePadding="@dimen/dp10"
             android:imeOptions="actionDone"
             android:inputType="textPassword"
-            android:maxLines="1"
-            android:singleLine="true" />
+            android:maxLines="1" />
 
     </android.support.design.widget.TextInputLayout>
 

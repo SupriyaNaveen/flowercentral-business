@@ -63,7 +63,7 @@ public class ShopPictures extends Fragment {
         mContext = getActivity();
 
         // For recycler view use a grid layout manager
-        GridLayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 3);
+        GridLayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
         mShopPicturesRecyclerView.setLayoutManager(mLayoutManager);
 
         mSwipeRefreshLayout.setRefreshing(true);
