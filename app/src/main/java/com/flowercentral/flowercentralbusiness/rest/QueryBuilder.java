@@ -71,4 +71,9 @@ public class QueryBuilder {
         return BuildConfig.SERVER +
                 "remove_shop_picture";
     }
+
+    public static String getUploadShopPicturesUrl() {
+        return BuildConfig.SERVER +
+                "add_shop_picture";
+    }
 }
