@@ -102,10 +102,8 @@ class ShopPicturesAdapter extends RecyclerView.Adapter<ShopPicturesAdapter.ViewH
             holder.uploadImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(isImageSelectable) {
-
-                    } else {
-
+                    if (!isImageSelectable) {
+                        mRefreshViews.uploadNewImage();
                     }
                 }
             });
@@ -134,14 +132,14 @@ class ShopPicturesAdapter extends RecyclerView.Adapter<ShopPicturesAdapter.ViewH
         }
     }
 
-    public void clearSelectedPathList() {
+    void clearSelectedPathList() {
         isImageSelectable = false;
         selectedPictureIdList.clear();
         mRefreshViews.refreshDeleteIcon();
         notifyDataSetChanged();
     }
 
-    public HashSet<String> getSelectedPictureIdList() {
+    HashSet<String> getSelectedPictureIdList() {
         return selectedPictureIdList;
     }
 }

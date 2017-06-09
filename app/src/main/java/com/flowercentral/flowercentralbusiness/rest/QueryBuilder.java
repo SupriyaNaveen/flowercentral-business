@@ -74,6 +74,6 @@ public class QueryBuilder {
 
     public static String getUploadShopPicturesUrl() {
         return BuildConfig.SERVER +
-                "add_shop_picture";
+                "update_new";
     }
 }

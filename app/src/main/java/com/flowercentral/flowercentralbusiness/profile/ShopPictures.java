@@ -226,6 +226,11 @@ public class ShopPictures extends Fragment {
                     imageViewDeletePictures.setVisibility(View.GONE);
                 }
             }
+
+            @Override
+            public void uploadNewImage() {
+                requestPermission();
+            }
         });
         mShopPicturesRecyclerView.setAdapter(shopPicturesAdapter);
     }
@@ -239,6 +244,8 @@ public class ShopPictures extends Fragment {
 
     interface RefreshViews {
         void refreshDeleteIcon();
+
+        void uploadNewImage();
     }
 
     @OnClick(R.id.image_view_delete)
@@ -450,10 +457,15 @@ public class ShopPictures extends Fragment {
                 if (filePath != null) {
                     MultipartUtility multipart = new MultipartUtility(url, charset, getActivity());
                     File file = new File(filePath);
-                    multipart.addFilePart("shop_images", file);
+                    multipart.addFilePart("image", file);
+
+                    String srcFormat = "yyyy-MM-dd HH:mm";
+                    SimpleDateFormat formatSrc = new SimpleDateFormat(srcFormat, Locale.getDefault());
+                    multipart.addFormField(getString(R.string.api_key_timestamp), formatSrc.format(Calendar.getInstance().getTime()));
+
                     String response = multipart.finish(HttpURLConnection.HTTP_CREATED);
                     responseObject = new JSONObject(response);
-                    if (responseObject.getString(getString(R.string.api_res_status)).compareTo("success") > 0) {
+                    if (responseObject.getInt(getString(R.string.api_res_status)) == 1) {
                         Logger.log(TAG, "doInBackground : ", response, AppConstant.LOG_LEVEL_INFO);
                         status = true;
                     } else {
