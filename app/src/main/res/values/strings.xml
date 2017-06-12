@@ -122,12 +122,8 @@
     <string name="lbl_accept">Accept</string>
     <string name="lbl_reject">Reject</string>
     <string name="api_res_status">status</string>
-    <string name="lbl_remove"><u>Remove</u></string>
-    <string name="btn_upload_new">Upload New</string>
     <string name="api_key_picture_id">picture_id</string>
     <string name="msg_uploading_data">Please wait! uploading data to server</string>
-    <string name="msg_data_upload_succes">Data upload success.</string>
     <string name="msg_data_upload_failed">Data upload failed.</string>
-    <string name="api_res_message">message</string>
     <string name="btn_upload_pictures">Upload\nPictures</string>
 </resources>

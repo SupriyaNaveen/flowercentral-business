@@ -20,7 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawablePadding="@dimen/dp10"
-                android:drawableStart="@drawable/ic_person_outline_white_24dp"
+                android:drawableStart="@drawable/ic_vendor_name_white"
                 android:imeOptions="actionNext"
                 android:inputType="text"
                 android:maxLines="1" />
@@ -37,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawablePadding="@dimen/dp10"
-                android:drawableStart="@drawable/ic_work_white_24dp"
+                android:drawableStart="@drawable/ic_tin_white"
                 android:imeOptions="actionNext"
                 android:inputType="text"
                 android:maxLines="1" />
@@ -59,7 +59,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/dp10"
-                    android:drawableStart="@drawable/ic_person_outline_white_24dp"
+                    android:drawableStart="@drawable/ic_store_white"
                     android:imeOptions="actionNext"
                     android:inputType="textPostalAddress"
                     android:maxLines="1" />
@@ -76,7 +76,8 @@
                 android:id="@+id/textview_city"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp32"
+                android:drawablePadding="@dimen/dp10"
+                android:drawableStart="@drawable/ic_location_white"
                 android:imeOptions="actionNext"
                 android:inputType="text"
                 android:maxLines="1" />
@@ -121,7 +122,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
             android:layout_marginTop="@dimen/dp16"
-            android:drawableEnd="@drawable/ic_location_red_24dp"
+            android:drawableEnd="@drawable/ic_location_red"
             android:drawablePadding="@dimen/dp5"
             android:text="@string/link_view_on_map" />
 
@@ -135,7 +136,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawablePadding="@dimen/dp10"
-                android:drawableStart="@drawable/ic_phone_white_24dp"
+                android:drawableStart="@drawable/ic_phone_white"
                 android:imeOptions="actionNext"
                 android:inputType="phone"
                 android:maxLines="1" />

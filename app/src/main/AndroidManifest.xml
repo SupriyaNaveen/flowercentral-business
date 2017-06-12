@@ -68,10 +68,10 @@
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_person_outline_white_24dp" />
+            android:resource="@drawable/ic_store_white" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@drawable/ic_person_outline_white_24dp" />
+            android:resource="@drawable/ic_store_white" />
 
         <activity
             android:name=".notification.NotificationOverlay"

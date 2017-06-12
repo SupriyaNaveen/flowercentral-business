@@ -16,7 +16,7 @@
             android:id="@+id/textView_doc_upload"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableTop="@drawable/ic_cloud_upload_white_24dp"
+            android:drawableTop="@drawable/ic_upload_white"
             android:gravity="center"
             android:text="Verification Doc" />
 
@@ -41,7 +41,7 @@
                 android:id="@+id/text_view_picture_upload"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_cloud_upload_white_24dp"
+                android:drawableTop="@drawable/ic_upload_white"
                 android:gravity="center"
                 android:text="Shop Picture" />
 

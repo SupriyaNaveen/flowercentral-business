@@ -61,7 +61,7 @@ public class NotificationMessageHandler {
 
         Intent intent;
         Bitmap largeIcon = BitmapFactory.decodeResource(context.getResources(),
-                R.drawable.ic_pinterest);
+                R.mipmap.flower_central_vendor_logo);
 
         int orderId = 0;
         for (Map.Entry<String, String> entry : entries) {
@@ -88,7 +88,7 @@ public class NotificationMessageHandler {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.ic_person_outline_white_24dp)
+                .setSmallIcon(R.drawable.ic_store_white)
                 .setLargeIcon(largeIcon)
                 .setContentTitle(messageTitle)
                 .setContentText(messageBody)

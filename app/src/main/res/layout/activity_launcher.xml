@@ -45,43 +45,11 @@
         android:padding="@dimen/dp32"
         android:visibility="visible">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+        <include layout="@layout/layout_register_header" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/flower_central_vendor_logo"
-                android:scaleType="fitCenter"/>
+        <include layout="@layout/layout_login" />
 
-            <TextView
-                style="@style/AppTheme.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/lbl_app_name" />
-
-            <TextView
-                style="@style/AppTheme.Label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/lbl_app_tag" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="@dimen/dp10">
-
-            <include layout="@layout/layout_login" />
-
-            <include layout="@layout/layout_app_registration" />
-
-        </LinearLayout>
+        <include layout="@layout/layout_app_registration" />
 
     </LinearLayout>
 
