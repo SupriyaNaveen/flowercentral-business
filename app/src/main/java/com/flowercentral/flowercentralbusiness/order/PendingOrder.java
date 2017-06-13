@@ -64,12 +64,6 @@ public class PendingOrder extends Fragment {
     }
 
     /**
-     * Default Constructor
-     */
-    public PendingOrder() {
-    }
-
-    /**
      * Fragment instance to instantiate pending order.
      *
      * @return instance

@@ -76,4 +76,19 @@ public class QueryBuilder {
         return BuildConfig.SERVER +
                 "update_new";
     }
+
+    public static String getTodaysSalesDataUrl() {
+        return BuildConfig.SERVER +
+                "salesdashboard_daily";
+    }
+
+    public static String getWeeklySalesDataUrl() {
+        return BuildConfig.SERVER +
+                "salesdashboard_weekly";
+    }
+
+    public static String getMonthlySalesDataUrl() {
+        return BuildConfig.SERVER +
+                "salesdashboard_monthly";
+    }
 }

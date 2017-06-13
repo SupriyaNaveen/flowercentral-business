@@ -82,6 +82,15 @@ public class ShopPictures extends Fragment {
     private UploadFilesAsync mUploadFileAsync;
 
     /**
+     * Instantiate ShopPictures fragment.
+     *
+     * @return instance of fragment
+     */
+    public static ShopPictures newInstance() {
+        return new ShopPictures();
+    }
+
+    /**
      * @param inflater           inflater
      * @param container          container
      * @param savedInstanceState savedInstance

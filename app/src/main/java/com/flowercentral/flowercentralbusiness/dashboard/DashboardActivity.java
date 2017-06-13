@@ -18,6 +18,7 @@ import com.flowercentral.flowercentralbusiness.feedback.FeedbackFragment;
 import com.flowercentral.flowercentralbusiness.login.ui.LauncherActivity;
 import com.flowercentral.flowercentralbusiness.order.OrderFragment;
 import com.flowercentral.flowercentralbusiness.profile.ProfileFragment;
+import com.flowercentral.flowercentralbusiness.sales.SalesDashboardFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

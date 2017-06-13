@@ -1,4 +1,4 @@
-package com.flowercentral.flowercentralbusiness.profile;
+package com.flowercentral.flowercentralbusiness.sales;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -14,10 +14,7 @@ import com.flowercentral.flowercentralbusiness.util.ViewPagerAdapter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- *
- */
-public class ProfileFragment extends Fragment {
+public class SalesDashboardFragment extends Fragment {
 
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
@@ -26,25 +23,19 @@ public class ProfileFragment extends Fragment {
     TabLayout mTabLayout;
 
     /**
-     * Default Constructor
-     */
-    public ProfileFragment() {
-    }
-
-    /**
      * Instantiate the order fragment to hold pending order and completed order.
      *
      * @return instance of fragment
      */
-    public static ProfileFragment newInstance() {
-        return new ProfileFragment();
+    public static SalesDashboardFragment newInstance() {
+        return new SalesDashboardFragment();
     }
 
     /**
      * Set up view pager.
      *
-     * @param inflater           inflater
-     * @param container          container
+     * @param inflater inflater
+     * @param container container
      * @param savedInstanceState savedInstance
      * @return view
      */
@@ -58,14 +49,13 @@ public class ProfileFragment extends Fragment {
     }
 
     /**
-     * Set up view pager for pending order and completed order list.
+     * Set up view pager.
      */
     private void setupViewPager() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
-        adapter.addFragment(UpdateProfile.newInstance(), getString(R.string.title_profile));
-        adapter.addFragment(ShopPictures.newInstance(), getString(R.string.title_shop_pictures));
-        adapter.addFragment(ChangePassword.newInstance(), getString(R.string.title_change_password));
-
+        adapter.addFragment(SalesGraphFragment.newInstance(SalesGraphFragment.VIEW_TYPE.TODAY), getString(R.string.title_today));
+        adapter.addFragment(SalesGraphFragment.newInstance(SalesGraphFragment.VIEW_TYPE.WEEKLY), getString(R.string.title_weekly));
+        adapter.addFragment(SalesGraphFragment.newInstance(SalesGraphFragment.VIEW_TYPE.MONTHLY), getString(R.string.title_monthly));
 
         mViewPager.setAdapter(adapter);
         mViewPager.setOffscreenPageLimit(3);

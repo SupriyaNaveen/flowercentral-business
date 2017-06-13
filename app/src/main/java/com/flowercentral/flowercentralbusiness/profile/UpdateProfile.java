@@ -90,6 +90,15 @@ public class UpdateProfile extends Fragment {
     private double mLatitude;
     private MaterialDialog mProgressDialog;
 
+    /**
+     * Instantiate UpdateProfile fragment.
+     *
+     * @return instance of fragment
+     */
+    public static UpdateProfile newInstance() {
+        return new UpdateProfile();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

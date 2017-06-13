@@ -103,7 +103,7 @@
     <string name="api_key_username">username</string>
     <string name="api_key_password">password</string>
     <string name="api_key_imei">imei</string>
-    <string name="api_key_device_id">deviceid</string>
+    <string name="api_key_device_id">deviceId</string>
     <string name="api_key_latitude">latitude</string>
     <string name="api_key_longitude">longitude</string>
     <string name="api_key_address">address</string>
@@ -126,4 +126,9 @@
     <string name="msg_uploading_data">Please wait! uploading data to server</string>
     <string name="msg_data_upload_failed">Data upload failed.</string>
     <string name="btn_upload_pictures">Upload\nPictures</string>
+    <string name="title_today">Today</string>
+    <string name="title_weekly">Weekly</string>
+    <string name="title_monthly">Monthly</string>
+    <string name="lbl_total_sales_order">Total Orders : </string>
+    <string name="lbl_total_sales">Total Sales :</string>
 </resources>

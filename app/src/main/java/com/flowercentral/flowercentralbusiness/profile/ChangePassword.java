@@ -48,6 +48,15 @@ public class ChangePassword extends Fragment {
     @BindView(R.id.root_layout)
     ScrollView mLinearRootLayout;
 
+    /**
+     * Instantiate ChangePassword fragment.
+     *
+     * @return instance of fragment
+     */
+    public static ChangePassword newInstance() {
+        return new ChangePassword();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
