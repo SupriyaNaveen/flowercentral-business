@@ -50,7 +50,7 @@
     <string name="order_format_schedule">Schedule: %s</string>
     <string name="order_format_delivered_at">Delivered At: %s</string>
     <string name="order_format_address">Address: %s</string>
-    <string name="lbl_status_delivered">Delivered</string>
+    <string name="lbl_status_delivered">DELIVERED</string>
     <string name="btn_view_on_map">VIEW ON MAP</string>
     <string name="link_view_on_map"><u>View on map</u></string>
     <string name="key_latitude">latitude</string>
