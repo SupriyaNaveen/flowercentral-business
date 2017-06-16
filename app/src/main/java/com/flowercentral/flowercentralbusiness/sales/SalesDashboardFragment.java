@@ -3,10 +3,12 @@ package com.flowercentral.flowercentralbusiness.sales;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.util.ViewPagerAdapter;
@@ -21,6 +23,9 @@ public class SalesDashboardFragment extends Fragment {
 
     @BindView(R.id.tabs)
     TabLayout mTabLayout;
+
+    @BindView(R.id.view_pager_container)
+    LinearLayout linearLayoutContainer;
 
     /**
      * Instantiate the order fragment to hold pending order and completed order.
@@ -59,6 +64,9 @@ public class SalesDashboardFragment extends Fragment {
 
         mViewPager.setAdapter(adapter);
         mViewPager.setOffscreenPageLimit(3);
+
+        linearLayoutContainer.setBackgroundResource(R.drawable.ic_background);
+        mTabLayout.setTabTextColors(ContextCompat.getColorStateList(getActivity(), R.color.colorWhite));
         mTabLayout.setupWithViewPager(mViewPager);
     }
 }

@@ -73,7 +73,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         //Show the Order navigation option by default.
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.nav_content_wrapper, OrderFragment.newInstance()).commit();
-        mActionBar.setSubtitle(getString(R.string.nav_item_order));
     }
 
     /**
@@ -103,27 +102,22 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         switch (id) {
             case R.id.nav_item_order:
                 transaction.replace(R.id.nav_content_wrapper, OrderFragment.newInstance()).commit();
-                mActionBar.setSubtitle(getString(R.string.nav_item_order));
                 break;
 
             case R.id.nav_item_sales_dashboard:
                 transaction.replace(R.id.nav_content_wrapper, SalesDashboardFragment.newInstance()).commit();
-                mActionBar.setSubtitle(getString(R.string.nav_item_sales_dashboard));
                 break;
 
             case R.id.nav_item_profile:
                 transaction.replace(R.id.nav_content_wrapper, ProfileFragment.newInstance()).commit();
-                mActionBar.setSubtitle(getString(R.string.nav_item_profile));
                 break;
 
             case R.id.nav_item_feedback:
                 transaction.replace(R.id.nav_content_wrapper, FeedbackFragment.newInstance()).commit();
-                mActionBar.setSubtitle(getString(R.string.nav_item_feedback));
                 break;
 
             case R.id.nav_item_help:
                 transaction.replace(R.id.nav_content_wrapper, HelpFragment.newInstance()).commit();
-                mActionBar.setSubtitle(getString(R.string.nav_item_help));
                 break;
 
             case R.id.nav_item_logout:

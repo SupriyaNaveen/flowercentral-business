@@ -9,6 +9,6 @@
     <!-- Border color and thickness -->
     <stroke
         android:width="2dp"
-        android:color="@color/colorGrey" />
+        android:color="@color/colorPrimary" />
 
 </shape>

@@ -3,10 +3,12 @@ package com.flowercentral.flowercentralbusiness.order;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.util.ViewPagerAdapter;
@@ -24,6 +26,9 @@ public class OrderFragment extends Fragment {
 
     @BindView(R.id.tabs)
     TabLayout mTabLayout;
+
+    @BindView(R.id.view_pager_container)
+    LinearLayout linearLayoutContainer;
 
     /**
      * Default Constructor
@@ -67,6 +72,10 @@ public class OrderFragment extends Fragment {
 
         mViewPager.setAdapter(adapter);
         mViewPager.setOffscreenPageLimit(2);
+
+        linearLayoutContainer.setBackgroundResource(R.color.colorBackground);
+        mTabLayout.setTabTextColors(ContextCompat.getColorStateList(getActivity(), R.color.colorGrey));
+
         mTabLayout.setupWithViewPager(mViewPager);
     }
 }
