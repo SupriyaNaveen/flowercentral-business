@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +12,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.flowercentral.flowercentralbusiness.R;
@@ -73,7 +76,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
     LinearLayout mLinearLayoutRoot;
 
     @BindView(R.id.view_on_map)
-    TextView mTextViewViewOnMap;
+    ImageView mImageViewViewOnMap;
 
     @BindView(R.id.order_delivered_at)
     TextView mTextViewOrderDeliveredAt;
@@ -82,6 +85,12 @@ public class OrderDetailsActivity extends AppCompatActivity {
     LinearLayout mDeliveredAtWrapper;
 
     private OrderDetailedItem mOrderItem;
+
+    @BindView(R.id.progress_bar)
+    ProgressBar mProgressBar;
+
+    @BindView(R.id.order_details_wrapper)
+    NestedScrollView dataWrapperLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,9 +121,16 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
     private void getOrderDetails(final int orderId) {
 
+        mProgressBar.setVisibility(View.VISIBLE);
+        dataWrapperLayout.setVisibility(View.GONE);
+
         BaseModel<JSONObject> baseModel = new BaseModel<JSONObject>(this) {
             @Override
             public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
+
+                mProgressBar.setVisibility(View.GONE);
+                dataWrapperLayout.setVisibility(View.VISIBLE);
+
                 OrderDetailedItem orderDetailedItem = new Gson().fromJson(String.valueOf(response),
                         new TypeToken<OrderDetailedItem>() {
                         }.getType());
@@ -123,6 +139,10 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onError(ErrorData error) {
+
+                mProgressBar.setVisibility(View.GONE);
+                dataWrapperLayout.setVisibility(View.VISIBLE);
+
                 if (error != null) {
                     error.setErrorMessage("Order details fetch failed. Cause -> " + error.getErrorMessage());
 

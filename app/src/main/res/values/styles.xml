@@ -46,4 +46,17 @@
         <item name="android:padding">2dp</item>
     </style>
 
+    <style name="TextTheme.Label.Black" parent="AppTheme">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:padding">6dp</item>
+    </style>
+
+    <style name="TextTheme.Title.Black" parent="AppTheme">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
+    <color name="colorBlack">#000000</color>
 </resources>

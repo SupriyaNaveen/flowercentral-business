@@ -140,7 +140,7 @@ public class OrderItem implements Parcelable {
         M,
         @SerializedName("L")
         L,
-        @SerializedName("X")
+        @SerializedName("XL")
         XL,
         @SerializedName("XXL")
         XXL

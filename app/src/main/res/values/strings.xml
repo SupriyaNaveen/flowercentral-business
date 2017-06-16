@@ -73,7 +73,7 @@
     <string name="lbl_schedule">Schedule</string>
     <string name="lbl_status">Order Status</string>
     <string name="lbl_delivered_at">Delivered At</string>
-    <string name="order_items">Items</string>
+    <string name="order_items">Items Details</string>
     <string name="key_order_id">order_id</string>
     <string name="title_profile">Profile</string>
     <string name="title_shop_pictures">Shop Pictures</string>
@@ -131,4 +131,5 @@
     <string name="title_monthly">Monthly</string>
     <string name="lbl_total_sales_order">Total Orders : </string>
     <string name="lbl_total_sales">Total Sales :</string>
+    <string name="colon">:</string>
 </resources>
