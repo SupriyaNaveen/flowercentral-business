@@ -59,4 +59,8 @@
     </style>
 
     <color name="colorBlack">#000000</color>
+
+    <style name="Custom.Search.Theme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlNormal">@color/colorPrimary</item>
+    </style>
 </resources>

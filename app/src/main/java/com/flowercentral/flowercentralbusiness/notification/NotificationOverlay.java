@@ -10,7 +10,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.LinearLayout;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -47,7 +49,7 @@ public class NotificationOverlay extends AppCompatActivity {
     private static final String TAG = NotificationOverlay.class.getSimpleName();
 
     @BindView(R.id.root_layout)
-    LinearLayout mLinearLayoutRoot;
+    RelativeLayout mLinearLayoutRoot;
 
     @BindView(R.id.text_view_timer)
     CircularTextView textViewTimer;
@@ -60,6 +62,9 @@ public class NotificationOverlay extends AppCompatActivity {
 
     @BindView(R.id.order_delivery_address)
     TextView mTextViewOrderDeliveryAddress;
+
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
 
     private Runnable mTimerRunnable;
     private final Handler mHandler = new Handler();
@@ -88,9 +93,11 @@ public class NotificationOverlay extends AppCompatActivity {
 
     private void getOrderDetails(final int orderId) {
 
+        progressBar.setVisibility(View.VISIBLE);
         BaseModel<JSONObject> baseModel = new BaseModel<JSONObject>(this) {
             @Override
             public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
+                progressBar.setVisibility(View.GONE);
                 OrderDetailedItem orderDetailedItem = new Gson().fromJson(String.valueOf(response),
                         new TypeToken<OrderDetailedItem>() {
                         }.getType());
@@ -100,6 +107,7 @@ public class NotificationOverlay extends AppCompatActivity {
 
             @Override
             public void onError(ErrorData error) {
+                progressBar.setVisibility(View.GONE);
                 if (error != null) {
                     error.setErrorMessage("Order details fetch failed. Cause -> " + error.getErrorMessage());
 
