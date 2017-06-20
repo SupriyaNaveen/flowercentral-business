@@ -88,7 +88,7 @@ public class NotificationMessageHandler {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.ic_store_white)
+                .setSmallIcon(R.drawable.ic_flower_vendor)
                 .setLargeIcon(largeIcon)
                 .setContentTitle(messageTitle)
                 .setContentText(messageBody)

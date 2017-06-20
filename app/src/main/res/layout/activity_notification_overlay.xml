@@ -6,33 +6,38 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
 
+    <include layout="@layout/layout_app_toolbar"/>
+
     <LinearLayout
         android:id="@+id/btn_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/dp10"
+        android:layout_margin="@dimen/dp16"
         android:orientation="horizontal"
         android:weightSum="2">
 
         <Button
             android:id="@+id/btn_accept"
-            style="@style/TextTheme.Label.Black"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/button_white_background"
-            android:text="@string/lbl_accept" />
+            android:background="@drawable/button_grey_background"
+            android:text="@string/lbl_accept"
+            android:layout_marginEnd="@dimen/dp10"
+            android:textSize="15sp"
+            android:textColor="@color/colorGrey"/>
 
         <Button
             android:id="@+id/btn_reject"
-            style="@style/TextTheme.Label.Black"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp5"
+            android:layout_marginStart="@dimen/dp10"
             android:layout_weight="1"
-            android:background="@drawable/button_white_background"
-            android:text="@string/lbl_reject" />
+            android:background="@drawable/button_grey_background"
+            android:text="@string/lbl_reject"
+            android:textSize="15sp"
+            android:textColor="@color/colorGrey"/>
 
     </LinearLayout>
 
@@ -41,6 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/btn_wrapper"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="?actionBarSize"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
