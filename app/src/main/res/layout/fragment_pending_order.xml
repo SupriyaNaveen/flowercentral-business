@@ -1,44 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <RelativeLayout
-        android:id="@+id/order_options_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:paddingEnd="@dimen/dp16"
-        android:paddingStart="@dimen/dp16"
-        android:layout_marginTop="@dimen/dp16">
-
-        <ImageView
-            android:id="@+id/image_view_filter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_filter_svg" />
-
-        <android.support.v7.widget.SearchView
-            android:id="@+id/search_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp10"
-            android:layout_toStartOf="@id/image_view_filter"
-            android:theme="@style/Custom.Search.Theme"
-            android:background="@drawable/rounded_corner_white_fill"
-            app:queryHint="Search by Order Id" />
-    </RelativeLayout>
+    android:layout_height="match_parent">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/order_options_container"
+        android:layout_alignParentTop="true"
         android:layout_marginTop="@dimen/dp5">
 
         <android.support.v7.widget.RecyclerView

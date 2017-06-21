@@ -12,7 +12,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,9 +59,6 @@ public class PendingOrder extends Fragment {
     @BindView(R.id.root_layout)
     RelativeLayout mRootLayout;
 
-    @BindView(R.id.search_view)
-    SearchView mSearchView;
-
     public interface RefreshViews {
         void performRefreshView();
     }
@@ -104,14 +100,6 @@ public class PendingOrder extends Fragment {
                 refreshItems();
             }
         });
-
-//        EditText searchEditText = (EditText) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-//        searchEditText.setTextColor(getResources().getColor(R.color.colorGrey));
-//        searchEditText.setHintTextColor(getResources().getColor(R.color.colorGrey));
-////        searchEditText.getBackground().mutate().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
-//
-//        ImageView v = (ImageView) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_button);
-//        v.setImageResource(R.drawable.ic_search_grey);
 
         return view;
     }

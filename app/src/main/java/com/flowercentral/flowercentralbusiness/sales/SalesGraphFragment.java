@@ -1,5 +1,6 @@
 package com.flowercentral.flowercentralbusiness.sales;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,7 +20,9 @@ import com.flowercentral.flowercentralbusiness.util.Util;
 import com.flowercentral.flowercentralbusiness.volley.ErrorData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -40,7 +44,7 @@ public class SalesGraphFragment extends Fragment {
     private static final String TAG = SalesGraphFragment.class.getSimpleName();
 
     @BindView(R.id.root_layout)
-    LinearLayout mRootLayout;
+    RelativeLayout mRootLayout;
 
     @BindView(R.id.total_orders)
     TextView mTextViewTotalOrders;
@@ -53,6 +57,9 @@ public class SalesGraphFragment extends Fragment {
 
     @BindView(R.id.graph_view)
     GraphView mGraphView;
+
+    @BindView(R.id.todays_sales_wrapper)
+    LinearLayout mTtodaysSalesWrapper;
 
     private VIEW_TYPE mViewType;
 
@@ -173,16 +180,21 @@ public class SalesGraphFragment extends Fragment {
         DataPoint[] dataPoints;
         ArrayList<GraphData> graphDataArrayList;
         if (null != salesDetails) {
-            mTextViewTotalOrders.setText(String.valueOf(salesDetails.getTotalOrders()));
-            mTextViewTotalSales.setText(String.valueOf(salesDetails.getTotalSales()));
 
             switch (mViewType) {
 
                 case TODAY:
+                    mTtodaysSalesWrapper.setVisibility(View.VISIBLE);
+                    mGraphView.setVisibility(View.GONE);
+                    mTextViewTotalOrders.setText(String.valueOf(salesDetails.getTotalOrders()));
+                    mTextViewTotalSales.setText(String.format("$%s", salesDetails.getTotalSales()));
                     break;
                 case WEEKLY:
-                    mTextViewTitle.setText(salesDetails.getStartDate() + " to " + salesDetails.getEndDate());
+                    mTextViewTitle.setText(mTextViewTitle.getText()
+                            + "\n\n" + salesDetails.getStartDate()
+                            + " to " + salesDetails.getEndDate());
                     mGraphView.setVisibility(View.VISIBLE);
+                    mTtodaysSalesWrapper.setVisibility(View.GONE);
                     graphDataArrayList = salesDetails.getGraphDataArrayList();
                     dataPoints = new DataPoint[graphDataArrayList.size()];
                     for (int i = 0; i < graphDataArrayList.size(); i++) {
@@ -195,31 +207,53 @@ public class SalesGraphFragment extends Fragment {
                             e.printStackTrace();
                         }
                     }
-                    LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPoints);
-                    mGraphView.getGridLabelRenderer().setNumHorizontalLabels(graphDataArrayList.size());
-                    mGraphView.addSeries(series);
-
                     mGraphView.getGridLabelRenderer().setLabelFormatter(
                             new DateAsXAxisLabelFormatter(getActivity(),
-                                    new SimpleDateFormat("dd/\nMM/\nyy", Locale.getDefault())));
-                    mGraphView.getGridLabelRenderer().setLabelsSpace(20);
+                                    new SimpleDateFormat("EEE", Locale.getDefault())));
+                    drawGraph(dataPoints, graphDataArrayList.size());
                     break;
                 case MONTHLY:
-                    mTextViewTitle.setText(salesDetails.getMonth());
+                    mTextViewTitle.setText(mTextViewTitle.getText()
+                            + "\n\n" + salesDetails.getMonth());
                     mGraphView.setVisibility(View.VISIBLE);
+                    mTtodaysSalesWrapper.setVisibility(View.GONE);
                     graphDataArrayList = salesDetails.getGraphDataArrayList();
                     dataPoints = new DataPoint[graphDataArrayList.size()];
                     for (int i = 0; i < graphDataArrayList.size(); i++) {
                         GraphData graphData = graphDataArrayList.get(i);
-                        dataPoints[i] = new DataPoint(i+1, graphData.getTotalSales());
+                        dataPoints[i] = new DataPoint(i + 1, graphData.getTotalSales());
                     }
-                    LineGraphSeries<DataPoint> monthlySeries = new LineGraphSeries<>(dataPoints);
-                    mGraphView.getGridLabelRenderer().setNumHorizontalLabels(graphDataArrayList.size());
-                    mGraphView.addSeries(monthlySeries);
-                    mGraphView.getGridLabelRenderer().setLabelsSpace(20);
+                    mGraphView.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+                        @Override
+                        public String formatLabel(double value, boolean isValueX) {
+                            if (isValueX) {
+                                return super.formatLabel(value, isValueX) + " Week";
+                            } else {
+                                return super.formatLabel(value, isValueX);
+                            }
+                        }
+                    });
+                    drawGraph(dataPoints, graphDataArrayList.size());
                     break;
             }
         }
+    }
+
+    private void drawGraph(DataPoint[] dataPoints, int noOfRows) {
+        LineGraphSeries<DataPoint> monthlySeries = new LineGraphSeries<>(dataPoints);
+        mGraphView.getGridLabelRenderer().setNumHorizontalLabels(noOfRows);
+
+        monthlySeries.setColor(Color.argb(255, 236, 64, 132));
+        monthlySeries.setDrawDataPoints(true);
+
+        mGraphView.addSeries(monthlySeries);
+        mGraphView.getGridLabelRenderer().setGridColor(R.color.colorGrey);
+        mGraphView.getGridLabelRenderer().setGridStyle(GridLabelRenderer.GridStyle.HORIZONTAL);
+        mGraphView.getGridLabelRenderer().setHorizontalLabelsColor(R.color.colorGrey);
+        mGraphView.getGridLabelRenderer().setVerticalLabelsColor(R.color.colorGrey);
+
+        mGraphView.getGridLabelRenderer().setHighlightZeroLines(false);
+        mGraphView.getGridLabelRenderer().reloadStyles();
     }
 
     private SalesDetails constructSalesDetails(JSONObject response) {

@@ -65,8 +65,8 @@ public class SalesDashboardFragment extends Fragment {
         mViewPager.setAdapter(adapter);
         mViewPager.setOffscreenPageLimit(3);
 
-        linearLayoutContainer.setBackgroundResource(R.drawable.ic_background);
-        mTabLayout.setTabTextColors(ContextCompat.getColorStateList(getActivity(), R.color.colorWhite));
+        linearLayoutContainer.setBackgroundResource(R.color.colorBackground);
+        mTabLayout.setTabTextColors(ContextCompat.getColorStateList(getActivity(), R.color.colorGrey));
         mTabLayout.setupWithViewPager(mViewPager);
     }
 }
