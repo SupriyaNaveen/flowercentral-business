@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flowercentral.flowercentralbusiness.R;
@@ -43,9 +42,6 @@ public class CompletedOrder extends Fragment {
 
     @BindView(R.id.completed_order_recyclerview)
     RecyclerView mOrderItemRecyclerView;
-
-    @BindView(R.id.textview_empty)
-    TextView mListEmptyMessageView;
 
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -180,12 +176,6 @@ public class CompletedOrder extends Fragment {
     private void updateCompletedOrderViews(List<OrderItem> orderItemList) {
 
         hideRefreshLayout();
-        if (null == orderItemList || orderItemList.isEmpty()) {
-            mListEmptyMessageView.setVisibility(View.VISIBLE);
-            orderItemList = new ArrayList<>();
-        } else {
-            mListEmptyMessageView.setVisibility(View.GONE);
-        }
 
         CompletedOrderAdapter adapter = new CompletedOrderAdapter(orderItemList);
         mOrderItemRecyclerView.setAdapter(adapter);

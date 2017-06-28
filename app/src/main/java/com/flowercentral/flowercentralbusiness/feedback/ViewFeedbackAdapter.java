@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -22,8 +23,10 @@ import butterknife.ButterKnife;
 /**
  *
  */
-class ViewFeedbackAdapter extends RecyclerView.Adapter<ViewFeedbackAdapter.ViewHolder> {
+class ViewFeedbackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final int VIEW_TYPE_EMPTY_LIST = 0;
+    private static final int VIEW_TYPE_NON_EMPTY_LIST = 1;
     private List<FeedbackItem> mFeedbackItemList;
     private Context mContext;
 
@@ -42,11 +45,23 @@ class ViewFeedbackAdapter extends RecyclerView.Adapter<ViewFeedbackAdapter.ViewH
      * @return view
      */
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.feedback_item_row, parent, false);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        RecyclerView.ViewHolder viewHolder = null;
         mContext = parent.getContext();
-        return new ViewHolder(itemView);
+        switch (viewType) {
+            case VIEW_TYPE_EMPTY_LIST:
+                View viewEmptyList = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_no_order_item, parent, false);
+                viewHolder = new EmptyListViewHolder(viewEmptyList);
+                break;
+
+            case VIEW_TYPE_NON_EMPTY_LIST:
+                View itemView = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.feedback_item_row, parent, false);
+                viewHolder = new ViewHolder(itemView);
+                break;
+        }
+        return viewHolder;
     }
 
     /**
@@ -56,25 +71,32 @@ class ViewFeedbackAdapter extends RecyclerView.Adapter<ViewFeedbackAdapter.ViewH
      * @param position position
      */
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
 
-        final FeedbackItem feedbackItem = mFeedbackItemList.get(position);
-        holder.ratingBarFeedback.setRating(feedbackItem.getRating());
+        if (holder instanceof ViewHolder) {
+            ViewHolder viewHolder = (ViewHolder) holder;
+            final FeedbackItem feedbackItem = mFeedbackItemList.get(position);
+            viewHolder.ratingBarFeedback.setRating(feedbackItem.getRating());
 
-        holder.textViewFeedbackMessage.setText(feedbackItem.getFeedbackMessage());
-        holder.textViewFeedbackBy.setText(feedbackItem.getFeedbackBy());
+            viewHolder.textViewFeedbackMessage.setText(feedbackItem.getFeedbackMessage());
+            viewHolder.textViewFeedbackBy.setText(feedbackItem.getFeedbackBy());
 
-        holder.textViewFeedbackOrderDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent orderDetailIntent = new Intent(mContext, OrderDetailsActivity.class);
-                orderDetailIntent.putExtra(mContext.getString(R.string.key_order_id), feedbackItem.getFeedbackOrderId());
-                mContext.startActivity(orderDetailIntent);
-            }
-        });
+            viewHolder.textViewFeedbackOrderDetails.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent orderDetailIntent = new Intent(mContext, OrderDetailsActivity.class);
+                    orderDetailIntent.putExtra(mContext.getString(R.string.key_order_id), feedbackItem.getFeedbackOrderId());
+                    mContext.startActivity(orderDetailIntent);
+                }
+            });
 
-        if (feedbackItem.getFeedbackBy().length() > 0)
-            holder.circularTextViewFeedback.setText(String.valueOf(feedbackItem.getFeedbackBy().charAt(0)));
+            if (feedbackItem.getFeedbackBy().length() > 0)
+                viewHolder.circularTextViewFeedback.setText(String.valueOf(feedbackItem.getFeedbackBy().charAt(0)));
+        } else if (holder instanceof EmptyListViewHolder) {
+            EmptyListViewHolder emptyListViewHolder = (EmptyListViewHolder) holder;
+            emptyListViewHolder.txtNoItemFound.setText(mContext.getString(R.string.empty_feedback_list));
+            emptyListViewHolder.txtNoItemFound.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite));
+        }
     }
 
     /**
@@ -82,9 +104,29 @@ class ViewFeedbackAdapter extends RecyclerView.Adapter<ViewFeedbackAdapter.ViewH
      *
      * @return size of list
      */
+    @Override
     public int getItemCount() {
-        return mFeedbackItemList.size();
+        int size;
+        if (mFeedbackItemList != null && mFeedbackItemList.size() > 0) {
+            size = mFeedbackItemList.size();
+        } else {
+            //To show empty view
+            size = 1;
+        }
+        return size;
     }
+
+    @Override
+    public int getItemViewType(int position) {
+        int viewType;
+        if (mFeedbackItemList != null && mFeedbackItemList.size() > 0) {
+            viewType = VIEW_TYPE_NON_EMPTY_LIST;
+        } else {
+            viewType = VIEW_TYPE_EMPTY_LIST;
+        }
+        return viewType;
+    }
+
 
     /**
      * View holder class.
@@ -114,6 +156,18 @@ class ViewFeedbackAdapter extends RecyclerView.Adapter<ViewFeedbackAdapter.ViewH
             circularTextViewFeedback.setStrokeColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
             circularTextViewFeedback.setSolidColor(ContextCompat.getColor(mContext, R.color.colorWhite));
             circularTextViewFeedback.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+        }
+    }
+
+    private class EmptyListViewHolder extends RecyclerView.ViewHolder {
+
+        ImageView imgNoItemFound;
+        TextView txtNoItemFound;
+
+        EmptyListViewHolder(View itemView) {
+            super(itemView);
+            imgNoItemFound = (ImageView) itemView.findViewById(R.id.img_no_item_found);
+            txtNoItemFound = (TextView) itemView.findViewById(R.id.txt_msg_no_item_found);
         }
     }
 }

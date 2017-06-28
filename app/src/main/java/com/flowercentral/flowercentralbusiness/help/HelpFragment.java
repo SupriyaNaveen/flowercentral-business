@@ -67,6 +67,7 @@ public class HelpFragment extends Fragment {
                         new TypeToken<List<HelpDetails>>() {
                         }.getType());
                 mProgressBar.setVisibility(View.GONE);
+
                 ExpandableListAdapter expandableListAdapter = new ExpandableListAdapter(getActivity(), helpDetailsArrayList);
                 mHelpList.setAdapter(expandableListAdapter);
             }

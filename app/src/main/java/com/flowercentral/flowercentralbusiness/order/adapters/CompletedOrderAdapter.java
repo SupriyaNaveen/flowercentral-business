@@ -28,8 +28,10 @@ import butterknife.ButterKnife;
 /**
  *
  */
-public class CompletedOrderAdapter extends RecyclerView.Adapter<CompletedOrderAdapter.ViewHolder> {
+public class CompletedOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final int VIEW_TYPE_EMPTY_LIST = 0;
+    private static final int VIEW_TYPE_NON_EMPTY_LIST = 1;
     private List<OrderItem> mOrderItemList;
     private Context mContext;
 
@@ -38,72 +40,108 @@ public class CompletedOrderAdapter extends RecyclerView.Adapter<CompletedOrderAd
     }
 
     @Override
-    public CompletedOrderAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.order_item_row, parent, false);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        RecyclerView.ViewHolder viewHolder = null;
         mContext = parent.getContext();
-        return new CompletedOrderAdapter.ViewHolder(itemView);
+        switch (viewType) {
+            case VIEW_TYPE_EMPTY_LIST:
+                View viewEmptyList = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_no_order_item, parent, false);
+                viewHolder = new EmptyListViewHolder(viewEmptyList);
+                break;
+
+            case VIEW_TYPE_NON_EMPTY_LIST:
+                View itemView = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.order_item_row, parent, false);
+                viewHolder = new ViewHolder(itemView);
+                break;
+        }
+        return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(CompletedOrderAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
-        final OrderItem orderItem = mOrderItemList.get(position);
-        String srcFormat = "yyyy-MM-dd HH:mm";
-        String destFormat = "dd EEE yyyy, hh:mm a";
-        holder.textViewOrderDetails.setText(orderItem.getName());
+        if (holder instanceof ViewHolder) {
+            ViewHolder viewHolder = (ViewHolder) holder;
+            final OrderItem orderItem = mOrderItemList.get(position);
+            String srcFormat = "yyyy-MM-dd HH:mm";
+            String destFormat = "dd EEE yyyy, hh:mm a";
+            viewHolder.textViewOrderDetails.setText(orderItem.getName());
 
-        holder.textViewOrderPriceDetails.setText(mContext.getString(R.string.order_format_price, String.valueOf(orderItem.getPrice())));
-        holder.textViewPaidStatus.setText(orderItem.getPaidStatus().value());
-        holder.textViewOrderQuantity.setText(mContext.getString(R.string.order_format_quantity, String.valueOf(orderItem.getQuantity())));
+            viewHolder.textViewOrderPriceDetails.setText(mContext.getString(R.string.order_format_price, String.valueOf(orderItem.getPrice())));
+            viewHolder.textViewPaidStatus.setText(orderItem.getPaidStatus().value());
+            viewHolder.textViewOrderQuantity.setText(mContext.getString(R.string.order_format_quantity, String.valueOf(orderItem.getQuantity())));
 
-        String dateStr = Util.formatDate(orderItem.getScheduleDateTime(), srcFormat, destFormat);
-        holder.textViewOrderSchedule.setText(mContext.getString(R.string.order_format_schedule, dateStr));
+            String dateStr = Util.formatDate(orderItem.getScheduleDateTime(), srcFormat, destFormat);
+            viewHolder.textViewOrderSchedule.setText(mContext.getString(R.string.order_format_schedule, dateStr));
 
-        holder.textViewOrderDeliveredAt.setVisibility(View.VISIBLE);
-        dateStr = Util.formatDate(orderItem.getDeliveredSchedule(), srcFormat, destFormat);
-        holder.textViewOrderDeliveredAt.setText(mContext.getString(R.string.order_format_delivered_at, dateStr));
+            viewHolder.textViewOrderDeliveredAt.setVisibility(View.VISIBLE);
+            dateStr = Util.formatDate(orderItem.getDeliveredSchedule(), srcFormat, destFormat);
+            viewHolder.textViewOrderDeliveredAt.setText(mContext.getString(R.string.order_format_delivered_at, dateStr));
 
-        holder.textViewOrderAddress.setText(mContext.getString(R.string.order_format_address, orderItem.getAddress()));
+            viewHolder.textViewOrderAddress.setText(mContext.getString(R.string.order_format_address, orderItem.getAddress()));
 
-        holder.buttonDeliveryStatus.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorGreen));
+            viewHolder.buttonDeliveryStatus.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorGreen));
 
-        Picasso.
-                with(mContext).
-                load(orderItem.getImageUrl()).
-                into(holder.orderItemImage);
+            Picasso.
+                    with(mContext).
+                    load(orderItem.getImageUrl()).
+                    into(viewHolder.orderItemImage);
 
-        holder.circularTextViewCategory.setText(String.valueOf(orderItem.getCategory()));
+            viewHolder.circularTextViewCategory.setText(String.valueOf(orderItem.getCategory()));
 
-        holder.relativeLayoutMaps.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    Intent mapIntent = new Intent(mContext, MapActivity.class);
-                    mapIntent.putExtra(mContext.getString(R.string.key_latitude), Double.parseDouble(orderItem.getLatitude()));
-                    mapIntent.putExtra(mContext.getString(R.string.key_longitude), Double.parseDouble(orderItem.getLongitude()));
-                    mapIntent.putExtra(mContext.getString(R.string.key_address), orderItem.getAddress());
-                    mapIntent.putExtra(mContext.getString(R.string.key_is_draggable), false);
-                    mContext.startActivity(mapIntent);
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
+            viewHolder.relativeLayoutMaps.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Intent mapIntent = new Intent(mContext, MapActivity.class);
+                        mapIntent.putExtra(mContext.getString(R.string.key_latitude), Double.parseDouble(orderItem.getLatitude()));
+                        mapIntent.putExtra(mContext.getString(R.string.key_longitude), Double.parseDouble(orderItem.getLongitude()));
+                        mapIntent.putExtra(mContext.getString(R.string.key_address), orderItem.getAddress());
+                        mapIntent.putExtra(mContext.getString(R.string.key_is_draggable), false);
+                        mContext.startActivity(mapIntent);
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
+            });
 
-        holder.linearLayoutOrderDetailContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent orderDetailIntent = new Intent(mContext, OrderDetailsActivity.class);
-                orderDetailIntent.putExtra(mContext.getString(R.string.key_order_id), orderItem.getId());
-                mContext.startActivity(orderDetailIntent);
-            }
-        });
+            viewHolder.linearLayoutOrderDetailContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent orderDetailIntent = new Intent(mContext, OrderDetailsActivity.class);
+                    orderDetailIntent.putExtra(mContext.getString(R.string.key_order_id), orderItem.getId());
+                    mContext.startActivity(orderDetailIntent);
+                }
+            });
+        } else if (holder instanceof EmptyListViewHolder) {
+            EmptyListViewHolder emptyListViewHolder = (EmptyListViewHolder) holder;
+            emptyListViewHolder.txtNoItemFound.setText(mContext.getString(R.string.empty_completed_order_items));
+        }
     }
 
     @Override
     public int getItemCount() {
-        return mOrderItemList.size();
+        int size;
+        if (mOrderItemList != null && mOrderItemList.size() > 0) {
+            size = mOrderItemList.size();
+        } else {
+            //To show empty view
+            size = 1;
+        }
+        return size;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        int viewType;
+        if (mOrderItemList != null && mOrderItemList.size() > 0) {
+            viewType = VIEW_TYPE_NON_EMPTY_LIST;
+        } else {
+            viewType = VIEW_TYPE_EMPTY_LIST;
+        }
+        return viewType;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -155,6 +193,18 @@ public class CompletedOrderAdapter extends RecyclerView.Adapter<CompletedOrderAd
             circularTextViewCategory.setStrokeColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
             circularTextViewCategory.setSolidColor(ContextCompat.getColor(mContext, R.color.colorWhite));
             circularTextViewCategory.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+        }
+    }
+
+    private class EmptyListViewHolder extends RecyclerView.ViewHolder {
+
+        ImageView imgNoItemFound;
+        TextView txtNoItemFound;
+
+        EmptyListViewHolder(View itemView) {
+            super(itemView);
+            imgNoItemFound = (ImageView) itemView.findViewById(R.id.img_no_item_found);
+            txtNoItemFound = (TextView) itemView.findViewById(R.id.txt_msg_no_item_found);
         }
     }
 }

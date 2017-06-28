@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flowercentral.flowercentralbusiness.R;
@@ -49,9 +48,6 @@ public class PendingOrder extends Fragment {
 
     @BindView(R.id.pending_order_recyclerview)
     RecyclerView mOrderItemRecyclerView;
-
-    @BindView(R.id.textview_empty)
-    TextView mListEmptyMessageView;
 
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -207,12 +203,6 @@ public class PendingOrder extends Fragment {
     private void updatePendingOrderViews(List<OrderItem> orderItemList) {
 
         hideRefreshLayout();
-        if (null == orderItemList || orderItemList.isEmpty()) {
-            mListEmptyMessageView.setVisibility(View.VISIBLE);
-            orderItemList = new ArrayList<>();
-        } else {
-            mListEmptyMessageView.setVisibility(View.GONE);
-        }
 
         PendingOrderAdapter adapter = new PendingOrderAdapter(orderItemList, mRootLayout, new RefreshViews() {
             @Override

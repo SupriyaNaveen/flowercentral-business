@@ -45,6 +45,7 @@
     <string name="title_completed_order">Completed Orders</string>
     <string name="empty_pending_order_items">No pending order items</string>
     <string name="empty_completed_order_items">No completed order items</string>
+    <string name="empty_help_items">No Help Details found.</string>
     <string name="order_format_price">$%s</string>
     <string name="order_format_quantity">Item: %s</string>
     <string name="order_format_schedule">Schedule: %s</string>

@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flowercentral.flowercentralbusiness.R;
@@ -44,9 +43,6 @@ public class FeedbackFragment extends Fragment {
 
     @BindView(R.id.root_layout)
     RelativeLayout mRootLayout;
-
-    @BindView(R.id.text_view_empty)
-    TextView mListEmptyMessageView;
 
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -183,12 +179,6 @@ public class FeedbackFragment extends Fragment {
     private void updateFeedbackListViews(List<FeedbackItem> feedbackItemList) {
 
         hideRefreshLayout();
-        if (null == feedbackItemList || feedbackItemList.isEmpty()) {
-            mListEmptyMessageView.setVisibility(View.VISIBLE);
-            feedbackItemList = new ArrayList<>();
-        } else {
-            mListEmptyMessageView.setVisibility(View.GONE);
-        }
 
         ViewFeedbackAdapter adapter = new ViewFeedbackAdapter(feedbackItemList);
         mFeedbackRecyclerView.setAdapter(adapter);
