@@ -91,4 +91,9 @@ public class QueryBuilder {
         return BuildConfig.SERVER +
                 "salesdashboard_monthly";
     }
+
+    public static String getHelpDetailsUrl() {
+        return BuildConfig.SERVER +
+                "help";
+    }
 }

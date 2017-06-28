@@ -15,4 +15,6 @@
     <dimen name="dp100">100dp</dimen>
     <dimen name="cardview_default_elavation">1dp</dimen>
     <dimen name="cardview_default_corner_radius">5dp</dimen>
+    <dimen name="dp20">20dp</dimen>
+    <dimen name="sp15">15sp</dimen>
 </resources>

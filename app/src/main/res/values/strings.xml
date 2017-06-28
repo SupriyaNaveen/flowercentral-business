@@ -132,4 +132,5 @@
     <string name="lbl_total_sales_order">Total Orders : </string>
     <string name="lbl_total_sales">Total Sales :</string>
     <string name="colon">:</string>
+    <string name="title_help">Help?</string>
 </resources>

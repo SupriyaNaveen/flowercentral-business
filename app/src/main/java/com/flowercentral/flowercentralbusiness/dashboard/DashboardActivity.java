@@ -15,6 +15,7 @@ import android.view.MenuItem;
 
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.feedback.FeedbackFragment;
+import com.flowercentral.flowercentralbusiness.help.HelpFragment;
 import com.flowercentral.flowercentralbusiness.login.ui.LauncherActivity;
 import com.flowercentral.flowercentralbusiness.order.OrderFragment;
 import com.flowercentral.flowercentralbusiness.profile.ProfileFragment;
