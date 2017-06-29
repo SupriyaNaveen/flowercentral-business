@@ -96,4 +96,9 @@ public class QueryBuilder {
         return BuildConfig.SERVER +
                 "help";
     }
+
+    public static String getOrderByDateUrl() {
+        return BuildConfig.SERVER +
+                "orders_bydate";
+    }
 }
