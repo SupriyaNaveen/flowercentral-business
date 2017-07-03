@@ -29,7 +29,22 @@ public class ProductItem implements Parcelable {
     private String message;
 
     @SerializedName("tag")
-    private String tag;
+    private String[] tag;
+
+    @SerializedName("images")
+    private String[] imagesUrlList;
+
+    @SerializedName("id")
+    private String id;
+
+    @SerializedName("liked")
+    private String liked;
+
+    @SerializedName("status")
+    private String status;
+
+    @SerializedName("description")
+    private String description;
 
     /**
      * Constructor to use when re-constructing object
@@ -58,7 +73,12 @@ public class ProductItem implements Parcelable {
         price = in.readDouble();
         imageUrl = in.readString();
         message = in.readString();
-        tag = in.readString();
+        tag = (String[]) in.readArray(String.class.getClassLoader());
+        imagesUrlList = (String[]) in.readArray(String.class.getClassLoader());
+        id = in.readString();
+        liked = in.readString();
+        status = in.readString();
+        description = in.readString();
     }
 
     @Override
@@ -72,8 +92,12 @@ public class ProductItem implements Parcelable {
         dest.writeDouble(price);
         dest.writeString(message);
         dest.writeString(imageUrl);
-        dest.writeString(tag);
-
+        dest.writeArray(tag);
+        dest.writeArray(imagesUrlList);
+        dest.writeString(id);
+        dest.writeString(status);
+        dest.writeString(description);
+        dest.writeString(liked);
     }
 
     /**
@@ -135,11 +159,11 @@ public class ProductItem implements Parcelable {
         this.message = message;
     }
 
-    public String getTag() {
+    public String[] getTag() {
         return tag;
     }
 
-    public void setTag(String tag) {
+    public void setTag(String[] tag) {
         this.tag = tag;
     }
 }

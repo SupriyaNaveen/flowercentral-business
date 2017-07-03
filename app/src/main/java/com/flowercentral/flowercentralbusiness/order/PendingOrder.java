@@ -135,7 +135,8 @@ public class PendingOrder extends Fragment {
         mImageViewClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               refreshItems();
+                mSwipeRefreshLayout.setRefreshing(true);
+                refreshItems();
             }
         });
         return view;
@@ -229,14 +230,14 @@ public class PendingOrder extends Fragment {
             }
         };
 
-        String url = QueryBuilder.getOrderByDateUrl();
+        String url = QueryBuilder.getPendingOrderByDateUrl();
         JSONObject requestObject = new JSONObject();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         try {
             requestObject.put(getString(R.string.api_key_start_date), formatter.format(mStartDateSearch.getTime()));
             requestObject.put(getString(R.string.api_key_end_date), formatter.format(mEndDateSearch.getTime()));
-            baseModel.executePostJsonRequest(url, requestObject, TAG);
-        }catch (JSONException e) {
+            baseModel.executePostJsonArrayRequest(url, requestObject, TAG);
+        } catch (JSONException e) {
 
         }
     }

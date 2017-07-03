@@ -1,6 +1,10 @@
 package com.flowercentral.flowercentralbusiness.rest;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.support.annotation.Nullable;
@@ -12,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.flowercentral.flowercentralbusiness.R;
+import com.flowercentral.flowercentralbusiness.login.ui.LauncherActivity;
 import com.flowercentral.flowercentralbusiness.preference.UserPreference;
 import com.flowercentral.flowercentralbusiness.setting.AppConstant;
 import com.flowercentral.flowercentralbusiness.util.Logger;
@@ -22,11 +27,14 @@ import com.flowercentral.flowercentralbusiness.volley.ErrorData;
 import com.flowercentral.flowercentralbusiness.volley.HttpResponseListener;
 import com.flowercentral.flowercentralbusiness.volley.RestUtil;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.flowercentral.flowercentralbusiness.preference.UserPreference.deleteProfileInformation;
 
 
 public abstract class BaseModel<T> implements Response.ErrorListener, HttpResponseListener<T> {
@@ -51,8 +59,6 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
 
     @Override
     public void onErrorResponse(VolleyError error) {
-
-
         // write logic here for handling error and preparing custom error;
         ErrorData errorData = new ErrorData();
 
@@ -80,37 +86,24 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
                 errorData.setErrorMessage(error.getMessage());
             }
 
-
             switch (error.networkResponse.statusCode) {
 
                 case UNAUTHORIZED_ERROR:
-
+                    break;
                 case AUTHENTICATION_ERROR:
-                    /*if(!(mContext instanceof LoginActivity)) {
-
-                        if (mContext != null && mContext instanceof BaseActivity) {
-                            ((BaseActivity) mContext).dismissDialog();
-                            ((BaseActivity) mContext).finish();
-                        }
-                        UserPreferences.setUser(null);
-                        UserPreferences.setSecurityPin("");
-                        UserPreferences.setAppApiToken(null);
-
-                        Intent intent = new Intent(mContext, SplashScreenActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        mContext.startActivity(intent);
-                        AsyncHttpClient.getInstance(mContext).cancelAllRequests();
-                    }else
-                    {
+                    if (!(mContext instanceof LauncherActivity)) {
+                        showSessionExpiredDialog();
+                    } else {
                         errorData.setErrorMessage("Invalid user name or password.");
-                    }*/
+                    }
 
                     break;
                 case 408:
                     errorData.setErrorType(ErrorData.ERROR_TYPE.CONNECTION_TIMEOUT);
+                    break;
                 case 500:
                     errorData.setErrorType(ErrorData.ERROR_TYPE.SERVER_ERROR);
+                    break;
                 case 400:
                     byte[] data = error.networkResponse.data;
                     String s = new String(data);
@@ -124,9 +117,10 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
+                    break;
                 default:
                     errorData.setErrorType(ErrorData.ERROR_TYPE.SERVER_ERROR);
+                    break;
 
             }
         } else {
@@ -147,30 +141,34 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
                 errorData.setErrorMessage("Error response data is null");
             }
         }
-        /*if(!TextUtils.isEmpty(errorData.getErrorMessage())&&errorData.getErrorMessage().contains("java.io.IOException: No authentication challenges found"))
-        {
-            if(!(mContext instanceof LoginActivity)) {
+        onError(errorData);
+    }
 
-                if (mContext != null && mContext instanceof BaseActivity) {
-                    ((BaseActivity) mContext).dismissDialog();
-                    ((BaseActivity) mContext).finish();
+    private void showSessionExpiredDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle("Authentication Error");
+        builder.setMessage("Session expired. Please login again!");
+
+        builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (mContext != null && mContext instanceof Activity) {
+                    ((Activity) mContext).finish();
                 }
-                UserPreferences.setUser(null);
-                UserPreferences.setSecurityPin("");
-                UserPreferences.setAppApiToken(null);
-                if(MyApplication.getLayerClient()!=null&&MyApplication.getLayerClient().isAuthenticated()) {
-                    MyApplication.deauthenticate(null);
-                }
-                Intent intent = new Intent(mContext, SplashScreenActivity.class);
+                deleteProfileInformation(mContext);
+                Intent intent = new Intent(mContext, LauncherActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 mContext.startActivity(intent);
                 AsyncHttpClient.getInstance(mContext).cancelAllRequests();
-                errorData.setErrorMessage("You have been logged out. Please login again");
             }
-        }*/
+        });
 
-        onError(errorData);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.setCancelable(false);
+        alertDialog.show();
     }
 
     @Override
@@ -211,6 +209,31 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
             request.appendHeaderValues(getCommonAuthorizationHeader());
             //addCommonHeaderParams(request);
             AsyncHttpClient.getInstance(mContext).addToRequestQueue(request, tag);
+        } else {
+            ErrorData errorData = new ErrorData();
+            errorData.setErrorType(ErrorData.ERROR_TYPE.NETWORK_NOT_AVAILABLE);
+            errorData.setErrorMessage(mContext.getResources().getString(R.string.msg_internet_unavailable));
+            onError(errorData);
+        }
+    }
+
+    public void executePostJsonArrayRequest(String url, JSONObject requestObject, String tag) {
+        if (RestUtil.isNetworkAvailable(mContext)) {
+            JSONObject params = appendCommonParams(mContext, requestObject);
+            try {
+                JSONArray jsonArray = new JSONArray();
+                params.toJSONArray(jsonArray);
+                CustomJsonArrayObjectRequest request = new CustomJsonArrayObjectRequest(Request.Method.POST, url, jsonArray, listener, this);
+                request.setRetryPolicy(new DefaultRetryPolicy(MY_SOCKET_TIMEOUT_MS,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                request.setCustomResponseListener(this);
+                request.appendHeaderValues(getCommonAuthorizationHeader());
+                //addCommonHeaderParams(request);
+                AsyncHttpClient.getInstance(mContext).addToRequestQueue(request, tag);
+            } catch (JSONException e) {
+
+            }
         } else {
             ErrorData errorData = new ErrorData();
             errorData.setErrorType(ErrorData.ERROR_TYPE.NETWORK_NOT_AVAILABLE);

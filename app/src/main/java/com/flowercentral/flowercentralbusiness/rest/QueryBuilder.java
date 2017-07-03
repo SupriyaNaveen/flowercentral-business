@@ -97,8 +97,13 @@ public class QueryBuilder {
                 "help";
     }
 
-    public static String getOrderByDateUrl() {
+    public static String getPendingOrderByDateUrl() {
         return BuildConfig.SERVER +
-                "orders_bydate";
+                "pendingorders_bydate";
+    }
+
+    public static String getDeliveredOrderByDateUrl() {
+        return BuildConfig.SERVER +
+                "deliveredorders_bydate";
     }
 }
