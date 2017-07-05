@@ -4,7 +4,10 @@ import android.app.Application;
 import android.content.Context;
 import android.os.StrictMode;
 
+import com.crashlytics.android.Crashlytics;
 import com.flowercentral.flowercentralbusiness.util.Logger;
+
+import io.fabric.sdk.android.Fabric;
 
 public class FlowerCentral extends Application {
 
@@ -13,6 +16,7 @@ public class FlowerCentral extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         Context mContext = this;
         mAppInstance = this;
 
