@@ -77,5 +77,21 @@ public class OrderFragment extends Fragment {
         mTabLayout.setTabTextColors(ContextCompat.getColorStateList(getActivity(), R.color.colorGrey));
 
         mTabLayout.setupWithViewPager(mViewPager);
+
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                mTabLayout.setScrollPosition(tab.getPosition(), 0f, true);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
     }
 }
