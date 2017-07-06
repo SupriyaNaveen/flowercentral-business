@@ -39,11 +39,11 @@ import com.flowercentral.flowercentralbusiness.dao.MultipartUtility;
 import com.flowercentral.flowercentralbusiness.login.ui.adapter.UploadListAdapter;
 import com.flowercentral.flowercentralbusiness.login.ui.model.FileDetails;
 import com.flowercentral.flowercentralbusiness.login.ui.model.RegisterVendorDetails;
+import com.flowercentral.flowercentralbusiness.map.MapActivity;
 import com.flowercentral.flowercentralbusiness.profile.model.ProfileDetails;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
 import com.flowercentral.flowercentralbusiness.setting.AppConstant;
 import com.flowercentral.flowercentralbusiness.util.Logger;
-import com.flowercentral.flowercentralbusiness.util.MapActivity;
 import com.flowercentral.flowercentralbusiness.util.PermissionUtil;
 import com.flowercentral.flowercentralbusiness.util.Util;
 

@@ -14,13 +14,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.flowercentral.flowercentralbusiness.R;
+import com.flowercentral.flowercentralbusiness.map.MapActivity;
 import com.flowercentral.flowercentralbusiness.order.OrderDetailsActivity;
 import com.flowercentral.flowercentralbusiness.order.PendingOrder;
 import com.flowercentral.flowercentralbusiness.order.model.OrderItem;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
 import com.flowercentral.flowercentralbusiness.util.CircularTextView;
-import com.flowercentral.flowercentralbusiness.util.MapActivity;
 import com.flowercentral.flowercentralbusiness.util.Util;
 import com.flowercentral.flowercentralbusiness.volley.ErrorData;
 import com.squareup.picasso.Picasso;

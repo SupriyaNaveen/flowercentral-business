@@ -48,7 +48,7 @@
             android:theme="@style/FullscreenTheme" />
 
         <activity
-            android:name=".util.MapActivity"
+            android:name=".map.MapActivity"
             android:screenOrientation="portrait" />
 
         <service

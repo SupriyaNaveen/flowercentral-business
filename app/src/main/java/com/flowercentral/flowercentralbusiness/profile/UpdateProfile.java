@@ -21,10 +21,10 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.flowercentral.flowercentralbusiness.R;
+import com.flowercentral.flowercentralbusiness.map.MapActivity;
 import com.flowercentral.flowercentralbusiness.profile.model.ProfileDetails;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
-import com.flowercentral.flowercentralbusiness.util.MapActivity;
 import com.flowercentral.flowercentralbusiness.util.Util;
 import com.flowercentral.flowercentralbusiness.volley.ErrorData;
 import com.google.gson.Gson;

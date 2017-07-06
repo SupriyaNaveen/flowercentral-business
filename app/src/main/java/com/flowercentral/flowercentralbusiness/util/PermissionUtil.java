@@ -11,7 +11,7 @@ public class PermissionUtil {
 
     // Initialize the request code for each permission
     public static final int REQUEST_CODE_READ_PHONE_STATE = 100;
-    static final int REQUEST_CODE_LOCATION = 101;
+    public static final int REQUEST_CODE_LOCATION = 101;
     public static final int REQUEST_CODE_READ_EXTERNAL_STORAGE = 102;
 
     /**
