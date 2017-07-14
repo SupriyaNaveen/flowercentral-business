@@ -1,5 +1,6 @@
 package com.flowercentral.flowercentralbusiness.sales;
 
+import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,12 +9,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flowercentral.flowercentralbusiness.R;
+import com.flowercentral.flowercentralbusiness.databinding.FragmentSalesGraphBinding;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
 import com.flowercentral.flowercentralbusiness.util.Util;
@@ -21,7 +20,6 @@ import com.flowercentral.flowercentralbusiness.volley.ErrorData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jjoe64.graphview.DefaultLabelFormatter;
-import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
@@ -36,30 +34,10 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class SalesGraphFragment extends Fragment {
 
     private static final String TAG = SalesGraphFragment.class.getSimpleName();
-
-    @BindView(R.id.root_layout)
-    RelativeLayout mRootLayout;
-
-    @BindView(R.id.total_orders)
-    TextView mTextViewTotalOrders;
-
-    @BindView(R.id.total_sales)
-    TextView mTextViewTotalSales;
-
-    @BindView(R.id.title_sales_graph)
-    TextView mTextViewTitle;
-
-    @BindView(R.id.graph_view)
-    GraphView mGraphView;
-
-    @BindView(R.id.todays_sales_wrapper)
-    LinearLayout mTtodaysSalesWrapper;
+    private FragmentSalesGraphBinding mBinder;
 
     private VIEW_TYPE mViewType;
 
@@ -89,11 +67,10 @@ public class SalesGraphFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_sales_graph, container, false);
-        ButterKnife.bind(this, view);
+        mBinder = DataBindingUtil.inflate(inflater, R.layout.fragment_sales_graph, container, false);
 
         getSalesGraphDetails();
-        return view;
+        return mBinder.getRoot();
     }
 
     private void getSalesGraphDetails() {
@@ -141,31 +118,31 @@ public class SalesGraphFragment extends Fragment {
                     error.setErrorMessage("Data fetch failed. Cause -> " + error.getErrorMessage());
                     switch (error.getErrorType()) {
                         case NETWORK_NOT_AVAILABLE:
-                            Snackbar.make(mRootLayout, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();
                             break;
                         case INTERNAL_SERVER_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case CONNECTION_TIMEOUT:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case APPLICATION_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case INVALID_INPUT_SUPPLIED:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case AUTHENTICATION_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case UNAUTHORIZED_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case SERVER_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         default:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                     }
                 }
@@ -184,17 +161,17 @@ public class SalesGraphFragment extends Fragment {
             switch (mViewType) {
 
                 case TODAY:
-                    mTtodaysSalesWrapper.setVisibility(View.VISIBLE);
-                    mGraphView.setVisibility(View.GONE);
-                    mTextViewTotalOrders.setText(String.valueOf(salesDetails.getTotalOrders()));
-                    mTextViewTotalSales.setText(String.format("$%s", salesDetails.getTotalSales()));
+                    mBinder.ltTodayReport.todaysSalesWrapper.setVisibility(View.VISIBLE);
+                    mBinder.graphView.setVisibility(View.GONE);
+                    mBinder.ltTodayReport.totalOrders.setText(String.valueOf(salesDetails.getTotalOrders()));
+                    mBinder.ltTodayReport.totalSales.setText(String.format("$%s", salesDetails.getTotalSales()));
                     break;
                 case WEEKLY:
-                    mTextViewTitle.setText(mTextViewTitle.getText()
+                    mBinder.titleSalesGraph.setText(mBinder.titleSalesGraph.getText()
                             + "\n\n" + salesDetails.getStartDate()
                             + " to " + salesDetails.getEndDate());
-                    mGraphView.setVisibility(View.VISIBLE);
-                    mTtodaysSalesWrapper.setVisibility(View.GONE);
+                    mBinder.graphView.setVisibility(View.VISIBLE);
+                    mBinder.ltTodayReport.todaysSalesWrapper.setVisibility(View.GONE);
                     graphDataArrayList = salesDetails.getGraphDataArrayList();
                     dataPoints = new DataPoint[graphDataArrayList.size()];
                     for (int i = 0; i < graphDataArrayList.size(); i++) {
@@ -207,23 +184,23 @@ public class SalesGraphFragment extends Fragment {
                             e.printStackTrace();
                         }
                     }
-                    mGraphView.getGridLabelRenderer().setLabelFormatter(
+                    mBinder.graphView.getGridLabelRenderer().setLabelFormatter(
                             new DateAsXAxisLabelFormatter(getActivity(),
                                     new SimpleDateFormat("EEE", Locale.getDefault())));
                     drawGraph(dataPoints, graphDataArrayList.size());
                     break;
                 case MONTHLY:
-                    mTextViewTitle.setText(mTextViewTitle.getText()
+                    mBinder.titleSalesGraph.setText(mBinder.titleSalesGraph.getText()
                             + "\n\n" + salesDetails.getMonth());
-                    mGraphView.setVisibility(View.VISIBLE);
-                    mTtodaysSalesWrapper.setVisibility(View.GONE);
+                    mBinder.graphView.setVisibility(View.VISIBLE);
+                    mBinder.ltTodayReport.todaysSalesWrapper.setVisibility(View.GONE);
                     graphDataArrayList = salesDetails.getGraphDataArrayList();
                     dataPoints = new DataPoint[graphDataArrayList.size()];
                     for (int i = 0; i < graphDataArrayList.size(); i++) {
                         GraphData graphData = graphDataArrayList.get(i);
                         dataPoints[i] = new DataPoint(i + 1, graphData.getTotalSales());
                     }
-                    mGraphView.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+                    mBinder.graphView.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
                         @Override
                         public String formatLabel(double value, boolean isValueX) {
                             if (isValueX) {
@@ -241,19 +218,19 @@ public class SalesGraphFragment extends Fragment {
 
     private void drawGraph(DataPoint[] dataPoints, int noOfRows) {
         LineGraphSeries<DataPoint> monthlySeries = new LineGraphSeries<>(dataPoints);
-        mGraphView.getGridLabelRenderer().setNumHorizontalLabels(noOfRows);
+        mBinder.graphView.getGridLabelRenderer().setNumHorizontalLabels(noOfRows);
 
         monthlySeries.setColor(Color.argb(255, 236, 64, 132));
         monthlySeries.setDrawDataPoints(true);
 
-        mGraphView.addSeries(monthlySeries);
-        mGraphView.getGridLabelRenderer().setGridColor(R.color.colorGrey);
-        mGraphView.getGridLabelRenderer().setGridStyle(GridLabelRenderer.GridStyle.HORIZONTAL);
-        mGraphView.getGridLabelRenderer().setHorizontalLabelsColor(R.color.colorGrey);
-        mGraphView.getGridLabelRenderer().setVerticalLabelsColor(R.color.colorGrey);
+        mBinder.graphView.addSeries(monthlySeries);
+        mBinder.graphView.getGridLabelRenderer().setGridColor(R.color.colorGrey);
+        mBinder.graphView.getGridLabelRenderer().setGridStyle(GridLabelRenderer.GridStyle.HORIZONTAL);
+        mBinder.graphView.getGridLabelRenderer().setHorizontalLabelsColor(R.color.colorGrey);
+        mBinder.graphView.getGridLabelRenderer().setVerticalLabelsColor(R.color.colorGrey);
 
-        mGraphView.getGridLabelRenderer().setHighlightZeroLines(false);
-        mGraphView.getGridLabelRenderer().reloadStyles();
+        mBinder.graphView.getGridLabelRenderer().setHighlightZeroLines(false);
+        mBinder.graphView.getGridLabelRenderer().reloadStyles();
     }
 
     private SalesDetails constructSalesDetails(JSONObject response) {

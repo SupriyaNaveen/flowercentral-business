@@ -3,6 +3,7 @@ package com.flowercentral.flowercentralbusiness.order.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.flowercentral.flowercentralbusiness.util.Util;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -133,7 +134,7 @@ public class OrderItem implements Parcelable {
     }
 
 
-    enum CATEGORY {
+    public enum CATEGORY {
         @SerializedName("S")
         S,
         @SerializedName("M")
@@ -198,9 +199,9 @@ public class OrderItem implements Parcelable {
         return paidStatus;
     }
 
-//    public DELIVERY_STATUS getDeliveryStatus() {
-//        return deliveryStatus;
-//    }
+    public DELIVERY_STATUS getDeliveryStatus() {
+        return deliveryStatus;
+    }
 
     public String getScheduleDateTime() {
         return scheduleDateTime;
@@ -228,5 +229,11 @@ public class OrderItem implements Parcelable {
 
     public static Creator getCREATOR() {
         return CREATOR;
+    }
+
+    public String getFormattedDate(String dateString) {
+        String srcFormat = "yyyy-MM-dd HH:mm";
+        String destFormat = "dd EEE yyyy, hh:mm a";
+        return Util.formatDate(dateString, srcFormat, destFormat);
     }
 }

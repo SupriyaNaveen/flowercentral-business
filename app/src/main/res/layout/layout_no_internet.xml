@@ -1,36 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tool="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/activity_horizontal_padding_16"
-    tool:ignore="UselessParent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/image_view_wifi_off"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:src="@drawable/ic_portable_wifi_off_accent_50dp"/>
-
-    <TextView
-        style="@style/AppTheme.Normal"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/image_view_wifi_off"
-        android:gravity="center"
-        android:text="@string/msg_internet_unavailable"
-        android:textColor="@color/colorWhite" />
+        android:layout_height="match_parent"
+        android:padding="@dimen/activity_horizontal_padding_16"
+        tool:ignore="UselessParent">
 
-    <Button
-        android:id="@+id/btn_try_again"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/button_transparent"
-        android:text="@string/btn_try_again"
-        android:textAllCaps="true"
-        android:textColor="@color/colorWhite" />
+        <ImageView
+            android:id="@+id/image_view_wifi_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_portable_wifi_off_accent_50dp" />
 
-</RelativeLayout>
+        <TextView
+            style="@style/AppTheme.Normal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/image_view_wifi_off"
+            android:gravity="center"
+            android:text="@string/msg_internet_unavailable"
+            android:textColor="@color/colorWhite" />
+
+        <Button
+            android:id="@+id/btn_try_again"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/button_transparent"
+            android:text="@string/btn_try_again"
+            android:textAllCaps="true"
+            android:textColor="@color/colorWhite"
+            android:onClick="tryAgainToRegister" />
+
+    </RelativeLayout>
+</layout>

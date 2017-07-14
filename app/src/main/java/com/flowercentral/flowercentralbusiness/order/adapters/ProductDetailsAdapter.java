@@ -1,21 +1,17 @@
 package com.flowercentral.flowercentralbusiness.order.adapters;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.flowercentral.flowercentralbusiness.R;
+import com.flowercentral.flowercentralbusiness.databinding.ProductDetailRowBinding;
 import com.flowercentral.flowercentralbusiness.order.model.ProductItem;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  *
@@ -32,31 +28,31 @@ public class ProductDetailsAdapter extends RecyclerView.Adapter<ProductDetailsAd
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.product_detail_row, parent, false);
+        ProductDetailRowBinding mBinder = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext())
+                , R.layout.product_detail_row, parent, false);
         mContext = parent.getContext();
-        return new ViewHolder(itemView);
+        return new ViewHolder(mBinder);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
         ProductItem productItem = mProductList.get(position);
-        holder.textViewProductDetails.setText(
+        holder.rowBinder.productDetails.setText(
                 productItem.getQuantity() +
                         BLANK_SPACE +
                         productItem.getName() +
                         BLANK_SPACE +
                         productItem.getCategory()
         );
-        holder.textViewProductPriceDetails.setText(String.format("$ %s", mProductList.get(position).getPrice()));
+        holder.rowBinder.productPriceDetails.setText(String.format("$ %s", mProductList.get(position).getPrice()));
 
-        holder.textViewProductMessage.setText(String.format("Message : %s", mProductList.get(position).getMessage()));
+        holder.rowBinder.productMessage.setText(String.format("Message : %s", mProductList.get(position).getMessage()));
 
         Picasso.
                 with(mContext).
                 load(mProductList.get(position).getImageUrl()).
-                into(holder.productItemImage);
+                into(holder.rowBinder.productItemImage);
     }
 
     @Override
@@ -64,23 +60,13 @@ public class ProductDetailsAdapter extends RecyclerView.Adapter<ProductDetailsAd
         return mProductList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.product_details)
-        TextView textViewProductDetails;
+        ProductDetailRowBinding rowBinder;
 
-        @BindView(R.id.product_price_details)
-        TextView textViewProductPriceDetails;
-
-        @BindView(R.id.product_message)
-        TextView textViewProductMessage;
-
-        @BindView(R.id.product_item_image)
-        ImageView productItemImage;
-
-        public ViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
+        ViewHolder(ProductDetailRowBinding binder) {
+            super(binder.getRoot());
+            rowBinder = binder;
         }
     }
 }

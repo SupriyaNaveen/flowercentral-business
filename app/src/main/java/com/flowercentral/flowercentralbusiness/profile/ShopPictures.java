@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -14,19 +15,17 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.dao.MultipartUtility;
+import com.flowercentral.flowercentralbusiness.databinding.FragmentShopPicturesBinding;
 import com.flowercentral.flowercentralbusiness.profile.model.ShopPictureDetails;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
@@ -50,36 +49,23 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 import static android.os.Build.VERSION_CODES.HONEYCOMB;
 
 /**
  *
  */
-public class ShopPictures extends Fragment {
+public class ShopPictures extends Fragment implements View.OnClickListener {
 
     private static final String TAG = ShopPictures.class.getSimpleName();
 
-    @BindView(R.id.shop_pictures_recycler_view)
-    RecyclerView mShopPicturesRecyclerView;
-
-    @BindView(R.id.swipe_refresh_layout)
-    SwipeRefreshLayout mSwipeRefreshLayout;
-
-    @BindView(R.id.image_view_delete)
-    ImageView imageViewDeletePictures;
-
     private Context mContext;
 
-    @BindView(R.id.root_layout)
-    RelativeLayout mRootLayout;
     private ShopPicturesAdapter shopPicturesAdapter;
     private MaterialDialog mMaterialDialog;
     private final int TYPE_PICTURES_UPLOAD = 100;
     private UploadFilesAsync mUploadFileAsync;
+
+    private FragmentShopPicturesBinding mBinder;
 
     /**
      * Instantiate ShopPictures fragment.
@@ -99,26 +85,27 @@ public class ShopPictures extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_shop_pictures, container, false);
-        ButterKnife.bind(this, view);
-
+        mBinder = DataBindingUtil.inflate(inflater, R.layout.fragment_shop_pictures, container, false);
         mContext = getActivity();
 
         // For recycler view use a grid layout manager
         GridLayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
-        mShopPicturesRecyclerView.setLayoutManager(mLayoutManager);
+        mBinder.shopPicturesRecyclerView.setLayoutManager(mLayoutManager);
 
-        mSwipeRefreshLayout.setRefreshing(true);
+        mBinder.swipeRefreshLayout.setRefreshing(true);
         getShopPictures();
 
+        mBinder.imageViewDelete.setOnClickListener(this);
+
         //On swipe refresh the screen.
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mBinder.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refreshItems();
             }
         });
 
+        View view = mBinder.getRoot();
         view.setFocusableInTouchMode(true);
         view.requestFocus();
         view.setOnKeyListener(new View.OnKeyListener() {
@@ -139,7 +126,7 @@ public class ShopPictures extends Fragment {
     }
 
     private void refreshItems() {
-        imageViewDeletePictures.setVisibility(View.GONE);
+        mBinder.imageViewDelete.setVisibility(View.GONE);
         getShopPictures();
     }
 
@@ -168,31 +155,31 @@ public class ShopPictures extends Fragment {
                     error.setErrorMessage("Data fetch failed. Cause -> " + error.getErrorMessage());
                     switch (error.getErrorType()) {
                         case NETWORK_NOT_AVAILABLE:
-                            Snackbar.make(mRootLayout, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();
                             break;
                         case INTERNAL_SERVER_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case CONNECTION_TIMEOUT:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case APPLICATION_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case INVALID_INPUT_SUPPLIED:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case AUTHENTICATION_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case UNAUTHORIZED_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case SERVER_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         default:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                     }
                 }
@@ -230,9 +217,9 @@ public class ShopPictures extends Fragment {
             @Override
             public void refreshDeleteIcon() {
                 if (shopPicturesAdapter.isImageSelectable) {
-                    imageViewDeletePictures.setVisibility(View.VISIBLE);
+                    mBinder.imageViewDelete.setVisibility(View.VISIBLE);
                 } else {
-                    imageViewDeletePictures.setVisibility(View.GONE);
+                    mBinder.imageViewDelete.setVisibility(View.GONE);
                 }
             }
 
@@ -241,14 +228,14 @@ public class ShopPictures extends Fragment {
                 requestPermission();
             }
         });
-        mShopPicturesRecyclerView.setAdapter(shopPicturesAdapter);
+        mBinder.shopPicturesRecyclerView.setAdapter(shopPicturesAdapter);
     }
 
     /**
      * Hide the swipe refresh layout.
      */
     private void hideRefreshLayout() {
-        mSwipeRefreshLayout.setRefreshing(false);
+        mBinder.swipeRefreshLayout.setRefreshing(false);
     }
 
     interface RefreshViews {
@@ -257,9 +244,10 @@ public class ShopPictures extends Fragment {
         void uploadNewImage();
     }
 
-    @OnClick(R.id.image_view_delete)
-    void deletePictures() {
-        removePicture(shopPicturesAdapter.getSelectedPictureIdList().toString());
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.image_view_delete)
+            removePicture(shopPicturesAdapter.getSelectedPictureIdList().toString());
     }
 
     private void removePicture(String pictureId) {
@@ -270,13 +258,13 @@ public class ShopPictures extends Fragment {
             public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
                 try {
                     if (response.getInt(mContext.getString(R.string.api_res_status)) == 1) {
-                        Snackbar.make(mRootLayout, "Remove picture successfull!", Snackbar.LENGTH_SHORT).show();
-                        mSwipeRefreshLayout.setRefreshing(true);
+                        Snackbar.make(mBinder.rootLayout, "Remove picture successfull!", Snackbar.LENGTH_SHORT).show();
+                        mBinder.swipeRefreshLayout.setRefreshing(true);
                         refreshItems();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Snackbar.make(mRootLayout, "Unable to remove picture.!", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(mBinder.rootLayout, "Unable to remove picture.!", Snackbar.LENGTH_SHORT).show();
                 }
                 dismissMaterialDialog();
             }
@@ -289,28 +277,28 @@ public class ShopPictures extends Fragment {
 
                     switch (error.getErrorType()) {
                         case NETWORK_NOT_AVAILABLE:
-                            Snackbar.make(mRootLayout, mContext.getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, mContext.getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();
                             break;
                         case INTERNAL_SERVER_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case CONNECTION_TIMEOUT:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case APPLICATION_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case INVALID_INPUT_SUPPLIED:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case AUTHENTICATION_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case UNAUTHORIZED_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         default:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                     }
                 }
@@ -412,7 +400,7 @@ public class ShopPictures extends Fragment {
      * Displays the snack bar to request the permission from user
      */
     private void snackBarRequestPermission() {
-        Snackbar snackbar = Snackbar.make(mRootLayout, getResources().getString(R.string
+        Snackbar snackbar = Snackbar.make(mBinder.rootLayout, getResources().getString(R.string
                 .s_required_permission_read_storage), Snackbar.LENGTH_INDEFINITE).setAction(getResources().getString(R.string
                 .s_action_request_again), new View.OnClickListener() {
             @Override
@@ -428,7 +416,7 @@ public class ShopPictures extends Fragment {
      * cannot be invoked. So display SnackBar to redirect to Settings to grant the permissions
      */
     private void snackBarRedirectToSettings() {
-        Snackbar snackbar = Snackbar.make(mRootLayout, getResources()
+        Snackbar snackbar = Snackbar.make(mBinder.rootLayout, getResources()
                 .getString(R.string.s_required_permission_settings), Snackbar.LENGTH_INDEFINITE)
                 .setAction(getResources().getString(R.string.s_action_redirect_settings), new View.OnClickListener() {
                     @Override
@@ -493,10 +481,10 @@ public class ShopPictures extends Fragment {
             super.onPostExecute(_status);
             dismissMaterialDialog();
             if (_status) {
-                mSwipeRefreshLayout.setRefreshing(true);
+                mBinder.swipeRefreshLayout.setRefreshing(true);
                 refreshItems();
             } else {
-                Snackbar.make(mRootLayout, getResources().getString(R.string.msg_data_upload_failed), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(mBinder.rootLayout, getResources().getString(R.string.msg_data_upload_failed), Snackbar.LENGTH_SHORT).show();
             }
         }
     }

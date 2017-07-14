@@ -4,10 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,12 +16,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.borax12.materialdaterangepicker.date.DatePickerDialog;
 import com.flowercentral.flowercentralbusiness.R;
+import com.flowercentral.flowercentralbusiness.databinding.FragmentPendingOrderBinding;
 import com.flowercentral.flowercentralbusiness.order.adapters.PendingOrderAdapter;
 import com.flowercentral.flowercentralbusiness.order.model.OrderItem;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
@@ -43,9 +42,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 /**
  *
  */
@@ -53,24 +49,7 @@ public class PendingOrder extends Fragment {
 
     private String TAG = PendingOrder.class.getSimpleName();
     private Context mContext;
-
-    @BindView(R.id.pending_order_recyclerview)
-    RecyclerView mOrderItemRecyclerView;
-
-    @BindView(R.id.swipe_refresh_layout)
-    SwipeRefreshLayout mSwipeRefreshLayout;
-
-    @BindView(R.id.root_layout)
-    RelativeLayout mRootLayout;
-
-    @BindView(R.id.text_date_range)
-    TextInputEditText mTextDateRange;
-
-    @BindView(R.id.image_view_date_range)
-    ImageView mImageViewDateRange;
-
-    @BindView(R.id.image_view_close)
-    ImageView mImageViewClose;
+    private FragmentPendingOrderBinding mBinder;
 
     private Calendar mStartDateSearch = Calendar.getInstance();
     private Calendar mEndDateSearch = Calendar.getInstance();
@@ -97,49 +76,48 @@ public class PendingOrder extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_pending_order, container, false);
-        ButterKnife.bind(this, view);
+        mBinder = DataBindingUtil.inflate(inflater, R.layout.fragment_pending_order, container, false);
 
         mContext = getActivity();
 
         // For recycler view use a linear layout manager
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        mOrderItemRecyclerView.setLayoutManager(mLayoutManager);
+        mBinder.pendingOrderRecyclerview.setLayoutManager(mLayoutManager);
 
         resetSearchBar();
-        mSwipeRefreshLayout.setRefreshing(true);
+        mBinder.swipeRefreshLayout.setRefreshing(true);
         getPendingOrderItems();
 
         //On swipe refresh the screen.
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mBinder.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refreshItems();
             }
         });
 
-        mImageViewDateRange.setOnClickListener(new View.OnClickListener() {
+        mBinder.imageViewDateRange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDateRangePickerDialog();
             }
         });
 
-        mTextDateRange.setOnClickListener(new View.OnClickListener() {
+        mBinder.textDateRange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDateRangePickerDialog();
             }
         });
 
-        mImageViewClose.setOnClickListener(new View.OnClickListener() {
+        mBinder.imageViewClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSwipeRefreshLayout.setRefreshing(true);
+                mBinder.swipeRefreshLayout.setRefreshing(true);
                 refreshItems();
             }
         });
-        return view;
+        return mBinder.getRoot();
     }
 
     private void showDateRangePickerDialog() {
@@ -165,14 +143,14 @@ public class PendingOrder extends Fragment {
 
     private void setSearchBar() {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        mImageViewClose.setVisibility(View.VISIBLE);
-        mTextDateRange.setText(format.format(mStartDateSearch.getTime()) + " to "
+        mBinder.imageViewClose.setVisibility(View.VISIBLE);
+        mBinder.textDateRange.setText(format.format(mStartDateSearch.getTime()) + " to "
                 + format.format(mEndDateSearch.getTime()));
     }
 
     private void searchOrderByDate() {
 
-        mSwipeRefreshLayout.setRefreshing(true);
+        mBinder.swipeRefreshLayout.setRefreshing(true);
         //No internet connection then return
         if (!Util.checkInternet(mContext)) {
             Toast.makeText(mContext, getResources().getString(R.string.msg_internet_unavailable), Toast.LENGTH_LONG).show();
@@ -199,31 +177,31 @@ public class PendingOrder extends Fragment {
                     error.setErrorMessage("Data fetch failed. Cause -> " + error.getErrorMessage());
                     switch (error.getErrorType()) {
                         case NETWORK_NOT_AVAILABLE:
-                            Snackbar.make(mRootLayout, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();
                             break;
                         case INTERNAL_SERVER_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case CONNECTION_TIMEOUT:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case APPLICATION_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case INVALID_INPUT_SUPPLIED:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case AUTHENTICATION_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case UNAUTHORIZED_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case SERVER_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         default:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                     }
                 }
@@ -261,8 +239,8 @@ public class PendingOrder extends Fragment {
     }
 
     private void resetSearchBar() {
-        mImageViewClose.setVisibility(View.GONE);
-        mTextDateRange.setText("");
+        mBinder.imageViewClose.setVisibility(View.GONE);
+        mBinder.textDateRange.setText("");
     }
 
     /**
@@ -296,31 +274,31 @@ public class PendingOrder extends Fragment {
                     error.setErrorMessage("Data fetch failed. Cause -> " + error.getErrorMessage());
                     switch (error.getErrorType()) {
                         case NETWORK_NOT_AVAILABLE:
-                            Snackbar.make(mRootLayout, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();
                             break;
                         case INTERNAL_SERVER_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case CONNECTION_TIMEOUT:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case APPLICATION_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case INVALID_INPUT_SUPPLIED:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case AUTHENTICATION_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case UNAUTHORIZED_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case SERVER_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         default:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                     }
                 }
@@ -352,27 +330,27 @@ public class PendingOrder extends Fragment {
 
         hideRefreshLayout();
 
-        PendingOrderAdapter adapter = new PendingOrderAdapter(orderItemList, mRootLayout, new RefreshViews() {
+        PendingOrderAdapter adapter = new PendingOrderAdapter(orderItemList, mBinder.rootLayout, new RefreshViews() {
             @Override
             public void performRefreshView() {
-                mSwipeRefreshLayout.setRefreshing(true);
+                mBinder.swipeRefreshLayout.setRefreshing(true);
                 refreshItems();
             }
         });
-        mOrderItemRecyclerView.setAdapter(adapter);
+        mBinder.pendingOrderRecyclerview.setAdapter(adapter);
     }
 
     /**
      * Hide the swipe refresh layout.
      */
     private void hideRefreshLayout() {
-        mSwipeRefreshLayout.setRefreshing(false);
+        mBinder.swipeRefreshLayout.setRefreshing(false);
     }
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            mSwipeRefreshLayout.setRefreshing(true);
+            mBinder.swipeRefreshLayout.setRefreshing(true);
             refreshItems();
         }
     };

@@ -5,26 +5,23 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.dashboard.DashboardActivity;
+import com.flowercentral.flowercentralbusiness.databinding.ActivityLauncherBinding;
+import com.flowercentral.flowercentralbusiness.databinding.LayoutLoginBinding;
 import com.flowercentral.flowercentralbusiness.login.ui.model.Vendor;
 import com.flowercentral.flowercentralbusiness.notification.NotificationMessageHandler;
 import com.flowercentral.flowercentralbusiness.preference.UserPreference;
@@ -41,47 +38,17 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 /**
  *
  */
 public class LauncherActivity extends AppCompatActivity {
 
     private static final String TAG = LauncherActivity.class.getSimpleName();
-
-    @BindView(R.id.btn_try_again)
-    Button mButtonTryAgain;
-
-    @BindView(R.id.login_wrapper)
-    LinearLayout mLinearLayoutLogin;
-
-    @BindView(R.id.fl_no_internet)
-    FrameLayout mFrameLayoutNoInternet;
-
-    @BindView(R.id.outer_wrapper)
-    FrameLayout mFrameLayoutRoot;
-
+    private ActivityLauncherBinding mBinder;
     private MaterialDialog mProgressDialog;
 
     private Context mContext;
-
-    @BindView(R.id.textview_vendor_name)
-    TextInputEditText mTextViewVendorName;
-
-    @BindView(R.id.textview_password)
-    TextInputEditText mTextViewPassword;
-
-    @BindView(R.id.textview_forgot_password)
-    TextView mTextViewForgotPassword;
-
-    @BindView(R.id.txt_link_flower_central_account)
-    TextView mTextViewRegisterAccount;
-
-    @BindView(R.id.toolbar)
-    Toolbar mToolBar;
+    private LayoutLoginBinding mLtLoginBinder;
 
     /**
      * @param savedInstanceState saved instance
@@ -98,8 +65,8 @@ public class LauncherActivity extends AppCompatActivity {
             finish();
             overridePendingTransition(0, 0);
         } else {
-            setContentView(R.layout.activity_launcher);
-            ButterKnife.bind(this);
+            mBinder = DataBindingUtil.setContentView(this, R.layout.activity_launcher);
+            mLtLoginBinder = mBinder.ltLogin;
             initializeActivity(mContext);
         }
 
@@ -117,18 +84,18 @@ public class LauncherActivity extends AppCompatActivity {
     private void initializeActivity(Context _context) {
         //Check internet connectivity
         if (Util.checkInternet(_context)) {
-            mFrameLayoutNoInternet.setVisibility(View.GONE);
-            mLinearLayoutLogin.setVisibility(View.VISIBLE);
+            mBinder.flNoInternet.setVisibility(View.GONE);
+            mBinder.loginWrapper.setVisibility(View.VISIBLE);
 
         } else {
-            mFrameLayoutNoInternet.setVisibility(View.VISIBLE);
-            mLinearLayoutLogin.setVisibility(View.GONE);
+            mBinder.flNoInternet.setVisibility(View.VISIBLE);
+            mBinder.loginWrapper.setVisibility(View.GONE);
         }
 
-        setSupportActionBar(mToolBar);
+        setSupportActionBar(mBinder.toolbar);
 
-        if (mToolBar != null) {
-            setSupportActionBar(mToolBar);
+        if (mBinder.toolbar != null) {
+            setSupportActionBar(mBinder.toolbar);
             ActionBar mActionBar = getSupportActionBar();
             if (mActionBar != null) {
                 mActionBar.setHomeButtonEnabled(true);
@@ -151,21 +118,6 @@ public class LauncherActivity extends AppCompatActivity {
     }
 
     /**
-     * Validate the input and make web api call.
-     */
-    @OnClick(R.id.btn_login)
-    void loginSelected() {
-        if (UserPreference.getApiToken(this) != null) {
-            UserPreference.deleteProfileInformation(this);
-        }
-
-        boolean isValidInput = isValidInput();
-        if (isValidInput) {
-            requestPermissionBeforeLogin();
-        }
-    }
-
-    /**
      * Validator class
      *
      * @return is valid or not
@@ -173,36 +125,21 @@ public class LauncherActivity extends AppCompatActivity {
     private boolean isValidInput() {
         boolean isValid = true;
 
-        if (mTextViewVendorName.getText().toString().isEmpty()) {
-            mTextViewVendorName.setError(getString(R.string.fld_error_user_name));
+        if (mLtLoginBinder.textviewVendorName.getText().toString().isEmpty()) {
+            mLtLoginBinder.textviewVendorName.setError(getString(R.string.fld_error_user_name));
             isValid = false;
         } else {
-            mTextViewVendorName.setError(null);
+            mLtLoginBinder.textviewVendorName.setError(null);
         }
 
-        if (mTextViewPassword.getText().toString().isEmpty()) {
-            mTextViewPassword.setError(getString(R.string.fld_error_password));
+        if (mLtLoginBinder.textviewPassword.getText().toString().isEmpty()) {
+            mLtLoginBinder.textviewPassword.setError(getString(R.string.fld_error_password));
             isValid = false;
         } else {
-            mTextViewPassword.setError(null);
+            mLtLoginBinder.textviewPassword.setError(null);
         }
 
         return isValid;
-    }
-
-    @OnClick(R.id.textview_forgot_password)
-    void forgotPasswordSelected() {
-
-    }
-
-    @OnClick(R.id.txt_link_flower_central_account)
-    void registerAccountSelected() {
-        startActivity(new Intent(this, RegisterActivity.class));
-    }
-
-    @OnClick(R.id.btn_try_again)
-    void tryAgainToRegister() {
-        initializeActivity(mContext);
     }
 
     /**
@@ -237,28 +174,28 @@ public class LauncherActivity extends AppCompatActivity {
 
                     switch (error.getErrorType()) {
                         case NETWORK_NOT_AVAILABLE:
-                            Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();
                             break;
                         case INTERNAL_SERVER_ERROR:
-                            Snackbar.make(mFrameLayoutRoot, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case CONNECTION_TIMEOUT:
-                            Snackbar.make(mFrameLayoutRoot, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case APPLICATION_ERROR:
-                            Snackbar.make(mFrameLayoutRoot, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case INVALID_INPUT_SUPPLIED:
-                            Snackbar.make(mFrameLayoutRoot, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case AUTHENTICATION_ERROR:
-                            Snackbar.make(mFrameLayoutRoot, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case UNAUTHORIZED_ERROR:
-                            Snackbar.make(mFrameLayoutRoot, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         default:
-                            Snackbar.make(mFrameLayoutRoot, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                     }
                 }
@@ -269,7 +206,7 @@ public class LauncherActivity extends AppCompatActivity {
         if (_user != null) {
             baseModel.executePostJsonRequest(url, _user, TAG);
         } else {
-            Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mBinder.rootLayout, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -300,13 +237,13 @@ public class LauncherActivity extends AppCompatActivity {
     private void performLogin() {
         try {
             JSONObject user = new JSONObject();
-            user.put(getString(R.string.api_key_username), mTextViewVendorName.getText());
-            user.put(getString(R.string.api_key_password), mTextViewPassword.getText());
+            user.put(getString(R.string.api_key_username), mLtLoginBinder.textviewVendorName.getText());
+            user.put(getString(R.string.api_key_password), mLtLoginBinder.textviewPassword.getText());
             user.put(getString(R.string.api_key_device_id), Util.getDeviceId(this));
             user.put(getString(R.string.api_key_imei), Util.getIEMINumber(this));
             registerUser(mContext, user);
         } catch (JSONException e) {
-            Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mBinder.rootLayout, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -333,7 +270,7 @@ public class LauncherActivity extends AppCompatActivity {
      * Displays the snack bar to request the permission from user
      */
     private void snackBarRequestPermission() {
-        Snackbar snackbar = Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string
+        Snackbar snackbar = Snackbar.make(mBinder.rootLayout, getResources().getString(R.string
                 .s_required_permission_phone_state), Snackbar.LENGTH_INDEFINITE).setAction(getResources().getString(R.string
                 .s_action_request_again), new View.OnClickListener() {
             @Override
@@ -349,7 +286,7 @@ public class LauncherActivity extends AppCompatActivity {
      * cannot be invoked. So display SnackBar to redirect to Settings to grant the permissions
      */
     private void snackBarRedirectToSettings() {
-        Snackbar snackbar = Snackbar.make(mFrameLayoutRoot, getResources()
+        Snackbar snackbar = Snackbar.make(mBinder.rootLayout, getResources()
                 .getString(R.string.s_required_permission_settings), Snackbar.LENGTH_INDEFINITE)
                 .setAction(getResources().getString(R.string.s_action_redirect_settings), new View.OnClickListener() {
                     @Override
@@ -362,5 +299,31 @@ public class LauncherActivity extends AppCompatActivity {
                     }
                 });
         snackbar.show();
+    }
+
+    /**
+     * Validate the input and make web api call.
+     */
+    public void loginSelected(View view) {
+        if (UserPreference.getApiToken(LauncherActivity.this) != null) {
+            UserPreference.deleteProfileInformation(LauncherActivity.this);
+        }
+
+        boolean isValidInput = isValidInput();
+        if (isValidInput) {
+            requestPermissionBeforeLogin();
+        }
+    }
+
+    public void forgotPasswordSelected(View view) {
+
+    }
+
+    public void registerAccountSelected(View view) {
+        startActivity(new Intent(LauncherActivity.this, RegisterActivity.class));
+    }
+
+    public void tryAgainToRegister(View view) {
+        initializeActivity(mContext);
     }
 }

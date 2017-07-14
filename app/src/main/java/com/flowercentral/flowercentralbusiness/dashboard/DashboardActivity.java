@@ -1,6 +1,7 @@
 package com.flowercentral.flowercentralbusiness.dashboard;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -10,19 +11,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.flowercentral.flowercentralbusiness.R;
+import com.flowercentral.flowercentralbusiness.databinding.ActivityDashboardBinding;
+import com.flowercentral.flowercentralbusiness.databinding.LayoutAppToolbarBinding;
 import com.flowercentral.flowercentralbusiness.feedback.FeedbackFragment;
 import com.flowercentral.flowercentralbusiness.help.HelpFragment;
 import com.flowercentral.flowercentralbusiness.login.ui.LauncherActivity;
 import com.flowercentral.flowercentralbusiness.order.OrderFragment;
 import com.flowercentral.flowercentralbusiness.profile.ProfileFragment;
 import com.flowercentral.flowercentralbusiness.sales.SalesDashboardFragment;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 import static com.flowercentral.flowercentralbusiness.preference.UserPreference.deleteProfileInformation;
 
@@ -31,15 +30,8 @@ import static com.flowercentral.flowercentralbusiness.preference.UserPreference.
  */
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
-
-    @BindView(R.id.drawer_layout)
-    DrawerLayout mDrawer;
-
-    @BindView(R.id.nav_view_left)
-    NavigationView mNavigationViewLeft;
-
+    private ActivityDashboardBinding mBinder;
+    private LayoutAppToolbarBinding mToolbarBinder;
     private ActionBar mActionBar;
 
     /**
@@ -48,13 +40,13 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
+        mBinder = DataBindingUtil.setContentView(this, R.layout.activity_dashboard);
 
-        ButterKnife.bind(this);
-        setSupportActionBar(mToolbar);
+        mToolbarBinder = mBinder.dashboard.ltToolbar;
+        setSupportActionBar(mToolbarBinder.toolbar);
 
-        if (mToolbar != null) {
-            setSupportActionBar(mToolbar);
+        if (mToolbarBinder.toolbar != null) {
+            setSupportActionBar(mToolbarBinder.toolbar);
             mActionBar = getSupportActionBar();
             if (mActionBar != null) {
                 mActionBar.setHomeButtonEnabled(true);
@@ -64,12 +56,12 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         }
 
         ActionBarDrawerToggle mToggle = new ActionBarDrawerToggle(
-                this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, mBinder.drawerLayout, mToolbarBinder.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         //noinspection deprecation
-        mDrawer.setDrawerListener(mToggle);
+        mBinder.drawerLayout.setDrawerListener(mToggle);
         mToggle.syncState();
 
-        mNavigationViewLeft.setNavigationItemSelectedListener(this);
+        mBinder.navViewLeft.setNavigationItemSelectedListener(this);
 
         //Show the Order navigation option by default.
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -129,7 +121,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 break;
         }
 
-        mDrawer.closeDrawer(GravityCompat.START);
+        mBinder.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 }

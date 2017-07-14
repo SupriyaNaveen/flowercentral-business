@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.databinding.DataBindingUtil;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -16,26 +17,23 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.dao.MultipartUtility;
+import com.flowercentral.flowercentralbusiness.databinding.ActivityRegisterBinding;
+import com.flowercentral.flowercentralbusiness.databinding.LayoutRegisterBinding;
+import com.flowercentral.flowercentralbusiness.databinding.LayoutUploadShopDetailsBinding;
 import com.flowercentral.flowercentralbusiness.login.ui.adapter.UploadListAdapter;
 import com.flowercentral.flowercentralbusiness.login.ui.model.FileDetails;
 import com.flowercentral.flowercentralbusiness.login.ui.model.RegisterVendorDetails;
@@ -56,10 +54,6 @@ import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 import static android.os.Build.VERSION_CODES.HONEYCOMB;
 
 /**
@@ -74,68 +68,19 @@ public class RegisterActivity extends AppCompatActivity {
 
     private static int mCurrentUploadType;
     private Context mContext;
-
-    @BindView(R.id.fl_no_internet)
-    FrameLayout mFrameLayoutNoInternet;
-
-    @BindView(R.id.outer_wrapper)
-    FrameLayout mFrameLayoutRoot;
-
-    @BindView(R.id.register_wrapper)
-    LinearLayout mLinearLayoutRegister;
-
-    @BindView(R.id.btn_register)
-    Button mButtonRegister;
-
     private MaterialDialog mProgressDialog;
-
-    @BindView(R.id.textview_vendor_name)
-    TextInputEditText mEditTextShopName;
-
-    @BindView(R.id.textview_address)
-    TextInputEditText mEditTextAddress;
-
-    @BindView(R.id.textview_state)
-    TextInputEditText mEditTextState;
-
-    @BindView(R.id.textview_city)
-    TextInputEditText mEditTextCity;
-
-    @BindView(R.id.textview_zip)
-    TextInputEditText mEditTextZip;
-
-    @BindView(R.id.textview_phone1)
-    TextInputEditText mEditTextPhone1;
-
-    @BindView(R.id.textview_phone2)
-    TextInputEditText mEditTextPhone2;
-
-    @BindView(R.id.textview_tin)
-    TextInputEditText mEditTextTIN;
-
-    @BindView(R.id.textView_doc_upload)
-    TextView mTextViewDocUpload;
-
-    @BindView(R.id.text_view_locate)
-    TextView mTextViewLocate;
-
-    @BindView(R.id.list_view_doc)
-    RecyclerView mListViewDoc;
-
-    @BindView(R.id.list_view_picture)
-    RecyclerView mListViewImage;
 
     private double mLongitude;
     private double mLatitude;
 
-    @BindView(R.id.toolbar)
-    Toolbar mToolBar;
-
     private UploadListAdapter mDocUploadAdapter;
     private UploadListAdapter mImageUploadAdapter;
-
     private RegisterVendorDetails mRegisterVendorDetails = new RegisterVendorDetails();
     private UploadFilesAsync mUploadFileAsync;
+
+    private ActivityRegisterBinding mBinder;
+    private LayoutUploadShopDetailsBinding mUploadBinder;
+    private LayoutRegisterBinding mRegisterBinder;
 
     /**
      * @param savedInstanceState instance
@@ -144,9 +89,9 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_register);
-        ButterKnife.bind(this);
-
+        mBinder = DataBindingUtil.setContentView(this, R.layout.activity_register);
+        mUploadBinder = mBinder.ltUploadShopDetails;
+        mRegisterBinder = mBinder.ltRegister;
         mContext = this;
         initializeActivity(mContext);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -158,29 +103,29 @@ public class RegisterActivity extends AppCompatActivity {
     private void initializeActivity(Context _context) {
         //Check internet connectivity
         if (Util.checkInternet(_context)) {
-            mFrameLayoutNoInternet.setVisibility(View.GONE);
-            mLinearLayoutRegister.setVisibility(View.VISIBLE);
+            mBinder.flNoInternet.setVisibility(View.GONE);
+            mBinder.registerWrapper.setVisibility(View.VISIBLE);
 
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-            mListViewDoc.setLayoutManager(mLayoutManager);
+            mUploadBinder.listViewDoc.setLayoutManager(mLayoutManager);
             mLayoutManager = new LinearLayoutManager(this);
-            mListViewImage.setLayoutManager(mLayoutManager);
+            mUploadBinder.listViewPicture.setLayoutManager(mLayoutManager);
 
             mDocUploadAdapter = new UploadListAdapter(mRegisterVendorDetails.getUploadDocList());
-            mListViewDoc.setAdapter(mDocUploadAdapter);
+            mUploadBinder.listViewDoc.setAdapter(mDocUploadAdapter);
 
             mImageUploadAdapter = new UploadListAdapter(mRegisterVendorDetails.getUploadImageList());
-            mListViewImage.setAdapter(mImageUploadAdapter);
+            mUploadBinder.listViewPicture.setAdapter(mImageUploadAdapter);
 
         } else {
-            mFrameLayoutNoInternet.setVisibility(View.VISIBLE);
-            mLinearLayoutRegister.setVisibility(View.GONE);
+            mBinder.flNoInternet.setVisibility(View.VISIBLE);
+            mBinder.registerWrapper.setVisibility(View.GONE);
         }
 
-        setSupportActionBar(mToolBar);
+        setSupportActionBar(mBinder.toolbar);
 
-        if (mToolBar != null) {
-            setSupportActionBar(mToolBar);
+        if (mBinder.toolbar != null) {
+            setSupportActionBar(mBinder.toolbar);
             ActionBar mActionBar = getSupportActionBar();
             if (mActionBar != null) {
                 mActionBar.setHomeButtonEnabled(true);
@@ -206,15 +151,6 @@ public class RegisterActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick(R.id.btn_register)
-    void registerSelected() {
-
-        boolean isValidInput = isValidInput();
-        if (isValidInput) {
-            uploadData();
-        }
-    }
-
     private void showRegisterSuccessMessage(final JSONObject response) {
 
         try {
@@ -237,17 +173,17 @@ public class RegisterActivity extends AppCompatActivity {
             alertDialog.setCanceledOnTouchOutside(false);
             alertDialog.show();
         } catch (JSONException e) {
-            Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mBinder.outerWrapper, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();
         }
     }
 
     private boolean isValidInput() {
         boolean isValid = true;
-        if (mEditTextShopName.getText().toString().isEmpty()) {
-            mEditTextShopName.setError(getString(R.string.fld_error_vendor_name));
+        if (mRegisterBinder.textviewVendorName.getText().toString().isEmpty()) {
+            mRegisterBinder.textviewVendorName.setError(getString(R.string.fld_error_vendor_name));
             isValid = false;
         } else {
-            mEditTextShopName.setError(null);
+            mRegisterBinder.textviewVendorName.setError(null);
         }
         return isValid;
     }
@@ -263,22 +199,10 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.textView_doc_upload)
-    void uploadDocuments() {
-        mCurrentUploadType = TYPE_DOC_UPLOAD;
-        requestPermission();
-    }
-
     private void browseDocuments() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("file/*");
         startActivityForResult(intent, TYPE_DOC_UPLOAD);
-    }
-
-    @OnClick(R.id.text_view_picture_upload)
-    void uploadPictures() {
-        mCurrentUploadType = TYPE_PICTURES_UPLOAD;
-        requestPermission();
     }
 
     private void browsePictures() {
@@ -414,7 +338,7 @@ public class RegisterActivity extends AppCompatActivity {
      * Displays the snack bar to request the permission from user
      */
     private void snackBarRequestPermission() {
-        Snackbar snackbar = Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string
+        Snackbar snackbar = Snackbar.make(mBinder.outerWrapper, getResources().getString(R.string
                 .s_required_permission_read_storage), Snackbar.LENGTH_INDEFINITE).setAction(getResources().getString(R.string
                 .s_action_request_again), new View.OnClickListener() {
             @Override
@@ -430,7 +354,7 @@ public class RegisterActivity extends AppCompatActivity {
      * cannot be invoked. So display SnackBar to redirect to Settings to grant the permissions
      */
     private void snackBarRedirectToSettings() {
-        Snackbar snackbar = Snackbar.make(mFrameLayoutRoot, getResources()
+        Snackbar snackbar = Snackbar.make(mBinder.outerWrapper, getResources()
                 .getString(R.string.s_required_permission_settings), Snackbar.LENGTH_INDEFINITE)
                 .setAction(getResources().getString(R.string.s_action_redirect_settings), new View.OnClickListener() {
                     @Override
@@ -443,22 +367,6 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 });
         snackbar.show();
-    }
-
-    @OnClick(R.id.text_view_locate)
-    void locateAddressSelected() {
-        if (mEditTextAddress.getText().length() > 0) {
-            if (isLocated(mEditTextAddress.getText().toString())) {
-                Intent mapIntent = new Intent(this, MapActivity.class);
-                mapIntent.putExtra(getString(R.string.key_latitude), mLatitude);
-                mapIntent.putExtra(getString(R.string.key_longitude), mLongitude);
-                mapIntent.putExtra(getString(R.string.key_address), mEditTextAddress.getText());
-                mapIntent.putExtra(getString(R.string.key_is_draggable), true);
-                startActivityForResult(mapIntent, TYPE_MAP);
-            }
-        } else {
-            Toast.makeText(this, getString(R.string.fld_error_address_for_map), Toast.LENGTH_LONG).show();
-        }
     }
 
     private boolean isLocated(String strAddress) {
@@ -486,36 +394,36 @@ public class RegisterActivity extends AppCompatActivity {
     private void uploadData() {
 
         ProfileDetails profileDetails = new ProfileDetails();
-        if (mEditTextShopName.getText().length() > 0) {
-            profileDetails.setShopName(mEditTextShopName.getText().toString());
+        if (mRegisterBinder.textviewVendorName.getText().length() > 0) {
+            profileDetails.setShopName(mRegisterBinder.textviewVendorName.getText().toString());
         }
-        if (mEditTextAddress.getText().length() > 0) {
-            profileDetails.setAddress(mEditTextAddress.getText().toString());
+        if (mRegisterBinder.textviewAddress.getText().length() > 0) {
+            profileDetails.setAddress(mRegisterBinder.textviewAddress.getText().toString());
             if (mLatitude == 0 || mLongitude == 0) {
-                isLocated(mEditTextAddress.getText().toString());
+                isLocated(mRegisterBinder.textviewAddress.getText().toString());
             }
             profileDetails.setLatitude(mLatitude);
             profileDetails.setLongitude(mLongitude);
         }
 
-        if (mEditTextCity.getText().length() > 0) {
-            profileDetails.setCity(mEditTextCity.getText().toString());
+        if (mRegisterBinder.textviewCity.getText().length() > 0) {
+            profileDetails.setCity(mRegisterBinder.textviewCity.getText().toString());
         }
-        if (mEditTextState.getText().length() > 0) {
-            profileDetails.setState(mEditTextState.getText().toString());
+        if (mRegisterBinder.textviewState.getText().length() > 0) {
+            profileDetails.setState(mRegisterBinder.textviewState.getText().toString());
         }
-        if (mEditTextZip.getText().length() > 0) {
-            profileDetails.setPin(mEditTextZip.getText().toString());
+        if (mRegisterBinder.textviewZip.getText().length() > 0) {
+            profileDetails.setPin(mRegisterBinder.textviewZip.getText().toString());
         }
 
-        if (mEditTextPhone1.getText().length() > 0) {
-            profileDetails.setPhone1(mEditTextPhone1.getText().toString());
+        if (mRegisterBinder.textviewPhone1.getText().length() > 0) {
+            profileDetails.setPhone1(mRegisterBinder.textviewPhone1.getText().toString());
         }
-        if (mEditTextPhone2.getText().length() > 0) {
-            profileDetails.setPhone2(mEditTextPhone2.getText().toString());
+        if (mRegisterBinder.textviewPhone2.getText().length() > 0) {
+            profileDetails.setPhone2(mRegisterBinder.textviewPhone2.getText().toString());
         }
-        if (mEditTextTIN.getText().length() > 0) {
-            profileDetails.setTinNumber(mEditTextTIN.getText().toString());
+        if (mRegisterBinder.textviewTin.getText().length() > 0) {
+            profileDetails.setTinNumber(mRegisterBinder.textviewTin.getText().toString());
         }
 
         mRegisterVendorDetails.setProfileDetails(profileDetails);
@@ -533,6 +441,7 @@ public class RegisterActivity extends AppCompatActivity {
     private class UploadFilesAsync extends AsyncTask<RegisterVendorDetails, Void, Boolean> {
 
         JSONObject responseObject;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -583,7 +492,7 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                     String response = multipart.finish(HttpURLConnection.HTTP_CREATED);
                     responseObject = new JSONObject(response);
-                    if(responseObject.getString(getString(R.string.api_res_status)).compareTo("success") > 0 ) {
+                    if (responseObject.getString(getString(R.string.api_res_status)).compareTo("success") > 0) {
                         Logger.log(TAG, "doInBackground : ", response, AppConstant.LOG_LEVEL_INFO);
                         status = true;
                     } else {
@@ -609,8 +518,41 @@ public class RegisterActivity extends AppCompatActivity {
                 mImageUploadAdapter.notifyDataSetChanged();
                 showRegisterSuccessMessage(responseObject);
             } else {
-                Snackbar.make(mFrameLayoutRoot, getResources().getString(R.string.msg_data_upload_failed), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(mBinder.outerWrapper, getResources().getString(R.string.msg_data_upload_failed), Snackbar.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public void locateAddressSelected(View view) {
+        if (mRegisterBinder.textviewAddress.getText().length() > 0) {
+            if (isLocated(mRegisterBinder.textviewAddress.getText().toString())) {
+                Intent mapIntent = new Intent(this, MapActivity.class);
+                mapIntent.putExtra(getString(R.string.key_latitude), mLatitude);
+                mapIntent.putExtra(getString(R.string.key_longitude), mLongitude);
+                mapIntent.putExtra(getString(R.string.key_address), mRegisterBinder.textviewAddress.getText());
+                mapIntent.putExtra(getString(R.string.key_is_draggable), true);
+                startActivityForResult(mapIntent, TYPE_MAP);
+            }
+        } else {
+            Toast.makeText(RegisterActivity.this, getString(R.string.fld_error_address_for_map), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void registerSelected(View view) {
+
+        boolean isValidInput = isValidInput();
+        if (isValidInput) {
+            uploadData();
+        }
+    }
+
+    public void uploadDocuments(View view) {
+        mCurrentUploadType = TYPE_DOC_UPLOAD;
+        requestPermission();
+    }
+
+    public void uploadPictures(View view) {
+        mCurrentUploadType = TYPE_PICTURES_UPLOAD;
+        requestPermission();
     }
 }

@@ -1,186 +1,206 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginEnd="@dimen/dp10"
-    android:layout_marginLeft="@dimen/dp10"
-    android:layout_marginRight="@dimen/dp10"
-    android:layout_marginStart="@dimen/dp10"
-    android:layout_marginTop="@dimen/dp10"
-    app:cardBackgroundColor="@color/colorWhite">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <data>
+
+        <variable
+            name="order"
+            type="com.flowercentral.flowercentralbusiness.order.model.OrderItem" />
+
+        <variable
+            name="isVisible"
+            type="boolean" />
+    </data>
+
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginEnd="@dimen/dp10"
+        android:layout_marginLeft="@dimen/dp10"
+        android:layout_marginRight="@dimen/dp10"
+        android:layout_marginStart="@dimen/dp10"
+        android:layout_marginTop="@dimen/dp10"
+        app:cardBackgroundColor="@color/colorWhite">
 
         <LinearLayout
-            android:id="@+id/order_detail_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="1">
+            android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="@dimen/dp100"
-                android:layout_margin="@dimen/dp10"
-                android:layout_weight="0.3">
-
-                <ImageView
-                    android:id="@+id/order_item_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="@dimen/dp5" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
+                android:id="@+id/order_detail_container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.7"
-                android:orientation="vertical"
-                android:paddingBottom="@dimen/dp16"
-                android:paddingTop="@dimen/dp10">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.flowercentral.flowercentralbusiness.util.CircularTextView
-                        android:id="@+id/order_category"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_margin="@dimen/dp5"
-                        android:gravity="center"
-                        android:padding="@dimen/dp5" />
-
-                    <TextView
-                        android:id="@+id/order_details"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_toStartOf="@id/order_category"
-                        android:theme="@style/AppTheme.Normal" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/order_details"
-                        android:layout_toStartOf="@id/order_category"
-                        android:text="Small desc text"
-                        android:theme="@style/AppTheme.Normal" />
-                </RelativeLayout>
-
+                android:orientation="horizontal"
+                android:weightSum="1">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp100"
+                    android:layout_margin="@dimen/dp10"
+                    android:layout_weight="0.3">
 
-                    <TextView
-                        android:id="@+id/order_price_details"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimary" />
+                    <ImageView
+                        android:id="@+id/order_item_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/dp5" />
 
-                    <TextView
-                        android:id="@+id/order_paid_status"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp10"
-                        android:background="@drawable/flower_image_frame_pink"
-                        android:padding="@dimen/dp5"
-                        android:textColor="@color/colorPrimary" />
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/order_quantity"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:theme="@style/AppTheme.Normal" />
+                    android:layout_weight="0.7"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/dp16"
+                    android:paddingTop="@dimen/dp10">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.flowercentral.flowercentralbusiness.util.CircularTextView
+                            android:id="@+id/order_category"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_margin="@dimen/dp5"
+                            android:gravity="center"
+                            android:padding="@dimen/dp5"
+                            android:text="@{String.valueOf(order.category)}" />
+
+                        <TextView
+                            android:id="@+id/order_details"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_toStartOf="@id/order_category"
+                            android:text="@{order.name}"
+                            android:theme="@style/AppTheme.Normal" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/order_details"
+                            android:layout_toStartOf="@id/order_category"
+                            android:text="Small desc text"
+                            android:theme="@style/AppTheme.Normal" />
+                    </RelativeLayout>
 
 
-                <TextView
-                    android:id="@+id/order_schedule"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:theme="@style/AppTheme.Normal" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/order_delivered_at"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:theme="@style/AppTheme.Normal"
-                    android:visibility="gone"/>
+                        <TextView
+                            android:id="@+id/order_price_details"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{String.format(@string/order_format_price, order.price)}"
+                            android:textColor="@color/colorPrimary" />
 
-                <TextView
-                    android:id="@+id/order_address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:theme="@style/AppTheme.Normal" />
+                        <TextView
+                            android:id="@+id/order_paid_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp10"
+                            android:background="@drawable/flower_image_frame_pink"
+                            android:padding="@dimen/dp5"
+                            android:text="@{String.valueOf(order.paidStatus)}"
+                            android:textColor="@color/colorPrimary" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/order_quantity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/AppTheme.Normal" />
+
+                    <TextView
+                        android:id="@+id/order_schedule"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{String.format(@string/order_format_schedule, order.getFormattedDate(order.scheduleDateTime))}"
+                        android:theme="@style/AppTheme.Normal" />
+
+                    <TextView
+                        android:id="@+id/order_delivered_at"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{String.format(@string/order_format_delivered_at, order.getFormattedDate(order.deliveredSchedule))}"
+                        android:theme="@style/AppTheme.Normal"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/order_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/AppTheme.Normal" />
+
+                </LinearLayout>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp5"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <RelativeLayout
+                    android:id="@+id/order_map_details"
+                    android:layout_width="0dp"
+                    android:layout_height="?android:attr/actionBarSize"
+                    android:layout_weight="1"
+                    android:background="@android:color/holo_blue_light">
+
+                    <TextView
+                        android:id="@+id/tv_view_on_map"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:paddingStart="@dimen/dp5"
+                        android:text="@string/btn_view_on_map"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toStartOf="@id/tv_view_on_map"
+                        android:src="@drawable/ic_map_white_24dp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/order_status"
+                    android:layout_width="0dp"
+                    android:layout_height="?android:attr/actionBarSize"
+                    android:layout_marginStart="@dimen/dp2"
+                    android:layout_weight="1"
+                    android:background="@color/colorPrimary">
+
+                    <TextView
+                        android:id="@+id/tv_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:paddingStart="@dimen/dp5"
+                        android:text="@string/lbl_status_delivered"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toStartOf="@id/tv_status"
+                        android:src="@drawable/ic_status_white_24dp" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp5"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <RelativeLayout
-                android:id="@+id/order_map_details"
-                android:layout_width="0dp"
-                android:layout_height="?android:attr/actionBarSize"
-                android:layout_weight="1"
-                android:background="@android:color/holo_blue_light">
-
-                <TextView
-                    android:id="@+id/tv_view_on_map"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="@string/btn_view_on_map"
-                    android:paddingStart="@dimen/dp5"
-                    android:textStyle="bold"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toStartOf="@id/tv_view_on_map"
-                    android:src="@drawable/ic_map_white_24dp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/order_status"
-                android:layout_width="0dp"
-                android:layout_height="?android:attr/actionBarSize"
-                android:layout_weight="1"
-                android:background="@color/colorPrimary"
-                android:layout_marginStart="@dimen/dp2">
-
-                <TextView
-                    android:id="@+id/tv_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:paddingStart="@dimen/dp5"
-                    android:textStyle="bold"
-                    android:text="@string/lbl_status_delivered"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toStartOf="@id/tv_status"
-                    android:src="@drawable/ic_status_white_24dp" />
-            </RelativeLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-</android.support.v7.widget.CardView>
+    </android.support.v7.widget.CardView>
+</layout>

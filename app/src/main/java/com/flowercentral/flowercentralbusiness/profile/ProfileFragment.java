@@ -1,34 +1,23 @@
 package com.flowercentral.flowercentralbusiness.profile;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.flowercentral.flowercentralbusiness.R;
+import com.flowercentral.flowercentralbusiness.databinding.FragmentViewPagerBinding;
 import com.flowercentral.flowercentralbusiness.util.ViewPagerAdapter;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  *
  */
 public class ProfileFragment extends Fragment {
 
-    @BindView(R.id.view_pager)
-    ViewPager mViewPager;
-
-    @BindView(R.id.tabs)
-    TabLayout mTabLayout;
-
-    @BindView(R.id.view_pager_container)
-    LinearLayout linearLayoutContainer;
+   FragmentViewPagerBinding mBinder;
 
     /**
      * Default Constructor
@@ -56,10 +45,9 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_view_pager, container, false);
-        ButterKnife.bind(this, view);
+        mBinder = DataBindingUtil.inflate(inflater, R.layout.fragment_view_pager, container, false);
         setupViewPager();
-        return view;
+        return mBinder.getRoot();
     }
 
     /**
@@ -72,11 +60,11 @@ public class ProfileFragment extends Fragment {
         adapter.addFragment(ChangePassword.newInstance(), getString(R.string.title_change_password));
 
 
-        mViewPager.setAdapter(adapter);
-        mViewPager.setOffscreenPageLimit(3);
+        mBinder.viewPager.setAdapter(adapter);
+        mBinder.viewPager.setOffscreenPageLimit(3);
 
-        linearLayoutContainer.setBackgroundResource(R.drawable.ic_background);
-        mTabLayout.setTabTextColors(ContextCompat.getColorStateList(getActivity(), R.color.colorWhite));
-        mTabLayout.setupWithViewPager(mViewPager);
+        mBinder.viewPagerContainer.setBackgroundResource(R.drawable.ic_background);
+        mBinder.tabs.setTabTextColors(ContextCompat.getColorStateList(getActivity(), R.color.colorWhite));
+        mBinder.tabs.setupWithViewPager(mBinder.viewPager);
     }
 }

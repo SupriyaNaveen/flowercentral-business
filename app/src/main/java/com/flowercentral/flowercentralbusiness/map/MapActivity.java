@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.databinding.DataBindingUtil;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
@@ -18,9 +19,9 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.view.View;
-import android.widget.RelativeLayout;
 
 import com.flowercentral.flowercentralbusiness.R;
+import com.flowercentral.flowercentralbusiness.databinding.MapActivityBinding;
 import com.flowercentral.flowercentralbusiness.util.PermissionUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,9 +35,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class MapActivity extends Activity implements OnMapReadyCallback {
 
     private GoogleMap mGoogleMap;
@@ -45,15 +43,12 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
     private String mAddress;
     private boolean mIsDraggable;
 
-    @BindView(R.id.root_layout)
-    RelativeLayout mRelativeLayoutRoot;
+    private MapActivityBinding mBinder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.map_activity);
-
-        ButterKnife.bind(this);
+        mBinder = DataBindingUtil.setContentView(this, R.layout.map_activity);
 
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
@@ -182,7 +177,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
      * Displays the snack bar to request the permission from user
      */
     private void snackBarRequestPermission() {
-        Snackbar snackbar = Snackbar.make(mRelativeLayoutRoot, getResources().getString(R.string
+        Snackbar snackbar = Snackbar.make(mBinder.rootLayout, getResources().getString(R.string
                 .s_required_permission_location), Snackbar.LENGTH_INDEFINITE).setAction(getResources().getString(R.string
                 .s_action_request_again), new View.OnClickListener() {
             @Override
@@ -198,7 +193,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
      * cannot be invoked. So display SnackBar to redirect to Settings to grant the permissions
      */
     private void snackBarRedirectToSettings() {
-        Snackbar snackbar = Snackbar.make(mRelativeLayoutRoot, getResources()
+        Snackbar snackbar = Snackbar.make(mBinder.rootLayout, getResources()
                 .getString(R.string.s_required_permission_settings), Snackbar.LENGTH_INDEFINITE)
                 .setAction(getResources().getString(R.string.s_action_redirect_settings), new View.OnClickListener() {
                     @Override

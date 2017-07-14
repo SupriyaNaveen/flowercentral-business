@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        android:id="@+id/answer"
-        style="@style/TextTheme.Label.Black"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorWhite"
-        android:padding="@dimen/dp16" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <View
-        android:id="@+id/child_divider_blank"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp20"
-        android:background="@color/colorBackground" />
+        <TextView
+            android:id="@+id/answer"
+            style="@style/TextTheme.Label.Black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:padding="@dimen/dp16" />
 
-</LinearLayout>
+        <View
+            android:id="@+id/child_divider_blank"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp20"
+            android:background="@color/colorBackground" />
+
+    </LinearLayout>
+</layout>

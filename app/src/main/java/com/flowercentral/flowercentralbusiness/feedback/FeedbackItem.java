@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  *
  */
-class FeedbackItem implements android.os.Parcelable {
+public class FeedbackItem implements android.os.Parcelable {
 
     @SerializedName("rating")
     private int rating;
@@ -53,19 +53,25 @@ class FeedbackItem implements android.os.Parcelable {
         dest.writeInt(feedbackOrderId);
     }
 
-    int getRating() {
+    public int getRating() {
         return rating;
     }
 
-    String getFeedbackMessage() {
+    public String getFeedbackMessage() {
         return feedbackMessage;
     }
 
-    String getFeedbackBy() {
+    public String getFeedbackBy() {
         return feedbackBy;
     }
 
-    int getFeedbackOrderId() {
+    public int getFeedbackOrderId() {
         return feedbackOrderId;
+    }
+
+    public String getFeedbackByLetter(String feedbackBy) {
+        if (feedbackBy.length() > 0)
+            return String.valueOf(feedbackBy.charAt(0));
+        return "";
     }
 }

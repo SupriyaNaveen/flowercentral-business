@@ -1,6 +1,7 @@
 package com.flowercentral.flowercentralbusiness.feedback;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -10,10 +11,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.flowercentral.flowercentralbusiness.R;
+import com.flowercentral.flowercentralbusiness.databinding.FragmentFeedbackBinding;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
 import com.flowercentral.flowercentralbusiness.util.Util;
@@ -27,9 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 /**
  *
  */
@@ -37,18 +35,9 @@ public class FeedbackFragment extends Fragment {
 
     private static final String TAG = FeedbackFragment.class.getSimpleName();
     private Context mContext;
-
-    @BindView(R.id.feedback_recyclerview)
-    RecyclerView mFeedbackRecyclerView;
-
-    @BindView(R.id.root_layout)
-    RelativeLayout mRootLayout;
-
-    @BindView(R.id.swipe_refresh_layout)
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    private FragmentFeedbackBinding mBinder;
 
     /**
-     *
      * @return instance of fragment
      */
     public static FeedbackFragment newInstance() {
@@ -56,35 +45,32 @@ public class FeedbackFragment extends Fragment {
     }
 
     /**
-     *
-     * @param inflater inflater
-     * @param container container
+     * @param inflater           inflater
+     * @param container          container
      * @param savedInstanceState savedInstanceState
      * @return view
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_feedback, container, false);
-        ButterKnife.bind(this, view);
-
+        mBinder = DataBindingUtil.inflate(inflater, R.layout.fragment_feedback, container, false);
         mContext = getActivity();
 
         // For recycler view use a linear layout manager
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        mFeedbackRecyclerView.setLayoutManager(mLayoutManager);
+        mBinder.feedbackRecyclerview.setLayoutManager(mLayoutManager);
 
-        mSwipeRefreshLayout.setRefreshing(true);
+        mBinder.swipeRefreshLayout.setRefreshing(true);
         getFeedbackItems();
 
         //On swipe refresh the screen.
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mBinder.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refreshItems();
             }
         });
-        return view;
+        return mBinder.getRoot();
     }
 
     /**
@@ -125,31 +111,31 @@ public class FeedbackFragment extends Fragment {
                     error.setErrorMessage("Data fetch failed. Cause -> " + error.getErrorMessage());
                     switch (error.getErrorType()) {
                         case NETWORK_NOT_AVAILABLE:
-                            Snackbar.make(mRootLayout, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();
                             break;
                         case INTERNAL_SERVER_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case CONNECTION_TIMEOUT:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case APPLICATION_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case INVALID_INPUT_SUPPLIED:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case AUTHENTICATION_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case UNAUTHORIZED_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         case SERVER_ERROR:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                         default:
-                            Snackbar.make(mRootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
                             break;
                     }
                 }
@@ -167,7 +153,8 @@ public class FeedbackFragment extends Fragment {
     private List<FeedbackItem> constructFeedbackItemList(JSONArray response) {
 
         return new Gson().fromJson(String.valueOf(response),
-                new TypeToken<List<FeedbackItem>>(){}.getType());
+                new TypeToken<List<FeedbackItem>>() {
+                }.getType());
     }
 
     /**
@@ -181,13 +168,13 @@ public class FeedbackFragment extends Fragment {
         hideRefreshLayout();
 
         ViewFeedbackAdapter adapter = new ViewFeedbackAdapter(feedbackItemList);
-        mFeedbackRecyclerView.setAdapter(adapter);
+        mBinder.feedbackRecyclerview.setAdapter(adapter);
     }
 
     /**
      * Hide the swipe refresh layout.
      */
     private void hideRefreshLayout() {
-        mSwipeRefreshLayout.setRefreshing(false);
+        mBinder.swipeRefreshLayout.setRefreshing(false);
     }
 }

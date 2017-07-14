@@ -1,34 +1,24 @@
 package com.flowercentral.flowercentralbusiness.order;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.flowercentral.flowercentralbusiness.R;
+import com.flowercentral.flowercentralbusiness.databinding.FragmentViewPagerBinding;
 import com.flowercentral.flowercentralbusiness.util.ViewPagerAdapter;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  *
  */
 public class OrderFragment extends Fragment {
 
-    @BindView(R.id.view_pager)
-    ViewPager mViewPager;
-
-    @BindView(R.id.tabs)
-    TabLayout mTabLayout;
-
-    @BindView(R.id.view_pager_container)
-    LinearLayout linearLayoutContainer;
+    private FragmentViewPagerBinding mBinder;
 
     /**
      * Default Constructor
@@ -48,18 +38,17 @@ public class OrderFragment extends Fragment {
     /**
      * Set up view pager.
      *
-     * @param inflater inflater
-     * @param container container
+     * @param inflater           inflater
+     * @param container          container
      * @param savedInstanceState savedInstanceState
      * @return view
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_view_pager, container, false);
-        ButterKnife.bind(this, view);
+        mBinder = DataBindingUtil.inflate(inflater, R.layout.fragment_view_pager, container, false);
         setupViewPager();
-        return view;
+        return mBinder.getRoot();
     }
 
     /**
@@ -70,19 +59,19 @@ public class OrderFragment extends Fragment {
         adapter.addFragment(PendingOrder.newInstance(), getString(R.string.title_pending_order));
         adapter.addFragment(CompletedOrder.newInstance(), getString(R.string.title_completed_order));
 
-        mViewPager.setAdapter(adapter);
-        mViewPager.setOffscreenPageLimit(2);
+        mBinder.viewPager.setAdapter(adapter);
+        mBinder.viewPager.setOffscreenPageLimit(2);
 
-        linearLayoutContainer.setBackgroundResource(R.color.colorBackground);
-        mTabLayout.setTabTextColors(ContextCompat.getColorStateList(getActivity(), R.color.colorGrey));
+        mBinder.viewPagerContainer.setBackgroundResource(R.color.colorBackground);
+        mBinder.tabs.setTabTextColors(ContextCompat.getColorStateList(getActivity(), R.color.colorGrey));
 
-        mTabLayout.setupWithViewPager(mViewPager);
+        mBinder.tabs.setupWithViewPager(mBinder.viewPager);
 
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mBinder.viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mBinder.tabs));
+        mBinder.tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                mTabLayout.setScrollPosition(tab.getPosition(), 0f, true);
+                mBinder.tabs.setScrollPosition(tab.getPosition(), 0f, true);
             }
 
             @Override

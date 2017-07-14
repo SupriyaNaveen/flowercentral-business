@@ -2,23 +2,19 @@ package com.flowercentral.flowercentralbusiness.feedback;
 
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.TextView;
 
 import com.flowercentral.flowercentralbusiness.R;
+import com.flowercentral.flowercentralbusiness.databinding.FeedbackItemRowBinding;
+import com.flowercentral.flowercentralbusiness.databinding.LayoutNoOrderItemBinding;
 import com.flowercentral.flowercentralbusiness.order.OrderDetailsActivity;
-import com.flowercentral.flowercentralbusiness.util.CircularTextView;
 
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  *
@@ -51,14 +47,15 @@ class ViewFeedbackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         mContext = parent.getContext();
         switch (viewType) {
             case VIEW_TYPE_EMPTY_LIST:
-                View viewEmptyList = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_no_order_item, parent, false);
-                viewHolder = new EmptyListViewHolder(viewEmptyList);
+                LayoutNoOrderItemBinding noOrderItemBinding = DataBindingUtil
+                        .inflate(LayoutInflater.from(parent.getContext()), R.layout.layout_no_order_item, parent, false);
+                viewHolder = new EmptyListViewHolder(noOrderItemBinding);
                 break;
 
             case VIEW_TYPE_NON_EMPTY_LIST:
-                View itemView = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.feedback_item_row, parent, false);
-                viewHolder = new ViewHolder(itemView);
+                FeedbackItemRowBinding rowBinding = DataBindingUtil
+                        .inflate(LayoutInflater.from(parent.getContext()), R.layout.feedback_item_row, parent, false);
+                viewHolder = new ViewHolder(rowBinding);
                 break;
         }
         return viewHolder;
@@ -74,14 +71,11 @@ class ViewFeedbackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
 
         if (holder instanceof ViewHolder) {
-            ViewHolder viewHolder = (ViewHolder) holder;
+            FeedbackItemRowBinding feedbackItemRowBinder = ((ViewHolder) holder).feedbackItemRowBinder;
             final FeedbackItem feedbackItem = mFeedbackItemList.get(position);
-            viewHolder.ratingBarFeedback.setRating(feedbackItem.getRating());
+            feedbackItemRowBinder.setFeedback(feedbackItem);
 
-            viewHolder.textViewFeedbackMessage.setText(feedbackItem.getFeedbackMessage());
-            viewHolder.textViewFeedbackBy.setText(feedbackItem.getFeedbackBy());
-
-            viewHolder.textViewFeedbackOrderDetails.setOnClickListener(new View.OnClickListener() {
+            feedbackItemRowBinder.feedbackOrderDetails.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent orderDetailIntent = new Intent(mContext, OrderDetailsActivity.class);
@@ -89,13 +83,10 @@ class ViewFeedbackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     mContext.startActivity(orderDetailIntent);
                 }
             });
-
-            if (feedbackItem.getFeedbackBy().length() > 0)
-                viewHolder.circularTextViewFeedback.setText(String.valueOf(feedbackItem.getFeedbackBy().charAt(0)));
         } else if (holder instanceof EmptyListViewHolder) {
-            EmptyListViewHolder emptyListViewHolder = (EmptyListViewHolder) holder;
-            emptyListViewHolder.txtNoItemFound.setText(mContext.getString(R.string.empty_feedback_list));
-            emptyListViewHolder.txtNoItemFound.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite));
+            LayoutNoOrderItemBinding emptyViewBinder = ((EmptyListViewHolder) holder).emptyViewBinder;
+            emptyViewBinder.txtMsgNoItemFound.setText(mContext.getString(R.string.empty_feedback_list));
+            emptyViewBinder.txtMsgNoItemFound.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite));
         }
     }
 
@@ -133,41 +124,26 @@ class ViewFeedbackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
      */
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.feedback_rating)
-        RatingBar ratingBarFeedback;
+        FeedbackItemRowBinding feedbackItemRowBinder;
 
-        @BindView(R.id.text_view_feedback_message)
-        TextView textViewFeedbackMessage;
+        public ViewHolder(FeedbackItemRowBinding binder) {
+            super(binder.getRoot());
 
-        @BindView(R.id.feedback_message_by)
-        TextView textViewFeedbackBy;
-
-        @BindView(R.id.feedback_order_details)
-        TextView textViewFeedbackOrderDetails;
-
-        @BindView(R.id.feedback_profile_pic)
-        CircularTextView circularTextViewFeedback;
-
-        public ViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-
-            circularTextViewFeedback.setStrokeWidth(1);
-            circularTextViewFeedback.setStrokeColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
-            circularTextViewFeedback.setSolidColor(ContextCompat.getColor(mContext, R.color.colorWhite));
-            circularTextViewFeedback.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+            feedbackItemRowBinder = binder;
+            binder.feedbackProfilePic.setStrokeWidth(1);
+            binder.feedbackProfilePic.setStrokeColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+            binder.feedbackProfilePic.setSolidColor(ContextCompat.getColor(mContext, R.color.colorWhite));
+            binder.feedbackProfilePic.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
         }
     }
 
     private class EmptyListViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView imgNoItemFound;
-        TextView txtNoItemFound;
+        LayoutNoOrderItemBinding emptyViewBinder;
 
-        EmptyListViewHolder(View itemView) {
-            super(itemView);
-            imgNoItemFound = (ImageView) itemView.findViewById(R.id.img_no_item_found);
-            txtNoItemFound = (TextView) itemView.findViewById(R.id.txt_msg_no_item_found);
+        EmptyListViewHolder(LayoutNoOrderItemBinding binder) {
+            super(binder.getRoot());
+            emptyViewBinder = binder;
         }
     }
 }

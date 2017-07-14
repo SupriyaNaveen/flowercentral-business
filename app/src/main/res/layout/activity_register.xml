@@ -1,86 +1,98 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/outer_wrapper"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/ic_background"
-    tools:context="com.flowercentral.flowercentralbusiness.login.ui.LauncherActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- The primary full-screen view. This can be replaced with whatever view
-    is needed to present your content, e.g. VideoView, SurfaceView,
-    TextureView, etc. -->
-
-    <LinearLayout
-        android:id="@+id/register_wrapper"
+    <FrameLayout
+        android:id="@+id/outer_wrapper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        android:orientation="vertical"
-        android:visibility="visible">
+        android:background="@drawable/ic_background"
+        tools:context="com.flowercentral.flowercentralbusiness.login.ui.LauncherActivity">
 
-        <android.support.design.widget.AppBarLayout
+        <!-- The primary full-screen view. This can be replaced with whatever view
+        is needed to present your content, e.g. VideoView, SurfaceView,
+        TextureView, etc. -->
+
+        <LinearLayout
+            android:id="@+id/register_wrapper"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            app:elevation="0dp">
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            android:orientation="vertical"
+            android:visibility="visible">
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize">
-
-                <TextView
-                    style="@style/AppTheme.Title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/lbl_register" />
-
-            </android.support.v7.widget.Toolbar>
-
-        </android.support.design.widget.AppBarLayout>
-
-        <android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <LinearLayout
+            <android.support.design.widget.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:background="@android:color/transparent"
+                app:elevation="0dp">
 
-                <include layout="@layout/layout_register_header" />
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize">
 
-                <include layout="@layout/layout_register" />
+                    <TextView
+                        style="@style/AppTheme.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/lbl_register" />
 
-                <include layout="@layout/layout_upload_shop_details" />
+                </android.support.v7.widget.Toolbar>
 
-                <Button
-                    android:id="@+id/btn_register"
+            </android.support.design.widget.AppBarLayout>
+
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp16"
-                    android:background="@drawable/button_transparent"
-                    android:text="@string/lbl_register" />
+                    android:orientation="vertical">
 
-            </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
+                    <include
+                        android:id="@+id/lt_register_header"
+                        layout="@layout/layout_register_header" />
 
-    </LinearLayout>
+                    <include
+                        android:id="@+id/lt_register"
+                        layout="@layout/layout_register" />
 
-    <!-- This FrameLayout insets its children based on system windows using
-    android:fitsSystemWindows. -->
-    <FrameLayout
-        android:id="@+id/fl_no_internet"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        android:visibility="gone">
+                    <include
+                        android:id="@+id/lt_upload_shop_details"
+                        layout="@layout/layout_upload_shop_details" />
 
-        <include layout="@layout/layout_no_internet" />
+                    <Button
+                        android:id="@+id/btn_register"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/dp16"
+                        android:background="@drawable/button_transparent"
+                        android:text="@string/lbl_register"
+                        android:onClick="registerSelected"/>
+
+                </LinearLayout>
+            </android.support.v4.widget.NestedScrollView>
+
+        </LinearLayout>
+
+        <!-- This FrameLayout insets its children based on system windows using
+        android:fitsSystemWindows. -->
+        <FrameLayout
+            android:id="@+id/fl_no_internet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            android:visibility="gone">
+
+            <include
+                android:id="@+id/lt_no_internet"
+                layout="@layout/layout_no_internet" />
+
+        </FrameLayout>
 
     </FrameLayout>
-
-</FrameLayout>
+</layout>

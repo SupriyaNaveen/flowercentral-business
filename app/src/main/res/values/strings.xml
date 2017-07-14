@@ -136,4 +136,5 @@
     <string name="title_help">Help?</string>
     <string name="api_key_start_date">start_date</string>
     <string name="api_key_end_date">end_date</string>
+    <string name="sales_stat_title">Order Stats</string>
 </resources>

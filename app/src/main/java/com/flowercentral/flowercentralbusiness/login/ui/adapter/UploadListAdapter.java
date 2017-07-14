@@ -1,19 +1,16 @@
 package com.flowercentral.flowercentralbusiness.login.ui.adapter;
 
+import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.flowercentral.flowercentralbusiness.R;
+import com.flowercentral.flowercentralbusiness.databinding.UploadDataRowBinding;
 import com.flowercentral.flowercentralbusiness.login.ui.model.FileDetails;
 
 import java.util.ArrayList;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  *
@@ -22,7 +19,6 @@ public class UploadListAdapter extends RecyclerView.Adapter<UploadListAdapter.Vi
     private final ArrayList<FileDetails> mUploadDataList;
 
     /**
-     *
      * @param values values
      */
     public UploadListAdapter(ArrayList<FileDetails> values) {
@@ -30,27 +26,25 @@ public class UploadListAdapter extends RecyclerView.Adapter<UploadListAdapter.Vi
     }
 
     /**
-     *
-     * @param parent parent
+     * @param parent   parent
      * @param viewType viewType
      * @return view
      */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.upload_data_row, parent, false);
+        UploadDataRowBinding itemView = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext())
+                , R.layout.upload_data_row, parent, false);
         return new ViewHolder(itemView);
     }
 
     /**
-     *
-     * @param holder holder
+     * @param holder   holder
      * @param position position
      */
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.textViewData.setText(mUploadDataList.get(position).getFileName());
-        holder.imageViewClose.setOnClickListener(new View.OnClickListener() {
+        holder.rowBinder.textViewData.setText(mUploadDataList.get(position).getFileName());
+        holder.rowBinder.imageViewClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mUploadDataList.remove(holder.getAdapterPosition());
@@ -60,7 +54,6 @@ public class UploadListAdapter extends RecyclerView.Adapter<UploadListAdapter.Vi
     }
 
     /**
-     *
      * @return size
      */
     @Override
@@ -71,17 +64,13 @@ public class UploadListAdapter extends RecyclerView.Adapter<UploadListAdapter.Vi
     /**
      *
      */
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.text_view_data)
-        TextView textViewData;
+        private UploadDataRowBinding rowBinder;
 
-        @BindView(R.id.image_view_close)
-        ImageView imageViewClose;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        ViewHolder(UploadDataRowBinding binder) {
+            super(binder.getRoot());
+            rowBinder = binder;
         }
     }
 }

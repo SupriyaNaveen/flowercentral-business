@@ -3,6 +3,7 @@ package com.flowercentral.flowercentralbusiness.order.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.flowercentral.flowercentralbusiness.util.Util;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -42,6 +43,12 @@ public class OrderDetailedItem implements Parcelable {
 
     @SerializedName("products")
     private List<ProductItem> productItemList = new ArrayList<>();
+
+    private String formatDate(String dateString) {
+        String srcFormat = "yyyy-MM-dd HH:mm";
+        String destFormat = "dd EEE yyyy, hh:mm a";
+        return Util.formatDate(dateString, srcFormat, destFormat);
+    }
 
     /**
      * Constructor to use when re-constructing object
@@ -165,5 +172,11 @@ public class OrderDetailedItem implements Parcelable {
 
     public boolean isScheduledDelivery() {
         return isScheduledDelivery;
+    }
+
+    public String getFormattedDate(String dateString) {
+        String srcFormat = "yyyy-MM-dd HH:mm";
+        String destFormat = "dd EEE yyyy, hh:mm a";
+        return Util.formatDate(dateString, srcFormat, destFormat);
     }
 }

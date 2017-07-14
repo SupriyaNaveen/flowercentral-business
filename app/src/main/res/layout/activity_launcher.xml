@@ -1,69 +1,80 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/outer_wrapper"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/ic_background"
-    android:fitsSystemWindows="true"
-    tools:context="com.flowercentral.flowercentralbusiness.login.ui.LauncherActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- The primary full-screen view. This can be replaced with whatever view
-    is needed to present your content, e.g. VideoView, SurfaceView,
-    TextureView, etc. -->
-
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        app:elevation="0dp">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
-
-            <TextView
-                style="@style/AppTheme.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/lbl_login" />
-
-        </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
-
-    <LinearLayout
-        android:id="@+id/login_wrapper"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:fitsSystemWindows="true"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="@dimen/dp32"
-        android:visibility="visible">
-
-        <include layout="@layout/layout_register_header" />
-
-        <include layout="@layout/layout_login" />
-
-        <include layout="@layout/layout_app_registration" />
-
-    </LinearLayout>
-
-    <!-- This FrameLayout insets its children based on system windows using
-    android:fitsSystemWindows. -->
     <FrameLayout
-        android:id="@+id/fl_no_internet"
+        android:id="@+id/root_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/ic_background"
         android:fitsSystemWindows="true"
-        android:visibility="gone">
+        tools:context="com.flowercentral.flowercentralbusiness.login.ui.LauncherActivity">
 
-        <include layout="@layout/layout_no_internet" />
+        <!-- The primary full-screen view. This can be replaced with whatever view
+        is needed to present your content, e.g. VideoView, SurfaceView,
+        TextureView, etc. -->
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:elevation="0dp">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize">
+
+                <TextView
+                    style="@style/AppTheme.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/lbl_login" />
+
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <LinearLayout
+            android:id="@+id/login_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:fitsSystemWindows="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/dp32"
+            android:visibility="visible">
+
+            <include
+                android:id="@+id/lt_register_header"
+                layout="@layout/layout_register_header" />
+
+            <include
+                android:id="@+id/lt_login"
+                layout="@layout/layout_login" />
+
+            <include
+                android:id="@+id/lt_app_register"
+                layout="@layout/layout_app_registration" />
+
+        </LinearLayout>
+
+        <!-- This FrameLayout insets its children based on system windows using
+        android:fitsSystemWindows. -->
+        <FrameLayout
+            android:id="@+id/fl_no_internet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            android:visibility="gone">
+
+            <include
+                android:id="@+id/lt_no_internet"
+                layout="@layout/layout_no_internet" />
+
+        </FrameLayout>
 
     </FrameLayout>
-
-</FrameLayout>
+</layout>
