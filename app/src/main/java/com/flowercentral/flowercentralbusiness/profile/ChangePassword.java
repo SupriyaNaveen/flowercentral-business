@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.andexert.library.RippleView;
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.databinding.FragmentChangePasswordBinding;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
@@ -23,7 +24,7 @@ import java.util.Map;
 /**
  *
  */
-public class ChangePassword extends Fragment implements View.OnClickListener {
+public class ChangePassword extends Fragment implements RippleView.OnRippleCompleteListener {
 
     private static final String TAG = ChangePassword.class.getSimpleName();
     private Context mContext;
@@ -45,12 +46,12 @@ public class ChangePassword extends Fragment implements View.OnClickListener {
         mBinder = DataBindingUtil.inflate(inflater, R.layout.fragment_change_password, container, false);
 
         mContext = getActivity();
-        mBinder.btnResetPassword.setOnClickListener(this);
+        mBinder.btnResetPassword.setOnRippleCompleteListener(this);
         return mBinder.getRoot();
     }
 
     @Override
-    public void onClick(View view) {
+    public void onComplete(RippleView view) {
         if (view.getId() == R.id.btn_reset_password) {
             if (mBinder.editTextOldPassword.getText().length() > 0) {
                 if (mBinder.editTextNewPassword.getText().length() > 0) {

@@ -24,17 +24,24 @@
             android:text="@string/msg_internet_unavailable"
             android:textColor="@color/colorWhite" />
 
-        <Button
+        <com.andexert.library.RippleView
             android:id="@+id/btn_try_again"
+            rv_centered="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/button_transparent"
-            android:text="@string/btn_try_again"
-            android:textAllCaps="true"
-            android:textColor="@color/colorWhite"
-            android:onClick="tryAgainToRegister" />
+            android:background="@drawable/rounded_corner_nofill">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:text="@string/btn_try_again"
+                android:textAllCaps="true"
+                android:textColor="@color/colorWhite" />
+
+        </com.andexert.library.RippleView>
 
     </RelativeLayout>
 </layout>

@@ -6,15 +6,21 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
+        <com.andexert.library.RippleView
             android:id="@+id/txt_link_flower_central_account"
-            style="@style/AppTheme.Label"
+            rv_centered="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/dp16"
-            android:onClick="registerAccountSelected"
-            android:text="@string/lbl_need_flower_central_account" />
+            android:layout_marginTop="@dimen/dp16">
+
+            <TextView
+                style="@style/AppTheme.Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_need_flower_central_account" />
+
+        </com.andexert.library.RippleView>
 
     </LinearLayout>
 </layout>

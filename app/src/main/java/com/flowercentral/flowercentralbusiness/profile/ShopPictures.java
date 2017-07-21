@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.andexert.library.RippleView;
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.dao.MultipartUtility;
 import com.flowercentral.flowercentralbusiness.databinding.FragmentShopPicturesBinding;
@@ -54,7 +55,7 @@ import static android.os.Build.VERSION_CODES.HONEYCOMB;
 /**
  *
  */
-public class ShopPictures extends Fragment implements View.OnClickListener {
+public class ShopPictures extends Fragment implements RippleView.OnRippleCompleteListener {
 
     private static final String TAG = ShopPictures.class.getSimpleName();
 
@@ -95,7 +96,7 @@ public class ShopPictures extends Fragment implements View.OnClickListener {
         mBinder.swipeRefreshLayout.setRefreshing(true);
         getShopPictures();
 
-        mBinder.imageViewDelete.setOnClickListener(this);
+        mBinder.imageViewDelete.setOnRippleCompleteListener(this);
 
         //On swipe refresh the screen.
         mBinder.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -245,7 +246,7 @@ public class ShopPictures extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View view) {
+    public void onComplete(RippleView view) {
         if (view.getId() == R.id.image_view_delete)
             removePicture(shopPicturesAdapter.getSelectedPictureIdList().toString());
     }

@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.andexert.library.RippleView;
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.databinding.FragmentUpdateProfileBinding;
 import com.flowercentral.flowercentralbusiness.databinding.LayoutRegisterBinding;
@@ -35,7 +36,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class UpdateProfile extends Fragment implements View.OnClickListener {
+public class UpdateProfile extends Fragment implements RippleView.OnRippleCompleteListener {
 
     private static final String TAG = UpdateProfile.class.getSimpleName();
     private static final int TYPE_MAP = 100;
@@ -61,9 +62,9 @@ public class UpdateProfile extends Fragment implements View.OnClickListener {
         ltRegBinding = mBinder.register;
         initializeActivity(getActivity());
 
-        mBinder.register.textViewLocate.setOnClickListener(this);
-        mBinder.btnCancel.setOnClickListener(this);
-        mBinder.btnUpdate.setOnClickListener(this);
+        mBinder.register.textViewLocate.setOnRippleCompleteListener(this);
+        mBinder.btnCancel.setOnRippleCompleteListener(this);
+        mBinder.btnUpdate.setOnRippleCompleteListener(this);
 
         return mBinder.getRoot();
     }
@@ -267,7 +268,7 @@ public class UpdateProfile extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
+    public void onComplete(RippleView v) {
         switch (v.getId()) {
             case R.id.text_view_locate:
                 locateAddressSelected();

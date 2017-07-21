@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.andexert.library.RippleView;
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.databinding.ActivityOrderDetailsBinding;
 import com.flowercentral.flowercentralbusiness.map.MapActivity;
@@ -64,6 +65,13 @@ public class OrderDetailsActivity extends AppCompatActivity {
         mBinder.orderDetailRecyclerView.setLayoutManager(mLayoutManager);
 
         getOrderDetails(getIntent().getIntExtra(getString(R.string.key_order_id), 0));
+
+        mBinder.ltOrderDetails.viewOnMap.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                mapViewSelected(rippleView);
+            }
+        });
     }
 
     private void getOrderDetails(final int orderId) {
@@ -161,7 +169,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void mapViewSelected(View view) {
+    public void mapViewSelected(RippleView view) {
 
         if (null != mOrderItem) {
             try {

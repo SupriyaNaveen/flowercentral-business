@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.andexert.library.RippleView;
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.databinding.LayoutNoOrderItemBinding;
 import com.flowercentral.flowercentralbusiness.databinding.OrderItemRowBinding;
@@ -88,9 +89,9 @@ public class PendingOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     load(orderItem.getImageUrl()).
                     into(itemRowBinder.orderItemImage);
 
-            itemRowBinder.orderMapDetails.setOnClickListener(new View.OnClickListener() {
+            itemRowBinder.orderMapDetails.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
                 @Override
-                public void onClick(View v) {
+                public void onComplete(RippleView v) {
                     try {
                         Intent mapIntent = new Intent(mContext, MapActivity.class);
                         mapIntent.putExtra(mContext.getString(R.string.key_latitude), Double.parseDouble(orderItem.getLatitude()));
@@ -113,9 +114,9 @@ public class PendingOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
             });
 
-            itemRowBinder.orderStatus.setOnClickListener(new View.OnClickListener() {
+            itemRowBinder.orderStatus.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
                 @Override
-                public void onClick(View v) {
+                public void onComplete(RippleView v) {
                     processOrderDeliveredRequestByVendor(orderItem.getId());
                 }
             });

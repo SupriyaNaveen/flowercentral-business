@@ -29,6 +29,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.andexert.library.RippleView;
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.dao.MultipartUtility;
 import com.flowercentral.flowercentralbusiness.databinding.ActivityRegisterBinding;
@@ -59,7 +60,7 @@ import static android.os.Build.VERSION_CODES.HONEYCOMB;
 /**
  *
  */
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements RippleView.OnRippleCompleteListener {
 
     private static final int TYPE_MAP = 3;
     private String TAG = RegisterActivity.class.getSimpleName();
@@ -116,6 +117,12 @@ public class RegisterActivity extends AppCompatActivity {
 
             mImageUploadAdapter = new UploadListAdapter(mRegisterVendorDetails.getUploadImageList());
             mUploadBinder.listViewPicture.setAdapter(mImageUploadAdapter);
+
+            mUploadBinder.textViewDocUpload.setOnRippleCompleteListener(this);
+            mUploadBinder.textViewPictureUpload.setOnRippleCompleteListener(this);
+            mBinder.btnRegister.setOnRippleCompleteListener(this);
+            mRegisterBinder.textViewLocate.setOnRippleCompleteListener(this);
+            mBinder.ltNoInternet.btnTryAgain.setOnRippleCompleteListener(this);
 
         } else {
             mBinder.flNoInternet.setVisibility(View.VISIBLE);
@@ -523,7 +530,32 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    public void locateAddressSelected(View view) {
+    @Override
+    public void onComplete(RippleView rippleView) {
+        switch (rippleView.getId()) {
+            case R.id.text_view_locate:
+                locateAddressSelected();
+                break;
+
+            case R.id.textView_doc_upload:
+                uploadDocuments();
+                break;
+
+            case R.id.text_view_picture_upload:
+                uploadPictures();
+                break;
+
+            case R.id.btn_register:
+                registerSelected();
+                break;
+
+            case R.id.btn_try_again:
+                initializeActivity(mContext);
+                break;
+        }
+    }
+
+    public void locateAddressSelected() {
         if (mRegisterBinder.textviewAddress.getText().length() > 0) {
             if (isLocated(mRegisterBinder.textviewAddress.getText().toString())) {
                 Intent mapIntent = new Intent(this, MapActivity.class);
@@ -538,7 +570,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    public void registerSelected(View view) {
+    public void registerSelected() {
 
         boolean isValidInput = isValidInput();
         if (isValidInput) {
@@ -546,12 +578,12 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    public void uploadDocuments(View view) {
+    public void uploadDocuments() {
         mCurrentUploadType = TYPE_DOC_UPLOAD;
         requestPermission();
     }
 
-    public void uploadPictures(View view) {
+    public void uploadPictures() {
         mCurrentUploadType = TYPE_PICTURES_UPLOAD;
         requestPermission();
     }

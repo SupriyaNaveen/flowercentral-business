@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -115,14 +116,20 @@
                 android:gravity="center_vertical"
                 android:text="@{orderdetails.address}" />
 
-            <ImageView
+            <com.andexert.library.RippleView
                 android:id="@+id/view_on_map"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="0.2"
-                android:onClick="mapViewSelected"
-                android:src="@drawable/ic_map_black" />
+                app:rv_centered="true"
+                app:rv_zoom="true">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_map_black" />
+            </com.andexert.library.RippleView>
         </LinearLayout>
 
         <LinearLayout
@@ -222,8 +229,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:textColor="@color/colorPrimary"
-                android:text="@{String.valueOf(orderdetails.deliveryStatus)}"/>
+                android:text="@{String.valueOf(orderdetails.deliveryStatus)}"
+                android:textColor="@color/colorPrimary" />
 
         </LinearLayout>
 
@@ -258,7 +265,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="@{orderdetails.getFormattedDate(orderdetails.deliveredDateTime)}"/>
+                android:text="@{orderdetails.getFormattedDate(orderdetails.deliveredDateTime)}" />
 
         </LinearLayout>
 

@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.andexert.library.RippleView;
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.dashboard.DashboardActivity;
 import com.flowercentral.flowercentralbusiness.databinding.ActivityLauncherBinding;
@@ -104,6 +105,34 @@ public class LauncherActivity extends AppCompatActivity {
                 mActionBar.setDisplayShowHomeEnabled(true);
             }
         }
+
+        mLtLoginBinder.btnLogin.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                loginSelected(rippleView);
+            }
+        });
+
+        mLtLoginBinder.textviewForgotPassword.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                forgotPasswordSelected(rippleView);
+            }
+        });
+
+        mBinder.ltAppRegister.txtLinkFlowerCentralAccount.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                registerAccountSelected(rippleView);
+            }
+        });
+
+        mBinder.ltNoInternet.btnTryAgain.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                tryAgainToRegister(rippleView);
+            }
+        });
     }
 
     @Override
@@ -304,7 +333,7 @@ public class LauncherActivity extends AppCompatActivity {
     /**
      * Validate the input and make web api call.
      */
-    public void loginSelected(View view) {
+    public void loginSelected(RippleView view) {
         if (UserPreference.getApiToken(LauncherActivity.this) != null) {
             UserPreference.deleteProfileInformation(LauncherActivity.this);
         }
@@ -315,11 +344,11 @@ public class LauncherActivity extends AppCompatActivity {
         }
     }
 
-    public void forgotPasswordSelected(View view) {
+    public void forgotPasswordSelected(RippleView view) {
 
     }
 
-    public void registerAccountSelected(View view) {
+    public void registerAccountSelected(RippleView view) {
         startActivity(new Intent(LauncherActivity.this, RegisterActivity.class));
     }
 

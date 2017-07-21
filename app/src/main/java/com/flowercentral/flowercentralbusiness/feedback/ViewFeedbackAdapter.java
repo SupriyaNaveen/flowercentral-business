@@ -6,9 +6,9 @@ import android.databinding.DataBindingUtil;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
+import com.andexert.library.RippleView;
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.databinding.FeedbackItemRowBinding;
 import com.flowercentral.flowercentralbusiness.databinding.LayoutNoOrderItemBinding;
@@ -75,9 +75,9 @@ class ViewFeedbackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             final FeedbackItem feedbackItem = mFeedbackItemList.get(position);
             feedbackItemRowBinder.setFeedback(feedbackItem);
 
-            feedbackItemRowBinder.feedbackOrderDetails.setOnClickListener(new View.OnClickListener() {
+            feedbackItemRowBinder.feedbackOrderDetails.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
                 @Override
-                public void onClick(View v) {
+                public void onComplete(RippleView v) {
                     Intent orderDetailIntent = new Intent(mContext, OrderDetailsActivity.class);
                     orderDetailIntent.putExtra(mContext.getString(R.string.key_order_id), feedbackItem.getFeedbackOrderId());
                     mContext.startActivity(orderDetailIntent);

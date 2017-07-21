@@ -131,16 +131,21 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <TextView
+            <com.andexert.library.RippleView
                 android:id="@+id/text_view_locate"
+                rv_centered="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
-                android:layout_marginTop="@dimen/dp16"
-                android:drawableEnd="@drawable/ic_location_red"
-                android:drawablePadding="@dimen/dp5"
-                android:text="@string/link_view_on_map"
-                android:onClick="locateAddressSelected"/>
+                android:layout_marginTop="@dimen/dp16">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_location_red"
+                    android:drawablePadding="@dimen/dp5"
+                    android:text="@string/link_view_on_map" />
+            </com.andexert.library.RippleView>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
