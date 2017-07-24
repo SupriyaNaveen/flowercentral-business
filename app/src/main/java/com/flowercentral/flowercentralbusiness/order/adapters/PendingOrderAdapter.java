@@ -18,6 +18,8 @@ import com.flowercentral.flowercentralbusiness.databinding.OrderItemRowBinding;
 import com.flowercentral.flowercentralbusiness.map.MapActivity;
 import com.flowercentral.flowercentralbusiness.order.OrderDetailsActivity;
 import com.flowercentral.flowercentralbusiness.order.PendingOrder;
+import com.flowercentral.flowercentralbusiness.order.model.FlowerDetails;
+import com.flowercentral.flowercentralbusiness.order.model.Order;
 import com.flowercentral.flowercentralbusiness.order.model.OrderItem;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
@@ -27,7 +29,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -37,15 +39,15 @@ public class PendingOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private static final String TAG = PendingOrderAdapter.class.getSimpleName();
     private final PendingOrder.RefreshViews mRefreshViews;
-    private List<OrderItem> mOrderItemList;
+    private Order mOrder;
     private Context mContext;
     private final RelativeLayout mRootLayout;
 
     private static final int VIEW_TYPE_EMPTY_LIST = 0;
     private static final int VIEW_TYPE_NON_EMPTY_LIST = 1;
 
-    public PendingOrderAdapter(List<OrderItem> list, RelativeLayout rootLayout, PendingOrder.RefreshViews refreshViews) {
-        this.mOrderItemList = list;
+    public PendingOrderAdapter(Order order, RelativeLayout rootLayout, PendingOrder.RefreshViews refreshViews) {
+        this.mOrder = order;
         mRootLayout = rootLayout;
         mRefreshViews = refreshViews;
     }
@@ -78,16 +80,27 @@ public class PendingOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         if (holder instanceof ViewHolder) {
             OrderItemRowBinding itemRowBinder = ((ViewHolder) holder).itemRowBinder;
-            final OrderItem orderItem = mOrderItemList.get(position);
+            final OrderItem orderItem = mOrder.getOrderItemArrayList().get(position);
             itemRowBinder.setOrder(orderItem);
             //TODO check in xml
+            ArrayList<FlowerDetails> flowerDetails = orderItem.getFlowerDetails();
+            if (flowerDetails != null && !flowerDetails.isEmpty()) {
+                itemRowBinder.orderDetails.setText(flowerDetails.get(0).getFlowerName());
+                if (flowerDetails.size() > 1) {
+                    itemRowBinder.orderDetails.setText(itemRowBinder.orderDetails.getText() + ", " +
+                            String.valueOf(flowerDetails.size() - 1) +
+                            " more");
+                }
+            }
             itemRowBinder.orderQuantity.setText(mContext.getString(R.string.order_format_quantity, String.valueOf(orderItem.getQuantity())));
             itemRowBinder.orderAddress.setText(mContext.getString(R.string.order_format_address, orderItem.getAddress()));
 
-            Picasso.
-                    with(mContext).
-                    load(orderItem.getImageUrl()).
-                    into(itemRowBinder.orderItemImage);
+            if (orderItem.getImageUrl() != null && !orderItem.getImageUrl().isEmpty()) {
+                Picasso.
+                        with(mContext).
+                        load(orderItem.getImageUrl()).
+                        into(itemRowBinder.orderItemImage);
+            }
 
             itemRowBinder.orderMapDetails.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
                 @Override
@@ -199,8 +212,9 @@ public class PendingOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public int getItemCount() {
         int size;
-        if (mOrderItemList != null && mOrderItemList.size() > 0) {
-            size = mOrderItemList.size();
+
+        if (mOrder != null && mOrder.getOrderItemArrayList() != null && mOrder.getOrderItemArrayList().size() > 0) {
+            size = mOrder.getOrderItemArrayList().size();
         } else {
             //To show empty view
             size = 1;
@@ -211,7 +225,7 @@ public class PendingOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public int getItemViewType(int position) {
         int viewType;
-        if (mOrderItemList != null && mOrderItemList.size() > 0) {
+        if (mOrder != null && mOrder.getOrderItemArrayList() != null && mOrder.getOrderItemArrayList().size() > 0) {
             viewType = VIEW_TYPE_NON_EMPTY_LIST;
         } else {
             viewType = VIEW_TYPE_EMPTY_LIST;

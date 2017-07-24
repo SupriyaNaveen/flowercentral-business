@@ -5,16 +5,18 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 /**
  *
  */
 public class ProductItem implements Parcelable {
 
-    @SerializedName("quantity")
+    @SerializedName("product_qty")
     private int quantity;
 
-    @SerializedName("flower")
-    private String name;
+    @SerializedName("flower_details")
+    private ArrayList<FlowerDetails> flowerDetails = new ArrayList<>();
 
     @SerializedName("category")
     private OrderItem.CATEGORY category; //S,M,L,XL, XL+, All
@@ -22,29 +24,29 @@ public class ProductItem implements Parcelable {
     @SerializedName("price")
     private double price;
 
-    @SerializedName("image")
+    @SerializedName("img_url")
     private String imageUrl;
 
     @SerializedName("message")
     private String message;
 
-    @SerializedName("tag")
-    private String[] tag;
+//    @SerializedName("tag")
+//    private String[] tag;
+//
+//    @SerializedName("images")
+//    private String[] imagesUrlList;
+//
+//    @SerializedName("id")
+//    private String id;
 
-    @SerializedName("images")
-    private String[] imagesUrlList;
-
-    @SerializedName("id")
-    private String id;
-
-    @SerializedName("liked")
-    private String liked;
-
-    @SerializedName("status")
-    private String status;
-
-    @SerializedName("description")
-    private String description;
+//    @SerializedName("liked")
+//    private String liked;
+//
+//    @SerializedName("status")
+//    private String status;
+//
+//    @SerializedName("description")
+//    private String description;
 
     /**
      * Constructor to use when re-constructing object
@@ -68,17 +70,11 @@ public class ProductItem implements Parcelable {
         // field in the order that it was
         // written to the parcel
         quantity = in.readInt();
-        name = in.readString();
+        in.readList(flowerDetails, OrderItem.class.getClassLoader());
         category = OrderItem.CATEGORY.valueOf(in.readString());
         price = in.readDouble();
         imageUrl = in.readString();
         message = in.readString();
-        tag = (String[]) in.readArray(String.class.getClassLoader());
-        imagesUrlList = (String[]) in.readArray(String.class.getClassLoader());
-        id = in.readString();
-        liked = in.readString();
-        status = in.readString();
-        description = in.readString();
     }
 
     @Override
@@ -87,17 +83,11 @@ public class ProductItem implements Parcelable {
         // parcel. When we read from parcel, they
         // will come back in the same order
         dest.writeInt(quantity);
-        dest.writeString(name);
+        dest.writeList(flowerDetails);
         dest.writeString(category.name());
         dest.writeDouble(price);
         dest.writeString(message);
         dest.writeString(imageUrl);
-        dest.writeArray(tag);
-        dest.writeArray(imagesUrlList);
-        dest.writeString(id);
-        dest.writeString(status);
-        dest.writeString(description);
-        dest.writeString(liked);
     }
 
     /**
@@ -131,12 +121,8 @@ public class ProductItem implements Parcelable {
         return quantity;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public ArrayList<FlowerDetails> getFlowerDetails() {
+        return flowerDetails;
     }
 
     public OrderItem.CATEGORY getCategory() {
@@ -157,13 +143,5 @@ public class ProductItem implements Parcelable {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public String[] getTag() {
-        return tag;
-    }
-
-    public void setTag(String[] tag) {
-        this.tag = tag;
     }
 }

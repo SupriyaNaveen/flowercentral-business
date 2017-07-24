@@ -14,12 +14,12 @@ public class QueryBuilder {
 
     public static String getPendingOrderListUrl() {
         return BuildConfig.SERVER +
-                "pending";
+                "pendingorders";
     }
 
     public static String getCompletedOrderListUrl() {
         return BuildConfig.SERVER +
-                "delivered";
+                "deliveredorders";
     }
 
     public static String getRegisterUrl() {
@@ -29,27 +29,27 @@ public class QueryBuilder {
 
     public static String getOrderDetailsUrl() {
         return BuildConfig.SERVER +
-                "order_details";
+                "orderdetails";
     }
 
     public static String getUpdateUrl() {
         return BuildConfig.SERVER +
-                "update_profile";
+                "updateprofile";
     }
 
     public static String getProfileInformationUrl() {
         return BuildConfig.SERVER +
-                "get_profile";
+                "getprofile";
     }
 
     public static String getMarkDeliveredUrl() {
         return BuildConfig.SERVER +
-                "mark_delivered";
+                "markdelivered";
     }
 
     public static String getChangePasswordUrl() {
         return BuildConfig.SERVER +
-                "change_password";
+                "changepassword";
     }
 
     public static String getFeedbackListUrl() {
@@ -59,22 +59,22 @@ public class QueryBuilder {
 
     public static String getAcceptOrderUrl() {
         return BuildConfig.SERVER +
-                "accept_order";
+                "acceptorder";
     }
 
     public static String getShopPictureUrl() {
         return BuildConfig.SERVER +
-                "shop_picture";
+                "shoppictures";
     }
 
     public static String getRemovePictureUrl() {
         return BuildConfig.SERVER +
-                "remove_shop_picture";
+                "removeshoppictures";
     }
 
     public static String getUploadShopPicturesUrl() {
         return BuildConfig.SERVER +
-                "update_new";
+                "updateshoppics";
     }
 
     public static String getTodaysSalesDataUrl() {
@@ -99,11 +99,11 @@ public class QueryBuilder {
 
     public static String getPendingOrderByDateUrl() {
         return BuildConfig.SERVER +
-                "pendingorders_bydate";
+                "pendingordersbydate";
     }
 
     public static String getDeliveredOrderByDateUrl() {
         return BuildConfig.SERVER +
-                "deliveredorders_bydate";
+                "deliveredordersbydate";
     }
 }

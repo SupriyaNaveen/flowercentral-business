@@ -40,7 +40,7 @@ public class ProfileDetails implements Parcelable {
     @SerializedName("phone2")
     private String phone2;
 
-    @SerializedName("tin_num")
+    @SerializedName("tin_number")
     private String tinNumber;
 
     private ProfileDetails(Parcel in) {

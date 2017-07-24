@@ -149,7 +149,6 @@ public class OrderDetailsActivity extends AppCompatActivity {
         mOrderItem = orderDetailedItem;
         mBinder.ltOrderDetails.setOrderdetails(orderDetailedItem);
         //TODO move to xml
-        mBinder.ltOrderDetails.orderIsScheduledDelivery.setText(orderDetailedItem.isScheduledDelivery() ? "Yes" : "No");
         if (orderDetailedItem.getDeliveryStatus() == OrderDetailedItem.DELIVERY_STATUS.DELIVERED) {
             mBinder.ltOrderDetails.deliveredAtWrapper.setVisibility(View.VISIBLE);
         }

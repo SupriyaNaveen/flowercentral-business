@@ -32,16 +32,16 @@ public class OrderDetailedItem implements Parcelable {
     @SerializedName("status")
     private DELIVERY_STATUS deliveryStatus; //0: pending, 1: delivered
 
-    @SerializedName("schedule_datetime")
+    @SerializedName("scheduled_dateTime")
     private String scheduleDateTime;
 
-    @SerializedName("delivered_at")
+    @SerializedName("delivery_at")
     private String deliveredDateTime;
 
     @SerializedName("scheduled_delivery")
-    private boolean isScheduledDelivery;
+    private IS_SCHEDULED_DELIVERY isScheduledDelivery; // 0 no, 1 yes
 
-    @SerializedName("products")
+    @SerializedName("product_details")
     private List<ProductItem> productItemList = new ArrayList<>();
 
     private String formatDate(String dateString) {
@@ -78,8 +78,8 @@ public class OrderDetailedItem implements Parcelable {
         latitude = in.readString();
         deliveryStatus = DELIVERY_STATUS.valueOf(in.readString());
         scheduleDateTime = in.readString();
-        isScheduledDelivery = in.readByte() != 0;
-        in.readTypedList(productItemList, ProductItem.CREATOR);
+        isScheduledDelivery = IS_SCHEDULED_DELIVERY.valueOf(in.readString());
+        in.readList(productItemList, ProductItem.class.getClassLoader());
         deliveredDateTime = in.readString();
     }
 
@@ -95,8 +95,8 @@ public class OrderDetailedItem implements Parcelable {
         dest.writeString(latitude);
         dest.writeString(deliveryStatus.name());
         dest.writeString(scheduleDateTime);
-        dest.writeByte((byte) (isScheduledDelivery ? 1 : 0));
-        dest.writeTypedList(productItemList);
+        dest.writeString(isScheduledDelivery.name());
+        dest.writeList(productItemList);
         dest.writeString(deliveredDateTime);
     }
 
@@ -132,6 +132,13 @@ public class OrderDetailedItem implements Parcelable {
         PENDING,
         @SerializedName("Delivered")
         DELIVERED
+    }
+
+    public enum IS_SCHEDULED_DELIVERY {
+        @SerializedName("0")
+        No,
+        @SerializedName("1")
+        Yes
     }
 
     public String getOrderDate() {
@@ -170,7 +177,7 @@ public class OrderDetailedItem implements Parcelable {
         return deliveredDateTime;
     }
 
-    public boolean isScheduledDelivery() {
+    public IS_SCHEDULED_DELIVERY getIsScheduledDelivery() {
         return isScheduledDelivery;
     }
 

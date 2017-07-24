@@ -266,7 +266,7 @@ public class LauncherActivity extends AppCompatActivity {
     private void performLogin() {
         try {
             JSONObject user = new JSONObject();
-            user.put(getString(R.string.api_key_username), mLtLoginBinder.textviewVendorName.getText());
+            user.put(getString(R.string.api_key_email), mLtLoginBinder.textviewVendorName.getText());
             user.put(getString(R.string.api_key_password), mLtLoginBinder.textviewPassword.getText());
             user.put(getString(R.string.api_key_device_id), Util.getDeviceId(this));
             user.put(getString(R.string.api_key_imei), Util.getIEMINumber(this));

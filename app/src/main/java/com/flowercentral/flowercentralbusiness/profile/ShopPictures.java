@@ -461,7 +461,7 @@ public class ShopPictures extends Fragment implements RippleView.OnRippleComplet
                     SimpleDateFormat formatSrc = new SimpleDateFormat(srcFormat, Locale.getDefault());
                     multipart.addFormField(getString(R.string.api_key_timestamp), formatSrc.format(Calendar.getInstance().getTime()));
 
-                    String response = multipart.finish(HttpURLConnection.HTTP_CREATED);
+                    String response = multipart.finish(HttpURLConnection.HTTP_OK);
                     responseObject = new JSONObject(response);
                     if (responseObject.getInt(getString(R.string.api_res_status)) == 1) {
                         Logger.log(TAG, "doInBackground : ", response, AppConstant.LOG_LEVEL_INFO);

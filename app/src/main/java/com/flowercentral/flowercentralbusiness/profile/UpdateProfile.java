@@ -250,7 +250,7 @@ public class UpdateProfile extends Fragment implements RippleView.OnRippleComple
             mLongitude = location.getLongitude();
             mLatitude = location.getLatitude();
             return true;
-        } catch (IOException e) {
+        } catch (IOException | IndexOutOfBoundsException e) {
             Toast.makeText(getActivity(), getString(R.string.map_error_unable_locate_address), Toast.LENGTH_LONG).show();
         }
         return false;
@@ -311,6 +311,7 @@ public class UpdateProfile extends Fragment implements RippleView.OnRippleComple
                 if (ltRegBinding.textviewState.getText().length() > 0) {
                     updateJson.put(getString(R.string.api_key_state), ltRegBinding.textviewState.getText());
                 }
+                updateJson.put(getString(R.string.api_key_country), "India");
                 if (ltRegBinding.textviewZip.getText().length() > 0) {
                     updateJson.put(getString(R.string.api_key_pin), ltRegBinding.textviewZip.getText());
                 }

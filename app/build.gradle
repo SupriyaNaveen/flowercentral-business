@@ -34,13 +34,13 @@ android {
         development {
             buildConfigField("String", "BUILD_MODE", "\"DEVELOPMENT\"")
             buildConfigField("boolean", "IS_PRODUCTION", "false")
-            buildConfigField("String", "SERVER", "\"https://private-63c01-divye.apiary-mock.com/\"")
+            buildConfigField("String", "SERVER", "\"http://ec2-52-66-183-190.ap-south-1.compute.amazonaws.com/vendorApi/v1/\"")
         }
 
         production {
             buildConfigField("String", "BUILD_MODE", "\"PRODUCTION\"")
             buildConfigField("boolean", "IS_PRODUCTION", "true")
-            buildConfigField("String", "SERVER", "\"https://private-63c01-divye.apiary-mock.com/\"")
+            buildConfigField("String", "SERVER", "\"http://ec2-52-66-183-190.ap-south-1.compute.amazonaws.com/vendorApi/v1/\"")
 
         }
     }

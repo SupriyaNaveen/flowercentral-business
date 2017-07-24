@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import com.flowercentral.flowercentralbusiness.util.Util;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 /**
  *
  */
@@ -14,11 +16,11 @@ public class OrderItem implements Parcelable {
     @SerializedName("id")
     private int id;
 
-    @SerializedName("quantity")
+    @SerializedName("order_qty")
     private int quantity;
 
-    @SerializedName("flower")
-    private String name;
+    @SerializedName("flower_details")
+    private ArrayList<FlowerDetails> flowerDetails = new ArrayList<>();
 
     @SerializedName("category")
     private CATEGORY category; //S,M,L,XL, XL+, All
@@ -29,13 +31,13 @@ public class OrderItem implements Parcelable {
     @SerializedName("payment_status")
     private PAID_STATUS paidStatus; // 0: not paid, 1: paid
 
-    @SerializedName("Status")
+    @SerializedName("status")
     private DELIVERY_STATUS deliveryStatus; //0: pending, 1: delivered
 
-    @SerializedName("Schedule_datetime")
+    @SerializedName("scheduled_datetime")
     private String scheduleDateTime;
 
-    @SerializedName("Address")
+    @SerializedName("address")
     private String address;
 
     @SerializedName("longitude")
@@ -73,7 +75,7 @@ public class OrderItem implements Parcelable {
         // written to the parcel
         id = in.readInt();
         quantity = in.readInt();
-        name = in.readString();
+        in.readList(flowerDetails, OrderItem.class.getClassLoader());
         category = CATEGORY.valueOf(in.readString());
         price = in.readDouble();
         paidStatus = PAID_STATUS.valueOf(in.readString());
@@ -93,7 +95,7 @@ public class OrderItem implements Parcelable {
         // will come back in the same order
         dest.writeInt(id);
         dest.writeInt(quantity);
-        dest.writeString(name);
+        dest.writeList(flowerDetails);
         dest.writeString(category.name());
         dest.writeDouble(price);
         dest.writeString(paidStatus.name());
@@ -144,7 +146,9 @@ public class OrderItem implements Parcelable {
         @SerializedName("XL")
         XL,
         @SerializedName("XXL")
-        XXL
+        XXL,
+        @SerializedName("XXXL")
+        XXXL
     }
 
     public enum PAID_STATUS {
@@ -183,8 +187,8 @@ public class OrderItem implements Parcelable {
         return quantity;
     }
 
-    public String getName() {
-        return name;
+    public ArrayList<FlowerDetails> getFlowerDetails() {
+        return flowerDetails;
     }
 
     public CATEGORY getCategory() {

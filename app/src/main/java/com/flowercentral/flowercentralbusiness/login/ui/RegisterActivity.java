@@ -392,7 +392,7 @@ public class RegisterActivity extends AppCompatActivity implements RippleView.On
             mLongitude = location.getLongitude();
             mLatitude = location.getLatitude();
             return true;
-        } catch (IOException e) {
+        } catch (IOException | IndexOutOfBoundsException e) {
             Toast.makeText(this, getString(R.string.map_error_unable_locate_address), Toast.LENGTH_LONG).show();
         }
         return false;
@@ -485,7 +485,7 @@ public class RegisterActivity extends AppCompatActivity implements RippleView.On
                         for (int i = 0; i < dataList.size(); i++) {
                             FileDetails fileDetails = dataList.get(i);
                             File file = new File(fileDetails.getFilePath());
-                            multipart.addFilePart("verification_docs" + String.valueOf(i), file);
+                            multipart.addFilePart("verification_docs", file);
                         }
                     }
 
@@ -494,10 +494,10 @@ public class RegisterActivity extends AppCompatActivity implements RippleView.On
                         for (int i = 0; i < dataList.size(); i++) {
                             FileDetails fileDetails = dataList.get(i);
                             File file = new File(fileDetails.getFilePath());
-                            multipart.addFilePart("shop_images" + String.valueOf(i), file);
+                            multipart.addFilePart("shop_images", file);
                         }
                     }
-                    String response = multipart.finish(HttpURLConnection.HTTP_CREATED);
+                    String response = multipart.finish(HttpURLConnection.HTTP_OK);
                     responseObject = new JSONObject(response);
                     if (responseObject.getString(getString(R.string.api_res_status)).compareTo("success") > 0) {
                         Logger.log(TAG, "doInBackground : ", response, AppConstant.LOG_LEVEL_INFO);

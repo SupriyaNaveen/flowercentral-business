@@ -42,7 +42,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="1">
+                android:weightSum="1"
+                android:baselineAligned="false">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -54,7 +55,8 @@
                         android:id="@+id/order_item_image"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_margin="@dimen/dp5" />
+                        android:layout_margin="@dimen/dp5"
+                        android:contentDescription="@string/content_description"/>
 
                 </LinearLayout>
 
@@ -85,7 +87,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_toStartOf="@id/order_category"
-                            android:text="@{order.name}"
                             android:theme="@style/AppTheme.Normal" />
 
                         <TextView
@@ -93,8 +94,8 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@id/order_details"
                             android:layout_toStartOf="@id/order_category"
-                            android:text="Small desc text"
-                            android:theme="@style/AppTheme.Normal" />
+                            android:theme="@style/AppTheme.Normal"
+                            android:visibility="gone"/>
                     </RelativeLayout>
 
 
@@ -175,6 +176,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
                             android:paddingStart="@dimen/dp5"
+                            android:paddingEnd="@dimen/dp5"
                             android:text="@string/btn_view_on_map"
                             android:textStyle="bold" />
 
@@ -183,7 +185,8 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_toStartOf="@id/tv_view_on_map"
-                            android:src="@drawable/ic_map_white_24dp" />
+                            android:src="@drawable/ic_map_white_24dp"
+                            android:contentDescription="@string/content_description"/>
                     </RelativeLayout>
                 </com.andexert.library.RippleView>
 
@@ -205,6 +208,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
                             android:paddingStart="@dimen/dp5"
+                            android:paddingEnd="@dimen/dp5"
                             android:text="@string/lbl_status_delivered"
                             android:textStyle="bold" />
 
@@ -213,7 +217,8 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_toStartOf="@id/tv_status"
-                            android:src="@drawable/ic_status_white_24dp" />
+                            android:src="@drawable/ic_status_white_24dp"
+                            android:contentDescription="@string/content_description" />
                     </RelativeLayout>
 
                 </com.andexert.library.RippleView>

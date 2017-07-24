@@ -22,7 +22,7 @@ import com.borax12.materialdaterangepicker.date.DatePickerDialog;
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.databinding.FragmentPendingOrderBinding;
 import com.flowercentral.flowercentralbusiness.order.adapters.PendingOrderAdapter;
-import com.flowercentral.flowercentralbusiness.order.model.OrderItem;
+import com.flowercentral.flowercentralbusiness.order.model.Order;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
 import com.flowercentral.flowercentralbusiness.setting.AppConstant;
@@ -31,14 +31,11 @@ import com.flowercentral.flowercentralbusiness.volley.ErrorData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -158,11 +155,11 @@ public class PendingOrder extends Fragment {
         }
 
         // Make web api call to get the pending order item list.
-        BaseModel<JSONArray> baseModel = new BaseModel<JSONArray>(mContext) {
+        BaseModel<JSONObject> baseModel = new BaseModel<JSONObject>(mContext) {
             @Override
-            public void onSuccess(int statusCode, Map<String, String> headers, JSONArray response) {
+            public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
                 // Construct the order item list from web api response.
-                List<OrderItem> orderItemList = constructOrderItemList(response);
+                Order orderItemList = constructOrderItemList(response);
                 updatePendingOrderViews(orderItemList);
             }
 
@@ -171,8 +168,7 @@ public class PendingOrder extends Fragment {
                 hideRefreshLayout();
                 if (error != null) {
 
-                    List<OrderItem> orderItemList = new ArrayList<>();
-                    updatePendingOrderViews(orderItemList);
+                    updatePendingOrderViews(null);
 
                     error.setErrorMessage("Data fetch failed. Cause -> " + error.getErrorMessage());
                     switch (error.getErrorType()) {
@@ -214,9 +210,9 @@ public class PendingOrder extends Fragment {
         try {
             requestObject.put(getString(R.string.api_key_start_date), formatter.format(mStartDateSearch.getTime()));
             requestObject.put(getString(R.string.api_key_end_date), formatter.format(mEndDateSearch.getTime()));
-            baseModel.executePostJsonArrayRequest(url, requestObject, TAG);
+            baseModel.executePostJsonRequest(url, requestObject, TAG);
         } catch (JSONException e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -255,12 +251,12 @@ public class PendingOrder extends Fragment {
         }
 
         // Make web api call to get the pending order item list.
-        BaseModel<JSONArray> baseModel = new BaseModel<JSONArray>(mContext) {
+        BaseModel<JSONObject> baseModel = new BaseModel<JSONObject>(mContext) {
             @Override
-            public void onSuccess(int statusCode, Map<String, String> headers, JSONArray response) {
+            public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
                 // Construct the order item list from web api response.
-                List<OrderItem> orderItemList = constructOrderItemList(response);
-                updatePendingOrderViews(orderItemList);
+                Order order = constructOrderItemList(response);
+                updatePendingOrderViews(order);
             }
 
             @Override
@@ -268,8 +264,7 @@ public class PendingOrder extends Fragment {
                 hideRefreshLayout();
                 if (error != null) {
 
-                    List<OrderItem> orderItemList = new ArrayList<>();
-                    updatePendingOrderViews(orderItemList);
+                    updatePendingOrderViews(null);
 
                     error.setErrorMessage("Data fetch failed. Cause -> " + error.getErrorMessage());
                     switch (error.getErrorType()) {
@@ -306,31 +301,35 @@ public class PendingOrder extends Fragment {
         };
 
         String url = QueryBuilder.getPendingOrderListUrl();
-        baseModel.executeGetJsonArrayRequest(url, TAG);
+        baseModel.executeGetJsonRequest(url, TAG);
     }
 
     /**
      * @param response response
      * @return order item list
      */
-    private List<OrderItem> constructOrderItemList(JSONArray response) {
+    private Order constructOrderItemList(JSONObject response) {
 
-        return new Gson().fromJson(String.valueOf(response),
-                new TypeToken<List<OrderItem>>() {
-                }.getType());
+        try {
+            return new Gson().fromJson(String.valueOf(response),
+                    new TypeToken<Order>() {
+                    }.getType());
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     /**
      * Hide the swipe refresh layout.
      * If the list is empty show empty view. Else show the recycler view.
      *
-     * @param orderItemList order item list
+     * @param order order item list
      */
-    private void updatePendingOrderViews(List<OrderItem> orderItemList) {
+    private void updatePendingOrderViews(Order order) {
 
         hideRefreshLayout();
 
-        PendingOrderAdapter adapter = new PendingOrderAdapter(orderItemList, mBinder.rootLayout, new RefreshViews() {
+        PendingOrderAdapter adapter = new PendingOrderAdapter(order, mBinder.rootLayout, new RefreshViews() {
             @Override
             public void performRefreshView() {
                 mBinder.swipeRefreshLayout.setRefreshing(true);

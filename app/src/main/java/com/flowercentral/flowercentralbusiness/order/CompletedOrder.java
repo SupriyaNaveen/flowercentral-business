@@ -17,7 +17,7 @@ import com.borax12.materialdaterangepicker.date.DatePickerDialog;
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.databinding.FragmentCompletedOrderBinding;
 import com.flowercentral.flowercentralbusiness.order.adapters.CompletedOrderAdapter;
-import com.flowercentral.flowercentralbusiness.order.model.OrderItem;
+import com.flowercentral.flowercentralbusiness.order.model.Order;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
 import com.flowercentral.flowercentralbusiness.util.Util;
@@ -25,14 +25,11 @@ import com.flowercentral.flowercentralbusiness.volley.ErrorData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -147,12 +144,12 @@ public class CompletedOrder extends Fragment {
         }
 
         // Make web api call to get the pending order item list.
-        BaseModel<JSONArray> baseModel = new BaseModel<JSONArray>(mContext) {
+        BaseModel<JSONObject> baseModel = new BaseModel<JSONObject>(mContext) {
             @Override
-            public void onSuccess(int statusCode, Map<String, String> headers, JSONArray response) {
+            public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
                 // Construct the order item list from web api response.
-                List<OrderItem> orderItemList = constructOrderItemList(response);
-                updateCompletedOrderViews(orderItemList);
+                Order order = constructOrder(response);
+                updateCompletedOrderViews(order);
             }
 
             @Override
@@ -160,8 +157,7 @@ public class CompletedOrder extends Fragment {
                 hideRefreshLayout();
                 if (error != null) {
 
-                    List<OrderItem> orderItemList = new ArrayList<>();
-                    updateCompletedOrderViews(orderItemList);
+                    updateCompletedOrderViews(null);
 
                     error.setErrorMessage("Data fetch failed. Cause -> " + error.getErrorMessage());
                     switch (error.getErrorType()) {
@@ -203,7 +199,7 @@ public class CompletedOrder extends Fragment {
         try {
             requestObject.put(getString(R.string.api_key_start_date), formatter.format(mStartDateSearch.getTime()));
             requestObject.put(getString(R.string.api_key_end_date), formatter.format(mEndDateSearch.getTime()));
-            baseModel.executePostJsonArrayRequest(url, requestObject, TAG);
+            baseModel.executePostJsonRequest(url, requestObject, TAG);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -233,11 +229,11 @@ public class CompletedOrder extends Fragment {
             return;
         }
 
-        BaseModel<JSONArray> baseModel = new BaseModel<JSONArray>(mContext) {
+        BaseModel<JSONObject> baseModel = new BaseModel<JSONObject>(mContext) {
             @Override
-            public void onSuccess(int statusCode, Map<String, String> headers, JSONArray response) {
-                List<OrderItem> orderItemList = constructOrderItemList(response);
-                updateCompletedOrderViews(orderItemList);
+            public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
+                Order order = constructOrder(response);
+                updateCompletedOrderViews(order);
             }
 
             @Override
@@ -245,8 +241,7 @@ public class CompletedOrder extends Fragment {
                 hideRefreshLayout();
                 if (error != null) {
 
-                    List<OrderItem> orderItemList = new ArrayList<>();
-                    updateCompletedOrderViews(orderItemList);
+                    updateCompletedOrderViews(null);
 
                     error.setErrorMessage("Data fetch failed. Cause -> " + error.getErrorMessage());
                     switch (error.getErrorType()) {
@@ -283,29 +278,34 @@ public class CompletedOrder extends Fragment {
         };
 
         String url = QueryBuilder.getCompletedOrderListUrl();
-        baseModel.executeGetJsonArrayRequest(url, TAG);
+        baseModel.executeGetJsonRequest(url, TAG);
     }
 
     /**
      * @param response response
      * @return list of order items
      */
-    private List<OrderItem> constructOrderItemList(JSONArray response) {
-        return new Gson().fromJson(String.valueOf(response),
-                new TypeToken<List<OrderItem>>() {
-                }.getType());
+    private Order constructOrder(JSONObject response) {
+
+        try {
+            return new Gson().fromJson(String.valueOf(response),
+                    new TypeToken<Order>() {
+                    }.getType());
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     /**
      * Update view for ordered item list.
      *
-     * @param orderItemList order item list
+     * @param order order item list
      */
-    private void updateCompletedOrderViews(List<OrderItem> orderItemList) {
+    private void updateCompletedOrderViews(Order order) {
 
         hideRefreshLayout();
 
-        CompletedOrderAdapter adapter = new CompletedOrderAdapter(orderItemList);
+        CompletedOrderAdapter adapter = new CompletedOrderAdapter(order);
         mBinder.completedOrderRecyclerview.setAdapter(adapter);
     }
 
