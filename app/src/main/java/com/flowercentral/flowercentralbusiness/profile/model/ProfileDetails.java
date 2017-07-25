@@ -43,6 +43,12 @@ public class ProfileDetails implements Parcelable {
     @SerializedName("tin_number")
     private String tinNumber;
 
+    @SerializedName("email")
+    private String email;
+
+    @SerializedName("password")
+    private String password;
+
     private ProfileDetails(Parcel in) {
         shopName = in.readString();
         address = in.readString();
@@ -55,6 +61,8 @@ public class ProfileDetails implements Parcelable {
         phone2 = in.readString();
         tinNumber = in.readString();
         pin = in.readString();
+        email = in.readString();
+        password = in.readString();
     }
 
     public static final Creator<ProfileDetails> CREATOR = new Creator<ProfileDetails>() {
@@ -91,6 +99,8 @@ public class ProfileDetails implements Parcelable {
         dest.writeString(phone1);
         dest.writeString(phone2);
         dest.writeString(tinNumber);
+        dest.writeString(email);
+        dest.writeString(password);
     }
 
     public String getShopName() {
@@ -109,9 +119,9 @@ public class ProfileDetails implements Parcelable {
         return state;
     }
 
-//    public String getCountry() {
-//        return country;
-//    }
+    public String getCountry() {
+        return country;
+    }
 
     public String getPin() {
         return pin;
@@ -153,9 +163,9 @@ public class ProfileDetails implements Parcelable {
         this.state = state;
     }
 
-//    public void setCountry(String country) {
-//        this.country = country;
-//    }
+    public void setCountry(String country) {
+        this.country = country;
+    }
 
     public void setPin(String pin) {
         this.pin = pin;
@@ -179,5 +189,21 @@ public class ProfileDetails implements Parcelable {
 
     public void setTinNumber(String tinNumber) {
         this.tinNumber = tinNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

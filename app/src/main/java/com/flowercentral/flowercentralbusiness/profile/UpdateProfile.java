@@ -74,6 +74,9 @@ public class UpdateProfile extends Fragment implements RippleView.OnRippleComple
         if (Util.checkInternet(_context)) {
             mBinder.flNoInternet.setVisibility(View.GONE);
             mBinder.registerWrapper.setVisibility(View.VISIBLE);
+
+            mBinder.register.textviewEmail.setEnabled(false);
+            mBinder.register.textviewPassword.setVisibility(View.GONE);
             getProfileDetails();
         } else {
             mBinder.flNoInternet.setVisibility(View.VISIBLE);

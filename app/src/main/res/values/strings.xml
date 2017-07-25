@@ -25,9 +25,11 @@
     <string name="lbl_address">Address</string>
     <string name="lbl_state">State</string>
     <string name="lbl_city">City</string>
+    <string name="lbl_country">Country</string>
     <string name="lbl_zip">Zip</string>
     <string name="lbl_phone1">Phone1</string>
     <string name="lbl_phone2">Phone2</string>
+    <string name="lbl_email">Email</string>
 
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -94,6 +96,7 @@
     <string name="fld_error_user_name">Please enter user name.</string>
     <string name="fld_error_password">Please enter password.</string>
     <string name="fld_error_vendor_name">Please enter vendor name.</string>
+    <string name="fld_error_email">Please enter email.</string>
     <string name="fld_error_address_for_map">Please enter address to locate on map.</string>
     <string name="fld_error_old_password">Please enter old password.</string>
     <string name="fld_error_new_password">Please enter new password.</string>

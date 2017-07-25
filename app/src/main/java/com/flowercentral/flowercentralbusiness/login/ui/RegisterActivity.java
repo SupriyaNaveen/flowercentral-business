@@ -167,13 +167,7 @@ public class RegisterActivity extends AppCompatActivity implements RippleView.On
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            try {
-                                if (response.getString("status").equals("success")) {
-                                    finish();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                            finish();
                         }
                     });
             final AlertDialog alertDialog = alertDialogBuilder.create();
@@ -191,6 +185,20 @@ public class RegisterActivity extends AppCompatActivity implements RippleView.On
             isValid = false;
         } else {
             mRegisterBinder.textviewVendorName.setError(null);
+        }
+
+        if (mRegisterBinder.textviewEmail.getText().toString().isEmpty()) {
+            mRegisterBinder.textviewEmail.setError(getString(R.string.fld_error_email));
+            isValid = false;
+        } else {
+            mRegisterBinder.textviewEmail.setError(null);
+        }
+
+        if (mRegisterBinder.textviewPassword.getText().toString().isEmpty()) {
+            mRegisterBinder.textviewPassword.setError(getString(R.string.fld_error_password));
+            isValid = false;
+        } else {
+            mRegisterBinder.textviewPassword.setError(null);
         }
         return isValid;
     }
@@ -401,8 +409,16 @@ public class RegisterActivity extends AppCompatActivity implements RippleView.On
     private void uploadData() {
 
         ProfileDetails profileDetails = new ProfileDetails();
+        if (mRegisterBinder.textviewEmail.getText().length() > 0) {
+            profileDetails.setEmail(mRegisterBinder.textviewEmail.getText().toString());
+        }
+
         if (mRegisterBinder.textviewVendorName.getText().length() > 0) {
             profileDetails.setShopName(mRegisterBinder.textviewVendorName.getText().toString());
+        }
+
+        if (mRegisterBinder.textviewPassword.getText().length() > 0) {
+            profileDetails.setPassword(mRegisterBinder.textviewPassword.getText().toString());
         }
         if (mRegisterBinder.textviewAddress.getText().length() > 0) {
             profileDetails.setAddress(mRegisterBinder.textviewAddress.getText().toString());
@@ -418,6 +434,9 @@ public class RegisterActivity extends AppCompatActivity implements RippleView.On
         }
         if (mRegisterBinder.textviewState.getText().length() > 0) {
             profileDetails.setState(mRegisterBinder.textviewState.getText().toString());
+        }
+        if (mRegisterBinder.textviewCountry.getText().length() > 0) {
+            profileDetails.setCountry(mRegisterBinder.textviewCountry.getText().toString());
         }
         if (mRegisterBinder.textviewZip.getText().length() > 0) {
             profileDetails.setPin(mRegisterBinder.textviewZip.getText().toString());
@@ -469,12 +488,15 @@ public class RegisterActivity extends AppCompatActivity implements RippleView.On
                     MultipartUtility multipart = new MultipartUtility(url, charset, RegisterActivity.this);
 
                     ProfileDetails profileDetails = registerVendorDetails.getProfileDetails();
+                    multipart.addFormField(getString(R.string.api_key_email), profileDetails.getEmail());
                     multipart.addFormField(getString(R.string.api_key_shop_name), profileDetails.getShopName());
+                    multipart.addFormField(getString(R.string.api_key_password), profileDetails.getPassword());
                     multipart.addFormField(getString(R.string.api_key_address), profileDetails.getAddress());
                     multipart.addFormField(getString(R.string.api_key_latitude), String.valueOf(profileDetails.getLatitude()));
                     multipart.addFormField(getString(R.string.api_key_longitude), String.valueOf(profileDetails.getLongitude()));
                     multipart.addFormField(getString(R.string.api_key_city), profileDetails.getCity());
                     multipart.addFormField(getString(R.string.api_key_state), profileDetails.getState());
+                    multipart.addFormField(getString(R.string.api_key_country), profileDetails.getCountry());
                     multipart.addFormField(getString(R.string.api_key_pin), profileDetails.getPin());
                     multipart.addFormField(getString(R.string.api_key_phone1), profileDetails.getPhone1());
                     multipart.addFormField(getString(R.string.api_key_phone2), profileDetails.getPhone2());
@@ -499,7 +521,7 @@ public class RegisterActivity extends AppCompatActivity implements RippleView.On
                     }
                     String response = multipart.finish(HttpURLConnection.HTTP_OK);
                     responseObject = new JSONObject(response);
-                    if (responseObject.getString(getString(R.string.api_res_status)).compareTo("success") > 0) {
+                    if (responseObject.getInt(getString(R.string.api_res_status)) == 1) {
                         Logger.log(TAG, "doInBackground : ", response, AppConstant.LOG_LEVEL_INFO);
                         status = true;
                     } else {

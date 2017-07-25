@@ -22,6 +22,24 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/lbl_email">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/textview_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/dp10"
+                    android:drawableStart="@drawable/ic_mail_white"
+                    android:imeOptions="actionNext"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:text="@{profile.email}" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="@string/lbl_vendor_name">
 
                 <android.support.design.widget.TextInputEditText
@@ -40,18 +58,18 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/lbl_vendor_tin">
+                android:hint="@string/lbl_password">
 
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/textview_tin"
+                    android:id="@+id/textview_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/dp10"
-                    android:drawableStart="@drawable/ic_tin_white"
+                    android:drawableStart="@drawable/ic_password_white"
                     android:imeOptions="actionNext"
-                    android:inputType="text"
+                    android:inputType="textPassword"
                     android:maxLines="1"
-                    android:text="@{profile.tinNumber}" />
+                    android:text="@{profile.password}" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -111,6 +129,23 @@
                     android:inputType="text"
                     android:maxLines="1"
                     android:text="@{profile.state}" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/lbl_country">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/textview_country"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp32"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:text="@{profile.country}" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -179,6 +214,24 @@
                     android:inputType="phone"
                     android:maxLines="1"
                     android:text="@{profile.phone2}" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/lbl_vendor_tin">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/textview_tin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/dp10"
+                    android:drawableStart="@drawable/ic_tin_white"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:text="@{profile.tinNumber}" />
 
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
