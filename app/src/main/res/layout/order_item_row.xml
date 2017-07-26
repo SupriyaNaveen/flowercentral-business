@@ -185,7 +185,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_toStartOf="@id/tv_view_on_map"
-                            android:src="@drawable/ic_map_white_24dp"
+                            app:srcCompat="@drawable/ic_map_white_24dp"
                             android:contentDescription="@string/content_description"/>
                     </RelativeLayout>
                 </com.andexert.library.RippleView>
@@ -217,7 +217,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_toStartOf="@id/tv_status"
-                            android:src="@drawable/ic_status_white_24dp"
+                            app:srcCompat="@drawable/ic_status_white_24dp"
                             android:contentDescription="@string/content_description" />
                     </RelativeLayout>
 
