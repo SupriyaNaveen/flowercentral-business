@@ -18,7 +18,6 @@ import com.flowercentral.flowercentralbusiness.databinding.OrderItemRowBinding;
 import com.flowercentral.flowercentralbusiness.map.MapActivity;
 import com.flowercentral.flowercentralbusiness.order.OrderDetailsActivity;
 import com.flowercentral.flowercentralbusiness.order.PendingOrder;
-import com.flowercentral.flowercentralbusiness.order.model.FlowerDetails;
 import com.flowercentral.flowercentralbusiness.order.model.Order;
 import com.flowercentral.flowercentralbusiness.order.model.OrderItem;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
@@ -29,7 +28,6 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -83,15 +81,6 @@ public class PendingOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             final OrderItem orderItem = mOrder.getOrderItemArrayList().get(position);
             itemRowBinder.setOrder(orderItem);
             //TODO check in xml
-            ArrayList<FlowerDetails> flowerDetails = orderItem.getFlowerDetails();
-            if (flowerDetails != null && !flowerDetails.isEmpty()) {
-                itemRowBinder.orderDetails.setText(flowerDetails.get(0).getFlowerName());
-                if (flowerDetails.size() > 1) {
-                    itemRowBinder.orderDetails.setText(itemRowBinder.orderDetails.getText() + ", " +
-                            String.valueOf(flowerDetails.size() - 1) +
-                            " more");
-                }
-            }
             itemRowBinder.orderQuantity.setText(mContext.getString(R.string.order_format_quantity, String.valueOf(orderItem.getQuantity())));
             itemRowBinder.orderAddress.setText(mContext.getString(R.string.order_format_address, orderItem.getAddress()));
 

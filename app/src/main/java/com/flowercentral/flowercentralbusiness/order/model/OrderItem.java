@@ -19,6 +19,9 @@ public class OrderItem implements Parcelable {
     @SerializedName("order_qty")
     private int quantity;
 
+    @SerializedName("title")
+    private String orderTitle;
+
     @SerializedName("flower_details")
     private ArrayList<FlowerDetails> flowerDetails = new ArrayList<>();
 
@@ -75,6 +78,7 @@ public class OrderItem implements Parcelable {
         // written to the parcel
         id = in.readInt();
         quantity = in.readInt();
+        orderTitle = in.readString();
         in.readList(flowerDetails, OrderItem.class.getClassLoader());
         category = CATEGORY.valueOf(in.readString());
         price = in.readDouble();
@@ -95,6 +99,7 @@ public class OrderItem implements Parcelable {
         // will come back in the same order
         dest.writeInt(id);
         dest.writeInt(quantity);
+        dest.writeString(orderTitle);
         dest.writeList(flowerDetails);
         dest.writeString(category.name());
         dest.writeDouble(price);
@@ -239,5 +244,9 @@ public class OrderItem implements Parcelable {
         String srcFormat = "yyyy-MM-dd HH:mm";
         String destFormat = "dd EEE yyyy, hh:mm a";
         return Util.formatDate(dateString, srcFormat, destFormat);
+    }
+
+    public String getOrderTitle() {
+        return orderTitle;
     }
 }

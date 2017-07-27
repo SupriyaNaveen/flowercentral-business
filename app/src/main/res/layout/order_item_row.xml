@@ -87,7 +87,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_toStartOf="@id/order_category"
-                            android:theme="@style/AppTheme.Normal" />
+                            android:theme="@style/AppTheme.Normal"
+                            android:text="@{order.orderTitle}"/>
 
                         <TextView
                             android:layout_width="match_parent"

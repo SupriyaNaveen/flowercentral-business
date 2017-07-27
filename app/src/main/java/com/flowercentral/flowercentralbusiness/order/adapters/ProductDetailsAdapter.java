@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.databinding.ProductDetailRowBinding;
-import com.flowercentral.flowercentralbusiness.order.model.FlowerDetails;
 import com.flowercentral.flowercentralbusiness.order.model.ProductItem;
 import com.squareup.picasso.Picasso;
 
@@ -39,15 +38,10 @@ public class ProductDetailsAdapter extends RecyclerView.Adapter<ProductDetailsAd
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
         ProductItem productItem = mProductList.get(position);
-        StringBuilder flowerNames = new StringBuilder();
-        for (FlowerDetails flowerDetails : productItem.getFlowerDetails()) {
-            flowerNames.append(flowerDetails.getFlowerName() + " (" + flowerDetails.getFlowerQuantity() + ")");
-            flowerNames.append(", ");
-        }
         holder.rowBinder.productDetails.setText(
                 productItem.getQuantity() +
                         BLANK_SPACE +
-                        flowerNames +
+                        productItem.getOrderTitle() +
                         BLANK_SPACE +
                         productItem.getCategory()
         );
