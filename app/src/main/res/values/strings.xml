@@ -144,4 +144,5 @@
     <string name="api_key_country">country</string>
     <string name="content_description">desc</string>
     <string name="lbl_search_hint">Search from/to orders</string>
+    <string name="api_res_message">message</string>
 </resources>

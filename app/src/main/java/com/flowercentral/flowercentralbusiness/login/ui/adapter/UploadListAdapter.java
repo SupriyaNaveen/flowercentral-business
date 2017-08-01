@@ -58,7 +58,9 @@ public class UploadListAdapter extends RecyclerView.Adapter<UploadListAdapter.Vi
      */
     @Override
     public int getItemCount() {
-        return mUploadDataList.size();
+        if (mUploadDataList != null)
+            return mUploadDataList.size();
+        else return 0;
     }
 
     /**

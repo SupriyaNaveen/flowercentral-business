@@ -110,12 +110,14 @@ class ShopPicturesAdapter extends RecyclerView.Adapter<ShopPicturesAdapter.ViewH
 
     @Override
     public int getItemCount() {
-        return shopPicturesList.size() + 1;
+        if (shopPicturesList != null) {
+            return shopPicturesList.size() + 1;
+        } else return 1;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-       ShopPicturesItemRowBinding picturesItemRowBinder;
+        ShopPicturesItemRowBinding picturesItemRowBinder;
 
         ViewHolder(ShopPicturesItemRowBinding binder) {
             super(binder.getRoot());

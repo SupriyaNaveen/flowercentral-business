@@ -2,7 +2,9 @@ package com.flowercentral.flowercentralbusiness.login.ui;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -345,7 +347,19 @@ public class LauncherActivity extends AppCompatActivity {
     }
 
     public void forgotPasswordSelected(RippleView view) {
+        if (mLtLoginBinder.textviewVendorName.getText().toString().isEmpty()) {
+            mLtLoginBinder.textviewVendorName.setError(getString(R.string.fld_error_email));
+        } else {
+            mLtLoginBinder.textviewVendorName.setError(null);
 
+            JSONObject requestObject = new JSONObject();
+            try {
+                requestObject.put(getString(R.string.api_key_email), mLtLoginBinder.textviewVendorName.getText());
+                forgotPassword(mContext, requestObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void registerAccountSelected(RippleView view) {
@@ -354,5 +368,87 @@ public class LauncherActivity extends AppCompatActivity {
 
     public void tryAgainToRegister(View view) {
         initializeActivity(mContext);
+    }
+
+    private void forgotPassword(Context _context, JSONObject _user) {
+        //Start Progress dialog
+        dismissDialog();
+
+        mProgressDialog = Util.showProgressDialog(_context, null, getString(R.string.msg_registering_user), false);
+
+        BaseModel<JSONObject> baseModel = new BaseModel<JSONObject>(_context) {
+            @Override
+            public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
+                //CLose Progress dialog
+                dismissDialog();
+                try {
+                    showMessageDialog(response.getString(getString(R.string.api_res_message)));
+                } catch (JSONException e) {
+                    showMessageDialog("Please check email provided!");
+                }
+            }
+
+            @Override
+            public void onError(ErrorData error) {
+                //Close Progress dialog
+                dismissDialog();
+
+                if (error != null) {
+                    error.setErrorMessage("Forgot password failed. Cause -> " + error.getErrorMessage());
+
+                    switch (error.getErrorType()) {
+                        case NETWORK_NOT_AVAILABLE:
+                            Snackbar.make(mBinder.rootLayout, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();
+                            break;
+                        case INTERNAL_SERVER_ERROR:
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            break;
+                        case CONNECTION_TIMEOUT:
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            break;
+                        case APPLICATION_ERROR:
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            break;
+                        case INVALID_INPUT_SUPPLIED:
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            break;
+                        case AUTHENTICATION_ERROR:
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            break;
+                        case UNAUTHORIZED_ERROR:
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            break;
+                        default:
+                            Snackbar.make(mBinder.rootLayout, error.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+                            break;
+                    }
+                }
+            }
+        };
+
+        String url = QueryBuilder.getForgotPasswordUrl();
+        if (_user != null) {
+            baseModel.executePostJsonRequest(url, _user, TAG);
+        } else {
+            Snackbar.make(mBinder.rootLayout, getResources().getString(R.string.msg_reg_user_missing_input), Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showMessageDialog(String message) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Forgot Password");
+        builder.setMessage(message);
+
+        builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.setCancelable(false);
+        alertDialog.show();
     }
 }

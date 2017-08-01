@@ -145,30 +145,32 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
     }
 
     private void showSessionExpiredDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setTitle("Authentication Error");
-        builder.setMessage("Session expired. Please login again!");
+        if (mContext != null && mContext instanceof Activity) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setTitle("Authentication Error");
+            builder.setMessage("Session expired. Please login again!");
 
-        builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (mContext != null && mContext instanceof Activity) {
-                    ((Activity) mContext).finish();
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (mContext != null && mContext instanceof Activity) {
+                        ((Activity) mContext).finish();
+                    }
+                    deleteProfileInformation(mContext);
+                    Intent intent = new Intent(mContext, LauncherActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    mContext.startActivity(intent);
+                    AsyncHttpClient.getInstance(mContext).cancelAllRequests();
                 }
-                deleteProfileInformation(mContext);
-                Intent intent = new Intent(mContext, LauncherActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                mContext.startActivity(intent);
-                AsyncHttpClient.getInstance(mContext).cancelAllRequests();
-            }
-        });
+            });
 
-        AlertDialog alertDialog = builder.create();
-        alertDialog.setCanceledOnTouchOutside(false);
-        alertDialog.setCancelable(false);
-        alertDialog.show();
+            AlertDialog alertDialog = builder.create();
+            alertDialog.setCanceledOnTouchOutside(false);
+            alertDialog.setCancelable(false);
+            alertDialog.show();
+        }
     }
 
     @Override

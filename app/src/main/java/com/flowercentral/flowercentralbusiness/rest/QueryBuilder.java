@@ -106,4 +106,9 @@ public class QueryBuilder {
         return BuildConfig.SERVER +
                 "deliveredordersbydate";
     }
+
+    public static String getForgotPasswordUrl() {
+        return BuildConfig.SERVER +
+                "forgotpassword";
+    }
 }
