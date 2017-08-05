@@ -455,7 +455,7 @@ public class ShopPictures extends Fragment implements RippleView.OnRippleComplet
                 if (filePath != null) {
                     MultipartUtility multipart = new MultipartUtility(url, charset, getActivity());
                     File file = new File(filePath);
-                    multipart.addFilePart("image", file);
+                    multipart.addFilePart("images", file);
 
                     String srcFormat = "yyyy-MM-dd HH:mm";
                     SimpleDateFormat formatSrc = new SimpleDateFormat(srcFormat, Locale.getDefault());

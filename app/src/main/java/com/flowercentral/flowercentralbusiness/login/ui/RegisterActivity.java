@@ -507,7 +507,7 @@ public class RegisterActivity extends AppCompatActivity implements RippleView.On
                         for (int i = 0; i < dataList.size(); i++) {
                             FileDetails fileDetails = dataList.get(i);
                             File file = new File(fileDetails.getFilePath());
-                            multipart.addFilePart("verification_docs", file);
+                            multipart.addFilePart("verification_docs[]", file);
                         }
                     }
 
@@ -516,7 +516,7 @@ public class RegisterActivity extends AppCompatActivity implements RippleView.On
                         for (int i = 0; i < dataList.size(); i++) {
                             FileDetails fileDetails = dataList.get(i);
                             File file = new File(fileDetails.getFilePath());
-                            multipart.addFilePart("shop_images", file);
+                            multipart.addFilePart("shop_images[]", file);
                         }
                     }
                     String response = multipart.finish(HttpURLConnection.HTTP_OK);
