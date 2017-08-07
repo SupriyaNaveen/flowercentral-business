@@ -215,8 +215,14 @@ public class RegisterActivity extends AppCompatActivity implements RippleView.On
     }
 
     private void browseDocuments() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("file/*");
+        final String[] ACCEPT_MIME_TYPES = {
+                "file/*",
+                "image/*"
+        };
+        Intent intent = new Intent();
+        intent.setType("*/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, ACCEPT_MIME_TYPES);
         startActivityForResult(intent, TYPE_DOC_UPLOAD);
     }
 
