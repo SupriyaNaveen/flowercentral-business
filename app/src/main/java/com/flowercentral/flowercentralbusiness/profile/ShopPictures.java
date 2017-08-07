@@ -1,16 +1,19 @@
 package com.flowercentral.flowercentralbusiness.profile;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -20,6 +23,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -37,6 +41,8 @@ import com.flowercentral.flowercentralbusiness.util.Util;
 import com.flowercentral.flowercentralbusiness.volley.ErrorData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -228,8 +234,51 @@ public class ShopPictures extends Fragment implements RippleView.OnRippleComplet
             public void uploadNewImage() {
                 requestPermission();
             }
+
+            @Override
+            public void previewImage(String imageUrl) {
+                previewShopImage(imageUrl);
+            }
         });
         mBinder.shopPicturesRecyclerView.setAdapter(shopPicturesAdapter);
+    }
+
+    private void previewShopImage(String imageUrl) {
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            final Dialog settingsDialog = new Dialog(getActivity());
+            settingsDialog.setCanceledOnTouchOutside(false);
+            settingsDialog.setContentView(getActivity().getLayoutInflater().inflate(R.layout.layout_preview_image
+                    , null));
+            settingsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            final ImageView previewImageView = (ImageView) settingsDialog.findViewById(R.id.image_view_preview);
+            final FloatingActionButton closeImageView = (FloatingActionButton) settingsDialog.findViewById(R.id.image_view_close);
+
+            Picasso.
+                    with(getActivity()).
+                    load(imageUrl).
+                    into(previewImageView, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            closeImageView.setVisibility(View.VISIBLE);
+                            previewImageView.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onError() {
+                            previewImageView.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_background));
+                            previewImageView.setVisibility(View.VISIBLE);
+                            closeImageView.setVisibility(View.VISIBLE);
+                        }
+                    });
+
+            closeImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    settingsDialog.dismiss();
+                }
+            });
+            settingsDialog.show();
+        }
     }
 
     /**
@@ -243,6 +292,8 @@ public class ShopPictures extends Fragment implements RippleView.OnRippleComplet
         void refreshDeleteIcon();
 
         void uploadNewImage();
+
+        void previewImage(String imageUrl);
     }
 
     @Override

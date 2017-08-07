@@ -89,6 +89,8 @@ class ShopPicturesAdapter extends RecyclerView.Adapter<ShopPicturesAdapter.ViewH
                             binder.imageViewSelected.setVisibility(View.VISIBLE);
                             selectedPictureIdList.add(pictureId);
                         }
+                    } else {
+                        mRefreshViews.previewImage(shopPicturesList.get(position).getImageUrl());
                     }
                 }
             });
