@@ -31,8 +31,6 @@ import static com.flowercentral.flowercentralbusiness.preference.UserPreference.
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private ActivityDashboardBinding mBinder;
-    private LayoutAppToolbarBinding mToolbarBinder;
-    private ActionBar mActionBar;
 
     /**
      * @param savedInstanceState savedInstanceState
@@ -42,21 +40,21 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         super.onCreate(savedInstanceState);
         mBinder = DataBindingUtil.setContentView(this, R.layout.activity_dashboard);
 
-        mToolbarBinder = mBinder.dashboard.ltToolbar;
-        setSupportActionBar(mToolbarBinder.toolbar);
+        LayoutAppToolbarBinding toolbarBinder = mBinder.dashboard.ltToolbar;
+        setSupportActionBar(toolbarBinder.toolbar);
 
-        if (mToolbarBinder.toolbar != null) {
-            setSupportActionBar(mToolbarBinder.toolbar);
-            mActionBar = getSupportActionBar();
-            if (mActionBar != null) {
-                mActionBar.setHomeButtonEnabled(true);
-                mActionBar.setDisplayHomeAsUpEnabled(true);
-                mActionBar.setDisplayShowHomeEnabled(true);
+        if (toolbarBinder.toolbar != null) {
+            setSupportActionBar(toolbarBinder.toolbar);
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setHomeButtonEnabled(true);
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setDisplayShowHomeEnabled(true);
             }
         }
 
         ActionBarDrawerToggle mToggle = new ActionBarDrawerToggle(
-                this, mBinder.drawerLayout, mToolbarBinder.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, mBinder.drawerLayout, toolbarBinder.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         //noinspection deprecation
         mBinder.drawerLayout.setDrawerListener(mToggle);
         mToggle.syncState();

@@ -111,21 +111,21 @@ public class LauncherActivity extends AppCompatActivity {
         mLtLoginBinder.btnLogin.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                loginSelected(rippleView);
+                loginSelected();
             }
         });
 
         mLtLoginBinder.textviewForgotPassword.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                forgotPasswordSelected(rippleView);
+                forgotPasswordSelected();
             }
         });
 
         mBinder.ltAppRegister.txtLinkFlowerCentralAccount.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                registerAccountSelected(rippleView);
+                registerAccountSelected();
             }
         });
 
@@ -335,7 +335,7 @@ public class LauncherActivity extends AppCompatActivity {
     /**
      * Validate the input and make web api call.
      */
-    public void loginSelected(RippleView view) {
+    public void loginSelected() {
         if (UserPreference.getApiToken(LauncherActivity.this) != null) {
             UserPreference.deleteProfileInformation(LauncherActivity.this);
         }
@@ -346,7 +346,7 @@ public class LauncherActivity extends AppCompatActivity {
         }
     }
 
-    public void forgotPasswordSelected(RippleView view) {
+    public void forgotPasswordSelected() {
         if (mLtLoginBinder.textviewVendorName.getText().toString().isEmpty()) {
             mLtLoginBinder.textviewVendorName.setError(getString(R.string.fld_error_email));
         } else {
@@ -362,7 +362,7 @@ public class LauncherActivity extends AppCompatActivity {
         }
     }
 
-    public void registerAccountSelected(RippleView view) {
+    public void registerAccountSelected() {
         startActivity(new Intent(LauncherActivity.this, RegisterActivity.class));
     }
 

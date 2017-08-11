@@ -65,7 +65,7 @@ public class FeedbackItem implements android.os.Parcelable {
         return feedbackBy;
     }
 
-    public int getFeedbackOrderId() {
+    int getFeedbackOrderId() {
         return feedbackOrderId;
     }
 

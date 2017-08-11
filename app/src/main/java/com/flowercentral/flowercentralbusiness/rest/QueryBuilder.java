@@ -109,6 +109,6 @@ public class QueryBuilder {
 
     public static String getForgotPasswordUrl() {
         return BuildConfig.SERVER +
-                "forgotpassword";
+                "forgetpassword";
     }
 }

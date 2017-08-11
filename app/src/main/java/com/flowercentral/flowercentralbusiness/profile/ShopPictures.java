@@ -29,13 +29,13 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.andexert.library.RippleView;
 import com.flowercentral.flowercentralbusiness.R;
-import com.flowercentral.flowercentralbusiness.dao.MultipartUtility;
 import com.flowercentral.flowercentralbusiness.databinding.FragmentShopPicturesBinding;
 import com.flowercentral.flowercentralbusiness.profile.model.ShopPictureDetails;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
 import com.flowercentral.flowercentralbusiness.setting.AppConstant;
 import com.flowercentral.flowercentralbusiness.util.Logger;
+import com.flowercentral.flowercentralbusiness.util.MultipartUtility;
 import com.flowercentral.flowercentralbusiness.util.PermissionUtil;
 import com.flowercentral.flowercentralbusiness.util.Util;
 import com.flowercentral.flowercentralbusiness.volley.ErrorData;
@@ -512,7 +512,7 @@ public class ShopPictures extends Fragment implements RippleView.OnRippleComplet
                     SimpleDateFormat formatSrc = new SimpleDateFormat(srcFormat, Locale.getDefault());
                     multipart.addFormField(getString(R.string.api_key_timestamp), formatSrc.format(Calendar.getInstance().getTime()));
 
-                    String response = multipart.finish(HttpURLConnection.HTTP_OK);
+                    String response = multipart.finish(HttpURLConnection.HTTP_CREATED);
                     responseObject = new JSONObject(response);
                     if (responseObject.getInt(getString(R.string.api_res_status)) == 1) {
                         Logger.log(TAG, "doInBackground : ", response, AppConstant.LOG_LEVEL_INFO);

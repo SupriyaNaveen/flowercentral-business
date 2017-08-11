@@ -31,7 +31,6 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.andexert.library.RippleView;
 import com.flowercentral.flowercentralbusiness.R;
-import com.flowercentral.flowercentralbusiness.dao.MultipartUtility;
 import com.flowercentral.flowercentralbusiness.databinding.ActivityRegisterBinding;
 import com.flowercentral.flowercentralbusiness.databinding.LayoutRegisterBinding;
 import com.flowercentral.flowercentralbusiness.databinding.LayoutUploadShopDetailsBinding;
@@ -43,6 +42,7 @@ import com.flowercentral.flowercentralbusiness.profile.model.ProfileDetails;
 import com.flowercentral.flowercentralbusiness.rest.QueryBuilder;
 import com.flowercentral.flowercentralbusiness.setting.AppConstant;
 import com.flowercentral.flowercentralbusiness.util.Logger;
+import com.flowercentral.flowercentralbusiness.util.MultipartUtility;
 import com.flowercentral.flowercentralbusiness.util.PermissionUtil;
 import com.flowercentral.flowercentralbusiness.util.Util;
 
@@ -525,7 +525,7 @@ public class RegisterActivity extends AppCompatActivity implements RippleView.On
                             multipart.addFilePart("shop_images[]", file);
                         }
                     }
-                    String response = multipart.finish(HttpURLConnection.HTTP_OK);
+                    String response = multipart.finish(HttpURLConnection.HTTP_CREATED);
                     responseObject = new JSONObject(response);
                     if (responseObject.getInt(getString(R.string.api_res_status)) == 1) {
                         Logger.log(TAG, "doInBackground : ", response, AppConstant.LOG_LEVEL_INFO);
