@@ -201,8 +201,6 @@ public class LauncherActivity extends AppCompatActivity {
                 dismissDialog();
 
                 if (error != null) {
-                    error.setErrorMessage("Login failed. Cause -> " + error.getErrorMessage());
-
                     switch (error.getErrorType()) {
                         case NETWORK_NOT_AVAILABLE:
                             Snackbar.make(mBinder.rootLayout, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();

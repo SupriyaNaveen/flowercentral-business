@@ -112,6 +112,7 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
                         if (!obj.isNull("errorCode")) {
                             String code = obj.getString("errorCode");
                             errorData.setErrorCodeOfResponseData(code);
+                            errorData.setErrorMessage(obj.getString("errorMessage"));
                         }
 
                     } catch (JSONException e) {
@@ -234,7 +235,7 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
                 //addCommonHeaderParams(request);
                 AsyncHttpClient.getInstance(mContext).addToRequestQueue(request, tag);
             } catch (JSONException e) {
-
+                e.printStackTrace();
             }
         } else {
             ErrorData errorData = new ErrorData();

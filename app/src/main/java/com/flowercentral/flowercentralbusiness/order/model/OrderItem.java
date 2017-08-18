@@ -174,10 +174,28 @@ public class OrderItem implements Parcelable {
     }
 
     private enum DELIVERY_STATUS {
-        @SerializedName("Pending")
-        PENDING,
+        @SerializedName("Unassigned")
+        UNASSIGNED("Unassigned"),
+        @SerializedName("Assigned & Pending")
+        PENDING("Assigned & Pending"),
+        @SerializedName("In Progress")
+        IN_PROGRESS("In Progress"),
         @SerializedName("Delivered")
-        DELIVERED
+        DELIVERED("Delivered"),
+        @SerializedName("Cancelled")
+        CANCELLED("Cancelled"),
+        @SerializedName("Vendor not found")
+        VENDOR_NOT_FOUND("Vendor not found");
+
+        DELIVERY_STATUS(String s) {
+            this.deliveryStatus = s;
+        }
+
+        String deliveryStatus;
+
+        public String value() {
+            return deliveryStatus;
+        }
     }
 
     public int getId() {

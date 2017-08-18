@@ -79,17 +79,17 @@ public class QueryBuilder {
 
     public static String getTodaysSalesDataUrl() {
         return BuildConfig.SERVER +
-                "salesdashboard_daily";
+                "salesdashboarddaily";
     }
 
     public static String getWeeklySalesDataUrl() {
         return BuildConfig.SERVER +
-                "salesdashboard_weekly";
+                "salesdashboardweekly";
     }
 
     public static String getMonthlySalesDataUrl() {
         return BuildConfig.SERVER +
-                "salesdashboard_monthly";
+                "salesdashboardmonthly";
     }
 
     public static String getHelpDetailsUrl() {

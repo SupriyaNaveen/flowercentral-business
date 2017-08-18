@@ -228,7 +228,7 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/dp10"
                     android:drawableStart="@drawable/ic_tin_white"
-                    android:imeOptions="actionNext"
+                    android:imeOptions="actionDone"
                     android:inputType="text"
                     android:maxLines="1"
                     android:text="@{profile.tinNumber}" />

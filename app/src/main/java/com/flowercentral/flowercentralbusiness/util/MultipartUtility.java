@@ -197,7 +197,10 @@ public class MultipartUtility {
             in.close();
             httpConn.disconnect();
         } else {
-            throw new IOException("Server returned non-OK status: " + status);
+            InputStream in = new BufferedInputStream(httpConn.getErrorStream());
+            response = streamToString(in);
+            in.close();
+            httpConn.disconnect();
         }
 
         return response;

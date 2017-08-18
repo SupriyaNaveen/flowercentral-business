@@ -231,7 +231,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="@{String.valueOf(orderdetails.deliveryStatus)}"
+                android:text="@{String.valueOf(orderdetails.deliveryStatus.value())}"
                 android:textColor="@color/colorPrimary" />
 
         </LinearLayout>

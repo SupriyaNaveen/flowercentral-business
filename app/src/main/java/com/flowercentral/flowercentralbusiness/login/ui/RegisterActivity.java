@@ -553,7 +553,13 @@ public class RegisterActivity extends AppCompatActivity implements RippleView.On
                 mImageUploadAdapter.notifyDataSetChanged();
                 showRegisterSuccessMessage(responseObject);
             } else {
-                Snackbar.make(mBinder.outerWrapper, getResources().getString(R.string.msg_data_upload_failed), Snackbar.LENGTH_SHORT).show();
+                if (responseObject != null && !responseObject.isNull("errorMessage")) {
+                    try {
+                        Snackbar.make(mBinder.outerWrapper, responseObject.getString("errorMessage"), Snackbar.LENGTH_SHORT).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }

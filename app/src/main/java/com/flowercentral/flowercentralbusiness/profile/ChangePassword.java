@@ -95,9 +95,9 @@ public class ChangePassword extends Fragment implements RippleView.OnRippleCompl
                             mBinder.editTextNewPassword.setText("");
                             mBinder.editTextConfirmNewPassword.setText("");
                             mBinder.editTextOldPassword.setText("");
-                            Snackbar.make(mBinder.rootLayout, "Password reset successful", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, response.getString(getString(R.string.api_res_message)), Snackbar.LENGTH_SHORT).show();
                         } else {
-                            Snackbar.make(mBinder.rootLayout, "Password reset failed", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(mBinder.rootLayout, response.getString(getString(R.string.api_res_message)), Snackbar.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {
                         Snackbar.make(mBinder.rootLayout, "Password reset failed", Snackbar.LENGTH_SHORT).show();
@@ -107,7 +107,6 @@ public class ChangePassword extends Fragment implements RippleView.OnRippleCompl
                 @Override
                 public void onError(ErrorData error) {
                     if (error != null) {
-                        error.setErrorMessage("Update failed. Cause -> " + error.getErrorMessage());
                         switch (error.getErrorType()) {
                             case NETWORK_NOT_AVAILABLE:
                                 Snackbar.make(mBinder.rootLayout, getResources().getString(R.string.msg_internet_unavailable), Snackbar.LENGTH_SHORT).show();

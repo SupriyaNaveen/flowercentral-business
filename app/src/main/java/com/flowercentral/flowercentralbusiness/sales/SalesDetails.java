@@ -13,7 +13,7 @@ class SalesDetails implements Parcelable {
     private Integer totalOrders;
 
     @SerializedName("total_sale")
-    private Integer totalSales;
+    private Double totalSales;
 
     @SerializedName("startdate")
     private String startDate;
@@ -29,7 +29,7 @@ class SalesDetails implements Parcelable {
 
     private SalesDetails(Parcel in) {
         totalOrders = in.readInt();
-        totalSales = in.readInt();
+        totalSales = in.readDouble();
         month = in.readString();
         startDate = in.readString();
         endDate = in.readString();
@@ -56,7 +56,7 @@ class SalesDetails implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(totalOrders);
-        dest.writeInt(totalSales);
+        dest.writeDouble(totalSales);
         dest.writeString(month);
         dest.writeList(graphDataArrayList);
         dest.writeString(startDate);
@@ -67,7 +67,7 @@ class SalesDetails implements Parcelable {
         return totalOrders;
     }
 
-    Integer getTotalSales() {
+    Double getTotalSales() {
         return totalSales;
     }
 

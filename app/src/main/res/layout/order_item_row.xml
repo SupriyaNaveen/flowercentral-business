@@ -119,7 +119,7 @@
                             android:layout_marginStart="@dimen/dp10"
                             android:background="@drawable/flower_image_frame_pink"
                             android:padding="@dimen/dp5"
-                            android:text="@{String.valueOf(order.paidStatus)}"
+                            android:text="@{String.valueOf(order.paidStatus.value())}"
                             android:textColor="@color/colorPrimary" />
                     </LinearLayout>
 

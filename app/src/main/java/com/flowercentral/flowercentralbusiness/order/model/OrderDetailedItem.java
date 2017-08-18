@@ -32,16 +32,16 @@ public class OrderDetailedItem implements Parcelable {
     @SerializedName("status")
     private DELIVERY_STATUS deliveryStatus; //0: pending, 1: delivered
 
-    @SerializedName("scheduled_dateTime")
+    @SerializedName("scheduled_datetime")
     private String scheduleDateTime;
 
-    @SerializedName("delivery_at")
+    @SerializedName("delivered_at")
     private String deliveredDateTime;
 
     @SerializedName("scheduled_delivery")
     private IS_SCHEDULED_DELIVERY isScheduledDelivery; // 0 no, 1 yes
 
-    @SerializedName("product_details")
+    @SerializedName("products")
     private List<ProductItem> productItemList = new ArrayList<>();
 
     private String formatDate(String dateString) {
@@ -128,10 +128,28 @@ public class OrderDetailedItem implements Parcelable {
     }
 
     public enum DELIVERY_STATUS {
-        @SerializedName("Pending")
-        PENDING,
+        @SerializedName("Unassigned")
+        UNASSIGNED("Unassigned"),
+        @SerializedName("Assigned & Pending")
+        PENDING("Assigned & Pending"),
+        @SerializedName("In Progress")
+        IN_PROGRESS("In Progress"),
         @SerializedName("Delivered")
-        DELIVERED
+        DELIVERED("Delivered"),
+        @SerializedName("Cancelled")
+        CANCELLED("Cancelled"),
+        @SerializedName("Vendor not found")
+        VENDOR_NOT_FOUND("Vendor not found");
+
+        DELIVERY_STATUS(String s) {
+            this.deliveryStatus = s;
+        }
+
+        String deliveryStatus;
+
+        public String value() {
+            return deliveryStatus;
+        }
     }
 
     public enum IS_SCHEDULED_DELIVERY {
