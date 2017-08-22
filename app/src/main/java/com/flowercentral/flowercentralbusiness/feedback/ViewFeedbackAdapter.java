@@ -14,10 +14,11 @@ import com.flowercentral.flowercentralbusiness.databinding.FeedbackItemRowBindin
 import com.flowercentral.flowercentralbusiness.databinding.LayoutNoOrderItemBinding;
 import com.flowercentral.flowercentralbusiness.order.OrderDetailsActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Feedback adapter provides view to each item of feedback list.
  */
 class ViewFeedbackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -27,6 +28,8 @@ class ViewFeedbackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private Context mContext;
 
     /**
+     * Init the adapter by setting the feedback list data.
+     *
      * @param list list
      */
     ViewFeedbackAdapter(List<FeedbackItem> list) {
@@ -34,7 +37,10 @@ class ViewFeedbackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     /**
-     * Initialise the feedback each item row view.
+     * Get the view type.
+     * If type is empty then show the empty view.
+     * If type is non empty, then
+     * Initialise the feedback view for each item in the list.
      *
      * @param parent   parent
      * @param viewType viewType
@@ -107,6 +113,12 @@ class ViewFeedbackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return size;
     }
 
+    /**
+     * Get the view type based on the list size.
+     *
+     * @param position position
+     * @return view type
+     */
     @Override
     public int getItemViewType(int position) {
         int viewType;
@@ -122,11 +134,11 @@ class ViewFeedbackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     /**
      * View holder class.
      */
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    private class ViewHolder extends RecyclerView.ViewHolder {
 
         FeedbackItemRowBinding feedbackItemRowBinder;
 
-        public ViewHolder(FeedbackItemRowBinding binder) {
+        ViewHolder(FeedbackItemRowBinding binder) {
             super(binder.getRoot());
 
             feedbackItemRowBinder = binder;
@@ -137,6 +149,9 @@ class ViewFeedbackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
+    /**
+     * Empty view holder class.
+     */
     private class EmptyListViewHolder extends RecyclerView.ViewHolder {
 
         LayoutNoOrderItemBinding emptyViewBinder;
@@ -145,5 +160,22 @@ class ViewFeedbackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             super(binder.getRoot());
             emptyViewBinder = binder;
         }
+    }
+
+    /**
+     * Replace the feedback item list with new set of data.
+     * Refresh the view accordingly.
+     *
+     * @param _list list
+     */
+    void replaceAll(List<FeedbackItem> _list) {
+        if (null == mFeedbackItemList) {
+            mFeedbackItemList = new ArrayList<>();
+        }
+        if (mFeedbackItemList.size() > 0) {
+            mFeedbackItemList.clear();
+        }
+        mFeedbackItemList.addAll(_list);
+        this.notifyDataSetChanged();
     }
 }

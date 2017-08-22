@@ -5,6 +5,9 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Help model class.
+ */
 class HelpDetails implements Parcelable{
 
     @SerializedName("question")

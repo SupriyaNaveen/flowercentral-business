@@ -24,20 +24,23 @@ import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * Feedback list is listed in this view.
+ * The feedback related order also shown.
  */
 public class FeedbackFragment extends Fragment {
 
     private static final String TAG = FeedbackFragment.class.getSimpleName();
     private Context mContext;
     private FragmentFeedbackBinding mBinder;
+    private ViewFeedbackAdapter mFeedbackAdapter;
 
     /**
+     * Instantiate the fragment.
+     *
      * @return instance of fragment
      */
     public static FeedbackFragment newInstance() {
@@ -45,6 +48,9 @@ public class FeedbackFragment extends Fragment {
     }
 
     /**
+     * Set up the views.
+     * Get the feedback list from web api to project on view.
+     *
      * @param inflater           inflater
      * @param container          container
      * @param savedInstanceState savedInstanceState
@@ -82,9 +88,11 @@ public class FeedbackFragment extends Fragment {
 
     /**
      * Get the feedback items list and present it on UI.
+     * On error in fetching the data, show appropriate message.
      */
     private void getFeedbackItems() {
 
+        hideRefreshLayout();
         //No internet connection then return
         if (!Util.checkInternet(mContext)) {
             Toast.makeText(mContext, getResources().getString(R.string.msg_internet_unavailable), Toast.LENGTH_LONG).show();
@@ -102,12 +110,7 @@ public class FeedbackFragment extends Fragment {
 
             @Override
             public void onError(ErrorData error) {
-                hideRefreshLayout();
                 if (error != null) {
-
-                    List<FeedbackItem> feedbackItemList = new ArrayList<>();
-                    updateFeedbackListViews(feedbackItemList);
-
                     error.setErrorMessage("Data fetch failed. Cause -> " + error.getErrorMessage());
                     switch (error.getErrorType()) {
                         case NETWORK_NOT_AVAILABLE:
@@ -147,6 +150,8 @@ public class FeedbackFragment extends Fragment {
     }
 
     /**
+     * Construct Feedback list model from web api json response.
+     *
      * @param response response
      * @return feedback item list
      */
@@ -158,17 +163,18 @@ public class FeedbackFragment extends Fragment {
     }
 
     /**
-     * Hide the swipe refresh layout.
      * If the list is empty show empty view. Else show the recycler view.
      *
      * @param feedbackItemList feedbackItemList
      */
     private void updateFeedbackListViews(List<FeedbackItem> feedbackItemList) {
 
-        hideRefreshLayout();
-
-        ViewFeedbackAdapter adapter = new ViewFeedbackAdapter(feedbackItemList);
-        mBinder.feedbackRecyclerview.setAdapter(adapter);
+        if (mFeedbackAdapter == null) {
+            mFeedbackAdapter = new ViewFeedbackAdapter(feedbackItemList);
+            mBinder.feedbackRecyclerview.setAdapter(mFeedbackAdapter);
+        } else {
+            mFeedbackAdapter.replaceAll(feedbackItemList);
+        }
     }
 
     /**

@@ -26,13 +26,17 @@ import com.flowercentral.flowercentralbusiness.sales.SalesDashboardFragment;
 import static com.flowercentral.flowercentralbusiness.preference.UserPreference.deleteProfileInformation;
 
 /**
- *
+ * Application dashboard, which has container to hold
+ * Order, Sales details, Profile, Feedback's, Help
  */
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private ActivityDashboardBinding mBinder;
 
     /**
+     * Set up the dashboard view, navigation drawer and toolbar.
+     * Load order's details as default content of dashboard.
+     *
      * @param savedInstanceState savedInstanceState
      */
     @Override
@@ -67,7 +71,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     }
 
     /**
-     *
+     * On back pressed, if navigation drawer is opened then close it.
+     * Or else finish the dashboard.
      */
     @Override
     public void onBackPressed() {
@@ -80,7 +85,10 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     }
 
     /**
-     * @param item item
+     * Handles the navigation item click.
+     * The corresponding views loaded on each selection.
+     *
+     * @param item item which is being clicked.
      * @return boolean
      */
     @Override

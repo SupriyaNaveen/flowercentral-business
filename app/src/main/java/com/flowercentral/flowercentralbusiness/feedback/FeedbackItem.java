@@ -5,7 +5,7 @@ import android.os.Parcel;
 import com.google.gson.annotations.SerializedName;
 
 /**
- *
+ * Feedback model class
  */
 public class FeedbackItem implements android.os.Parcelable {
 
