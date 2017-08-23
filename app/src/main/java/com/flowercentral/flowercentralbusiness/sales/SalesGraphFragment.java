@@ -34,6 +34,9 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * Sales details, sales data graph shown here.
+ */
 public class SalesGraphFragment extends Fragment {
 
     private static final String TAG = SalesGraphFragment.class.getSimpleName();
@@ -47,6 +50,12 @@ public class SalesGraphFragment extends Fragment {
         MONTHLY
     }
 
+    /**
+     * Instantiate the sales graph fragment.
+     *
+     * @param typeOfGraph today, weekly, monthly
+     * @return fragment instance
+     */
     public static SalesGraphFragment newInstance(VIEW_TYPE typeOfGraph) {
         SalesGraphFragment salesGraph = new SalesGraphFragment();
         Bundle bundle = new Bundle();
@@ -55,6 +64,11 @@ public class SalesGraphFragment extends Fragment {
         return salesGraph;
     }
 
+    /**
+     * Init viewtype from arguments.
+     *
+     * @param savedInstanceState savedInstanceState
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +78,15 @@ public class SalesGraphFragment extends Fragment {
         }
     }
 
+    /**
+     * Set up view.
+     * Get the graph details to show in UI.
+     *
+     * @param inflater           inflater
+     * @param container          container
+     * @param savedInstanceState savedInstanceState
+     * @return view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -73,6 +96,9 @@ public class SalesGraphFragment extends Fragment {
         return mBinder.getRoot();
     }
 
+    /**
+     * Based on view type setup the url and make web api call.
+     */
     private void getSalesGraphDetails() {
 
         String url;
@@ -92,6 +118,13 @@ public class SalesGraphFragment extends Fragment {
         }
     }
 
+    /**
+     * Make sales details url call.
+     * On success, construct model class of json response. Then update the UI.
+     * On failure show appropriate messages.
+     *
+     * @param url url
+     */
     private void getSalesDetails(String url) {
 
         //No internet connection then return
@@ -152,6 +185,14 @@ public class SalesGraphFragment extends Fragment {
         baseModel.executeGetJsonRequest(url, TAG);
     }
 
+    /**
+     * Update today, weekly, monthly sales view based on view type.
+     * Today : Update total order, total sales.
+     * Weekly: Set the title, construct and populate graph point.
+     * Monthly: Set the title, construct and populate graph point.
+     *
+     * @param salesDetails sales details
+     */
     private void updateSalesGraphView(SalesDetails salesDetails) {
 
         DataPoint[] dataPoints;
@@ -204,9 +245,9 @@ public class SalesGraphFragment extends Fragment {
                         @Override
                         public String formatLabel(double value, boolean isValueX) {
                             if (isValueX) {
-                                return super.formatLabel(value, isValueX) + " Week";
+                                return super.formatLabel(value, true) + " Week";
                             } else {
-                                return super.formatLabel(value, isValueX);
+                                return super.formatLabel(value, false);
                             }
                         }
                     });
@@ -216,6 +257,12 @@ public class SalesGraphFragment extends Fragment {
         }
     }
 
+    /**
+     * Set up the style for graph view and plot data point on graph view.
+     *
+     * @param dataPoints data points
+     * @param noOfRows   number of rows
+     */
     private void drawGraph(DataPoint[] dataPoints, int noOfRows) {
         LineGraphSeries<DataPoint> monthlySeries = new LineGraphSeries<>(dataPoints);
         mBinder.graphView.getGridLabelRenderer().setNumHorizontalLabels(noOfRows);
@@ -233,6 +280,12 @@ public class SalesGraphFragment extends Fragment {
         mBinder.graphView.getGridLabelRenderer().reloadStyles();
     }
 
+    /**
+     * Construct SalesDetails model from json response.
+     *
+     * @param response response
+     * @return SalesDetails model
+     */
     private SalesDetails constructSalesDetails(JSONObject response) {
         return new Gson().fromJson(String.valueOf(response),
                 new TypeToken<SalesDetails>() {

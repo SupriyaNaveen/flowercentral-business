@@ -18,10 +18,16 @@ class DocumentsContract {
     static String getDocumentId(Uri documentUri) {
         final List<String> paths = documentUri.getPathSegments();
         if (paths.size() < 2) {
+            Logger.logError(DocumentsContract.class.getSimpleName(),
+                    "getDocumentId",
+                    "Not a document: " + documentUri);
             throw new IllegalArgumentException("Not a document: " + documentUri);
         }
 
         if (!PATH_DOCUMENT.equals(paths.get(0))) {
+            Logger.logError(DocumentsContract.class.getSimpleName(),
+                    "getDocumentId",
+                    "Not a document: " + documentUri);
             throw new IllegalArgumentException("Not a document: " + documentUri);
         }
         return paths.get(1);

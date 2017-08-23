@@ -1,17 +1,14 @@
 package com.flowercentral.flowercentralbusiness.util;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.flowercentral.flowercentralbusiness.preference.UserPreference;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -27,7 +24,6 @@ import static com.flowercentral.flowercentralbusiness.util.Util.streamToString;
  *
  * @author www.codejava.net
  */
-
 public class MultipartUtility {
     private final String boundary;
     private static final String LINE_FEED = "\r\n";
@@ -135,44 +131,6 @@ public class MultipartUtility {
     }
 
     /**
-     * Adds a header field to the request.
-     *
-     * @param name  - name of the header field
-     * @param value - value of the header field
-     */
-    public void addHeaderField(String name, String value) {
-        writer.append(name).append(": ").append(value).append(LINE_FEED);
-        writer.flush();
-    }
-
-    /*
-    public List<String> finish() throws IOException {
-        List<String> response = new ArrayList<String>();
-
-        writer.append(LINE_FEED).flush();
-        writer.append("--" + boundary + "--").append(LINE_FEED);
-        writer.close();
-
-        // checks server's status code first
-        int status = httpConn.getResponseCode();
-        if (status == HttpURLConnection.HTTP_OK) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    httpConn.getInputStream()));
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                response.add(line);
-            }
-            reader.close();
-            httpConn.disconnect();
-        } else {
-            throw new IOException("Server returned non-OK status: " + status);
-        }
-
-        return response;
-    }
-    */
-
-    /**
      * Completes the request and receives response from the server.
      *
      * @return a list of Strings as response in case the server returned
@@ -206,29 +164,64 @@ public class MultipartUtility {
         return response;
     }
 
+//    /**
+//     * Adds a header field to the request.
+//     *
+//     * @param name  - name of the header field
+//     * @param value - value of the header field
+//     */
+//    public void addHeaderField(String name, String value) {
+//        writer.append(name).append(": ").append(value).append(LINE_FEED);
+//        writer.flush();
+//    }
 
-    private static String inputStreamToString(InputStream in) {
-        String result = "";
-        if (in == null) {
-            return result;
-        }
+//    public List<String> finish() throws IOException {
+//        List<String> response = new ArrayList<String>();
+//
+//        writer.append(LINE_FEED).flush();
+//        writer.append("--" + boundary + "--").append(LINE_FEED);
+//        writer.close();
+//
+//        // checks server's status code first
+//        int status = httpConn.getResponseCode();
+//        if (status == HttpURLConnection.HTTP_OK) {
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(
+//                    httpConn.getInputStream()));
+//            String line = null;
+//            while ((line = reader.readLine()) != null) {
+//                response.add(line);
+//            }
+//            reader.close();
+//            httpConn.disconnect();
+//        } else {
+//            throw new IOException("Server returned non-OK status: " + status);
+//        }
+//
+//        return response;
+//    }
 
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            StringBuilder out = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                out.append(line);
-            }
-            result = out.toString();
-            reader.close();
-
-            return result;
-        } catch (Exception e) {
-            // TODO: handle exception
-            Log.e("InputStream", "Error : " + e.toString());
-            return result;
-        }
-
-    }
+//    private static String inputStreamToString(InputStream in) {
+//        String result = "";
+//        if (in == null) {
+//            return result;
+//        }
+//
+//        try {
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+//            StringBuilder out = new StringBuilder();
+//            String line;
+//            while ((line = reader.readLine()) != null) {
+//                out.append(line);
+//            }
+//            result = out.toString();
+//            reader.close();
+//
+//            return result;
+//        } catch (Exception e) {
+//            // TODO: handle exception
+//            Log.e("InputStream", "Error : " + e.toString());
+//            return result;
+//        }
+//
+//    }
 }

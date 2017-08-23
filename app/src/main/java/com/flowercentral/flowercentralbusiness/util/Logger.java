@@ -11,16 +11,19 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
 
+/**
+ * Logger utility class, helps to log information.
+ */
 public class Logger {
     private static boolean print_log_to_console = true;
     public static boolean print_log_to_file = false;
 
     /**
-     * used to log an information to  LogCat.
+     * Used to log an information to  LogCat.
      *
-     * @param className : Name of the class file
+     * @param className  : Name of the class file
      * @param methodName : Name of the method
-     * @param info : Information to be print in LogCat.
+     * @param info       : Information to be print in LogCat.
      */
     public static void log(String className, String methodName, String info, int logLevel) {
         if (print_log_to_console) {
@@ -47,13 +50,13 @@ public class Logger {
     }
 
     /**
-     * used to log an error to SD-card and LogCat.
+     * Used to log an error to SD-card and LogCat.
      *
      * @param className  : Name of the class file
      * @param methodName : Name of the method
      * @param errorMsg   : Error Message
      */
-    private static void logError(String className, String methodName, String errorMsg) {
+    static void logError(String className, String methodName, String errorMsg) {
         String log = "Class: " + className + " | ";
         log = log + "Method: " + methodName + " | ";
         log = log + "Error: " + errorMsg;
@@ -65,7 +68,15 @@ public class Logger {
         }
     }
 
-    public static void printLogToFile(String message) {
+    /**
+     * Print log message to file.
+     * A file namely log.txt is created in Florist folder of external directory.
+     * Message is written to it.
+     * Calendar details append to same file.
+     *
+     * @param message message
+     */
+    private static void printLogToFile(String message) {
         // write log info to file
 
         // check for SD-card mounted or not
@@ -75,12 +86,12 @@ public class Logger {
             String filePath = folderPath + "log.txt";
             File directory = new File(folderPath);
             boolean isDirCreated = directory.mkdirs();
-            if(isDirCreated) {
+            if (isDirCreated) {
                 File logFile = new File(filePath);
                 if (!logFile.exists()) {
                     try {
                         boolean isFileCreated = logFile.createNewFile();
-                        if(isFileCreated) {
+                        if (isFileCreated) {
                             BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
                             buf.append(AppConstant.APP_NAME);
                             buf.newLine();

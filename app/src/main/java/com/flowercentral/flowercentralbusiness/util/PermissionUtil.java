@@ -6,7 +6,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
-
+/**
+ * Provides functionalities related to app permission.
+ */
 public class PermissionUtil {
 
     // Initialize the request code for each permission

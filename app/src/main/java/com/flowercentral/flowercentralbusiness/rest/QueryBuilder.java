@@ -3,7 +3,7 @@ package com.flowercentral.flowercentralbusiness.rest;
 import com.flowercentral.flowercentralbusiness.BuildConfig;
 
 /**
- *
+ * Construct the query by appending server url with api name.
  */
 public class QueryBuilder {
 

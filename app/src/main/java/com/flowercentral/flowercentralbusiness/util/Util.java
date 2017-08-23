@@ -1,7 +1,6 @@
 package com.flowercentral.flowercentralbusiness.util;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityManager;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,15 +21,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Map;
 
+/**
+ * Utility class includes common functionality.
+ */
 public class Util {
     private static final String TAG = Util.class.getSimpleName();
 
@@ -55,52 +52,52 @@ public class Util {
 
     }
 
-    /**
-     * Get Network connection type
-     *
-     * @param _context : Context
-     * @return ConnectivityType : Int
-     */
-    public static int getNetworkType(Context _context) {
-        int networkType;
-        try {
-            ConnectivityManager connectivityManager = (ConnectivityManager) _context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-            if (activeNetwork != null) {
-                networkType = activeNetwork.getType();
-            } else {
-                networkType = -1;
-            }
+//    /**
+//     * Get Network connection type
+//     *
+//     * @param _context : Context
+//     * @return ConnectivityType : Int
+//     */
+//    public static int getNetworkType(Context _context) {
+//        int networkType;
+//        try {
+//            ConnectivityManager connectivityManager = (ConnectivityManager) _context.getSystemService(Context.CONNECTIVITY_SERVICE);
+//            NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+//            if (activeNetwork != null) {
+//                networkType = activeNetwork.getType();
+//            } else {
+//                networkType = -1;
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            return -1;
+//        }
+//        return networkType;
+//    }
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return -1;
-        }
-        return networkType;
-    }
-
-    /**
-     * Check whether a particular service is running or not
-     *
-     * @param _context:   Context
-     * @param _className: String
-     */
-
-    public static boolean isServiceRunning(Context _context, String _className) {
-        boolean isServiceRunning = false;
-        try {
-            ActivityManager manager = (ActivityManager) _context.getSystemService(Context.ACTIVITY_SERVICE);
-            for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-                if (_className.equals(service.service.getClassName())) {
-                    isServiceRunning = true;
-                }
-            }
-        } catch (Exception ex) {
-            isServiceRunning = false;
-        }
-
-        return isServiceRunning;
-    }
+//    /**
+//     * Check whether a particular service is running or not
+//     *
+//     * @param _context:   Context
+//     * @param _className: String
+//     */
+//
+//    public static boolean isServiceRunning(Context _context, String _className) {
+//        boolean isServiceRunning = false;
+//        try {
+//            ActivityManager manager = (ActivityManager) _context.getSystemService(Context.ACTIVITY_SERVICE);
+//            for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+//                if (_className.equals(service.service.getClassName())) {
+//                    isServiceRunning = true;
+//                }
+//            }
+//        } catch (Exception ex) {
+//            isServiceRunning = false;
+//        }
+//
+//        return isServiceRunning;
+//    }
 
     /**
      * Get IMEI Number of the device
@@ -141,66 +138,66 @@ public class Util {
         return deviceId;
     }
 
-    /**
-     * Get Device Manufacturer
-     *
-     * @return String
-     */
-    public static String getManufacturer() {
-        // Android VERSION
-        String manufacturer = Build.MANUFACTURER;
-        if (manufacturer == null) {
-            return null;
-        } else {
-            return manufacturer;
-        }
-    }
+//    /**
+//     * Get Device Manufacturer
+//     *
+//     * @return String
+//     */
+//    public static String getManufacturer() {
+//        // Android VERSION
+//        String manufacturer = Build.MANUFACTURER;
+//        if (manufacturer == null) {
+//            return null;
+//        } else {
+//            return manufacturer;
+//        }
+//    }
 
-    /**
-     * Get Device Model
-     *
-     * @return String
-     */
-    public static String getModelNumber() {
-        String PhoneModel = Build.MODEL;
-        if (PhoneModel == null) {
-            return null;
-        } else {
-            return PhoneModel;
-        }
-    }
+//    /**
+//     * Get Device Model
+//     *
+//     * @return String
+//     */
+//    public static String getModelNumber() {
+//        String PhoneModel = Build.MODEL;
+//        if (PhoneModel == null) {
+//            return null;
+//        } else {
+//            return PhoneModel;
+//        }
+//    }
 
-    /**
-     * Get Android version
-     *
-     * @return string
-     */
-    public static String getAndroidVersion() {
-        // Android VERSION
-        String AndroidVersion = Build.VERSION.RELEASE;
-        if (AndroidVersion == null) {
-            return null;
-        } else {
-            return AndroidVersion;
-        }
-    }
+//    /**
+//     * Get Android version
+//     *
+//     * @return string
+//     */
+//    public static String getAndroidVersion() {
+//        // Android VERSION
+//        String AndroidVersion = Build.VERSION.RELEASE;
+//        if (AndroidVersion == null) {
+//            return null;
+//        } else {
+//            return AndroidVersion;
+//        }
+//    }
 
-    /**
-     * Get Current date & time
-     *
-     * @param _dateFormat dateformat
-     * @return string
-     */
-    public static String getCurrentDateTimeStamp(String _dateFormat) {
-        DateFormat dateFormat = new SimpleDateFormat(_dateFormat, Locale.getDefault());
-        Calendar calendar = Calendar.getInstance(Locale.getDefault());
-        return dateFormat.format(calendar.getTime());
-    }
-
-    public static long getCurrentDateTimeStamp() {
-        Calendar calendar = Calendar.getInstance(Locale.getDefault());
-        return calendar.getTimeInMillis();
-    }
+//    /**
+//     * Get Current date & time
+//     *
+//     * @param _dateFormat dateformat
+//     * @return string
+//     */
+//    public static String getCurrentDateTimeStamp(String _dateFormat) {
+//        DateFormat dateFormat = new SimpleDateFormat(_dateFormat, Locale.getDefault());
+//        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+//        return dateFormat.format(calendar.getTime());
+//    }
+//
+//    public static long getCurrentDateTimeStamp() {
+//        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+//        return calendar.getTimeInMillis();
+//    }
 
     public static String formatDate(String _date, String _fromFormat, String _toFormat) {
         String strDate;
@@ -362,26 +359,26 @@ public class Util {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
     }
 
-    public String getQueryString(Map<String, String> _params) {
-        StringBuilder builder = new StringBuilder();
+//    public String getQueryString(Map<String, String> _params) {
+//        StringBuilder builder = new StringBuilder();
+//
+//        for (String key : _params.keySet()) {
+//            Object value = _params.get(key);
+//            if (value != null) {
+//                try {
+//                    value = URLEncoder.encode(String.valueOf(value), "utf-8");
+//                    if (builder.length() > 0)
+//                        builder.append("&");
+//                    builder.append(key).append("=").append(value);
+//                } catch (UnsupportedEncodingException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//        return builder.toString();
+//    }
 
-        for (String key : _params.keySet()) {
-            Object value = _params.get(key);
-            if (value != null) {
-                try {
-                    value = URLEncoder.encode(String.valueOf(value), "utf-8");
-                    if (builder.length() > 0)
-                        builder.append("&");
-                    builder.append(key).append("=").append(value);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return builder.toString();
-    }
-
-    public static String streamToString(InputStream stream) throws IOException {
+    static String streamToString(InputStream stream) throws IOException {
         int n;
         char[] buffer = new char[1024 * 4];
         InputStreamReader reader = new InputStreamReader(stream, "UTF8");
@@ -390,6 +387,15 @@ public class Util {
         return writer.toString();
     }
 
+    /**
+     * Shows the progress with title, message.
+     *
+     * @param _context     context
+     * @param _title       title
+     * @param _message     message
+     * @param _cancellable cancelable or not
+     * @return dialog instance
+     */
     public static MaterialDialog showProgressDialog(Context _context, String _title, String _message, boolean _cancellable) {
 
         MaterialDialog progressDialog;
@@ -417,7 +423,5 @@ public class Util {
             progressDialog.show();
 
         return progressDialog;
-
     }
-
 }
