@@ -20,6 +20,7 @@ public class CustomJsonObjectRequest extends JsonObjectRequest {
     private NetworkResponse networkResponse;
     private Map<String, String> headerValues;
 
+    @SuppressWarnings("unchecked")
     public CustomJsonObjectRequest(int method, String Url, JSONObject jsonObjectData, Response.Listener listener, Response.ErrorListener errorListener) {
         super(method, Url, jsonObjectData, listener, errorListener);
     }
@@ -64,6 +65,7 @@ public class CustomJsonObjectRequest extends JsonObjectRequest {
         super.deliverError(error);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void deliverResponse(JSONObject response) {
         super.deliverResponse(response);

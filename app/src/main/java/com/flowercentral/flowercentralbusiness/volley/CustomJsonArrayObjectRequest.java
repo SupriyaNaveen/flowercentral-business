@@ -17,10 +17,7 @@ public class CustomJsonArrayObjectRequest extends JsonArrayRequest {
     private NetworkResponse networkResponse;
     private Map<String, String> headerValues;
 
-    public CustomJsonArrayObjectRequest(String url, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
-        super(url, listener, errorListener);
-    }
-
+    @SuppressWarnings("unchecked")
     public CustomJsonArrayObjectRequest(int method, String url, JSONArray jsonRequest, Response.Listener listener, Response.ErrorListener errorListener) {
         super(method, url, jsonRequest, listener, errorListener);
     }
@@ -65,6 +62,7 @@ public class CustomJsonArrayObjectRequest extends JsonArrayRequest {
         super.deliverError(error);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void deliverResponse(JSONArray response) {
         super.deliverResponse(response);

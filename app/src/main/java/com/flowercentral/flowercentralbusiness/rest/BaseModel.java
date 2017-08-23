@@ -27,7 +27,6 @@ import com.flowercentral.flowercentralbusiness.volley.ErrorData;
 import com.flowercentral.flowercentralbusiness.volley.HttpResponseListener;
 import com.flowercentral.flowercentralbusiness.volley.RestUtil;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -45,9 +44,11 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
     private String TAG = BaseModel.class.getSimpleName();
     private static final int MY_SOCKET_TIMEOUT_MS = 10000;
     public Context mContext;
+    private AsyncHttpClient mAsyncHttpClient;
 
     public BaseModel(Context context) {
         this.mContext = context;
+        mAsyncHttpClient = new AsyncHttpClient(mContext);
     }
 
     private Response.Listener<T> listener = new Response.Listener<T>() {
@@ -163,7 +164,7 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     mContext.startActivity(intent);
-                    AsyncHttpClient.getInstance(mContext).cancelAllRequests();
+                    mAsyncHttpClient.cancelAllRequests();
                 }
             });
 
@@ -191,7 +192,7 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
             request.setCustomResponseListener(this);
             request.appendHeaderValues(getCommonAuthorizationHeader());
             // addCommonHeaderParams(request);
-            AsyncHttpClient.getInstance(mContext).addToRequestQueue(request, tag);
+            mAsyncHttpClient.addToRequestQueue(request, tag);
         } else {
             ErrorData errorData = new ErrorData();
             errorData.setErrorType(ErrorData.ERROR_TYPE.NETWORK_NOT_AVAILABLE);
@@ -211,7 +212,7 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
             request.setCustomResponseListener(this);
             request.appendHeaderValues(getCommonAuthorizationHeader());
             //addCommonHeaderParams(request);
-            AsyncHttpClient.getInstance(mContext).addToRequestQueue(request, tag);
+            mAsyncHttpClient.addToRequestQueue(request, tag);
         } else {
             ErrorData errorData = new ErrorData();
             errorData.setErrorType(ErrorData.ERROR_TYPE.NETWORK_NOT_AVAILABLE);
@@ -220,30 +221,30 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
         }
     }
 
-    public void executePostJsonArrayRequest(String url, JSONObject requestObject, String tag) {
-        if (RestUtil.isNetworkAvailable(mContext)) {
-            JSONObject params = appendCommonParams(mContext, requestObject);
-            try {
-                JSONArray jsonArray = new JSONArray();
-                params.toJSONArray(jsonArray);
-                CustomJsonArrayObjectRequest request = new CustomJsonArrayObjectRequest(Request.Method.POST, url, jsonArray, listener, this);
-                request.setRetryPolicy(new DefaultRetryPolicy(MY_SOCKET_TIMEOUT_MS,
-                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-                request.setCustomResponseListener(this);
-                request.appendHeaderValues(getCommonAuthorizationHeader());
-                //addCommonHeaderParams(request);
-                AsyncHttpClient.getInstance(mContext).addToRequestQueue(request, tag);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        } else {
-            ErrorData errorData = new ErrorData();
-            errorData.setErrorType(ErrorData.ERROR_TYPE.NETWORK_NOT_AVAILABLE);
-            errorData.setErrorMessage(mContext.getResources().getString(R.string.msg_internet_unavailable));
-            onError(errorData);
-        }
-    }
+//    public void executePostJsonArrayRequest(String url, JSONObject requestObject, String tag) {
+//        if (RestUtil.isNetworkAvailable(mContext)) {
+//            JSONObject params = appendCommonParams(mContext, requestObject);
+//            try {
+//                JSONArray jsonArray = new JSONArray();
+//                params.toJSONArray(jsonArray);
+//                CustomJsonArrayObjectRequest request = new CustomJsonArrayObjectRequest(Request.Method.POST, url, jsonArray, listener, this);
+//                request.setRetryPolicy(new DefaultRetryPolicy(MY_SOCKET_TIMEOUT_MS,
+//                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//                request.setCustomResponseListener(this);
+//                request.appendHeaderValues(getCommonAuthorizationHeader());
+//                //addCommonHeaderParams(request);
+//                mAsyncHttpClient.addToRequestQueue(request, tag);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        } else {
+//            ErrorData errorData = new ErrorData();
+//            errorData.setErrorType(ErrorData.ERROR_TYPE.NETWORK_NOT_AVAILABLE);
+//            errorData.setErrorMessage(mContext.getResources().getString(R.string.msg_internet_unavailable));
+//            onError(errorData);
+//        }
+//    }
 
     public void executeGetJsonArrayRequest(String url, @Nullable String tag) {
         if (RestUtil.isNetworkAvailable(mContext)) {
@@ -255,7 +256,7 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
             request.setCustomResponseListener(this);
             request.appendHeaderValues(getCommonAuthorizationHeader());
             // addCommonHeaderParams(request);
-            AsyncHttpClient.getInstance(mContext).addToRequestQueue(request, tag);
+            mAsyncHttpClient.addToRequestQueue(request, tag);
         } else {
             ErrorData errorData = new ErrorData();
             errorData.setErrorType(ErrorData.ERROR_TYPE.NETWORK_NOT_AVAILABLE);
@@ -277,7 +278,7 @@ public abstract class BaseModel<T> implements Response.ErrorListener, HttpRespon
     public void processRequest(Context mContext,Request request)
     {
         addCommonHeaderParams(request);
-        AsyncHttpClient.getInstance(mContext).addToRequestQueue(request);
+        mAsyncHttpClient.addToRequestQueue(request);
     }*/
 
 

@@ -11,6 +11,12 @@ public class RestUtil {
 
     private static String TAG = RestUtil.class.getSimpleName();
 
+    /**
+     * Checks whether network available or not.
+     *
+     * @param context context
+     * @return true/false network availability
+     */
     public static boolean isNetworkAvailable(Context context) {
         boolean isNetworkAvailable = false;
         ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

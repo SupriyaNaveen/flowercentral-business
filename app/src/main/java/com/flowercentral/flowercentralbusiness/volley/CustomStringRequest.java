@@ -11,6 +11,7 @@ public class CustomStringRequest extends StringRequest {
     private HttpResponseListener responseListener;
     private NetworkResponse networkResponse;
 
+    @SuppressWarnings("unchecked")
     public CustomStringRequest(int method, String url, Response.Listener listener, Response.ErrorListener errorListener) {
         super(method, url, listener, errorListener);
     }
@@ -36,7 +37,7 @@ public class CustomStringRequest extends StringRequest {
 
     }
 
-
+    @SuppressWarnings("unchecked")
     @Override
     protected void deliverResponse(String response) {
         super.deliverResponse(response);

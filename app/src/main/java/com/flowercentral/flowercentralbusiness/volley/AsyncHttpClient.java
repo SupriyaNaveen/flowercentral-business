@@ -13,37 +13,32 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageLoader;
 
-
 /**
- * Created by Ashish Upadhyay on 7/18/16.
+ * AsyncHttpClient manages requests.
  */
 public class AsyncHttpClient {
 
     public static final String TAG = AsyncHttpClient.class.getSimpleName();
-    private static AsyncHttpClient mInstance;
-    private static Context mContext;
+    private Context mContext;
     private RequestQueue mRequestQueue;
-    private ImageLoader mImageLoader;
 
-    public static synchronized AsyncHttpClient getInstance(Context context) {
-        if (mInstance == null) {
-            mInstance = new AsyncHttpClient(context.getApplicationContext());
-        }
-        return mInstance;
-    }
-
-    private AsyncHttpClient(Context context) {
-        mContext = context;
+    /**
+     * Constructor
+     *
+     * @param context context
+     */
+    public AsyncHttpClient(Context context) {
+        mContext = context.getApplicationContext();
         mRequestQueue = getRequestQueue();
         //mImageLoader = new ImageLoader(mRequestQueue, new LruBitmapCache(context));
-        mImageLoader = new ImageLoader(mRequestQueue, new LRUBitmapCache());
+        new ImageLoader(mRequestQueue, new LRUBitmapCache());
     }
 
     /**
      * Creates a RequestQueue from valley if RequestQueue doesn't doesn't exists
      * else returns the current RequestQueue Object.
      *
-     * @return
+     * @return queue
      */
     private RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
@@ -57,54 +52,63 @@ public class AsyncHttpClient {
     }
 
 
+    /**
+     * Add request to request queue of volley.
+     *
+     * @param request request instance
+     * @param tag tag
+     */
     public void addToRequestQueue(Request request, @Nullable String tag) {
         // sets the default tag if tag is empty
         request.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
         getRequestQueue().add(request);
     }
 
-    public void addToRequestQueue(Request request) {
-        // sets the default tag if tag is empty
-        if (request.getTag() == null) {
-            request.setTag(TAG);
-        }
-        getRequestQueue().add(request);
-    }
+//    public void addToRequestQueue(Request request) {
+//        // sets the default tag if tag is empty
+//        if (request.getTag() == null) {
+//            request.setTag(TAG);
+//        }
+//        getRequestQueue().add(request);
+//    }
 
-    public ImageLoader getImageLoader() {
-        return mImageLoader;
-    }
+//    public ImageLoader getImageLoader() {
+//        return mImageLoader;
+//    }
 
-  /*  public void addToRequestQueue(StringRequest request,@Nullable String tag) {
-        // sets the default tag if tag is empty
-        request.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
-        getRequestQueue().add(request);
-    }
+//    public void addToRequestQueue(StringRequest request,@Nullable String tag) {
+//        // sets the default tag if tag is empty
+//        request.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
+//        getRequestQueue().add(request);
+//    }
+//
+//    public void addToRequestQueue(JsonArrayRequest request,@Nullable String tag) {
+//        // sets the default tag if tag is empty
+//        request.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
+//        getRequestQueue().add(request);
+//    }
+//
+//    public void addToRequestQueue(JsonObjectRequest request, @Nullable String tag) {
+//        // sets the default tag if tag is empty
+//        request.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
+//        getRequestQueue().add(request);
+//    }
+//
+//    public void addToRequestQueue(CustomGsonRequest request,@Nullable String tag) {
+//        // sets the default tag if tag is empty
+//        request.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
+//        getRequestQueue().add(request.getGsonRequest());
+//    }
 
-    public void addToRequestQueue(JsonArrayRequest request,@Nullable String tag) {
-        // sets the default tag if tag is empty
-        request.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
-        getRequestQueue().add(request);
-    }
+//    public void cancelAllRequestsByTag(String tag) {
+//        //cancels the requests with default tag if tag is null
+//        getRequestQueue().cancelAll(TextUtils.isEmpty(tag) ? TAG : tag);
+//
+//    }
 
-    public void addToRequestQueue(JsonObjectRequest request, @Nullable String tag) {
-        // sets the default tag if tag is empty
-        request.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
-        getRequestQueue().add(request);
-    }*/
-
-    /*public void addToRequestQueue(CustomGsonRequest request,@Nullable String tag) {
-        // sets the default tag if tag is empty
-        request.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
-        getRequestQueue().add(request.getGsonRequest());
-    }*/
-
-    public void cancelAllRequestsByTag(String tag) {
-        //cancels the requests with default tag if tag is null
-        getRequestQueue().cancelAll(TextUtils.isEmpty(tag) ? TAG : tag);
-
-    }
-
+    /**
+     * Cancels all the request from request queue.
+     */
     public void cancelAllRequests() {
         getRequestQueue().cancelAll(new RequestQueue.RequestFilter() {
             @Override
@@ -112,8 +116,5 @@ public class AsyncHttpClient {
                 return true;
             }
         });
-
     }
-
-
 }

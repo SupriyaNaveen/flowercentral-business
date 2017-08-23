@@ -3,8 +3,8 @@ package com.flowercentral.flowercentralbusiness.setting;
 public final class AppConstant {
 
     public final static String APP_NAME = "Florist";
-    public static final String LOCAL_DB_NAME = "florist.db";
-    public static final int DB_VERSION = 1;
+//    public static final String LOCAL_DB_NAME = "florist.db";
+//    public static final int DB_VERSION = 1;
 
 //    public enum APP_MODE {DEVELOPMENT, TEST, PRODUCTION}
 

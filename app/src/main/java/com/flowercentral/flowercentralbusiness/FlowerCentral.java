@@ -9,15 +9,23 @@ import com.flowercentral.flowercentralbusiness.util.Logger;
 
 import io.fabric.sdk.android.Fabric;
 
+/**
+ * Application class.
+ */
 public class FlowerCentral extends Application {
 
     private Application mAppInstance;
 
+    /**
+     * Initialise the fabric.
+     * Enable strict mode logging for debug mode.
+     * Set the logging flag based on build configuration.
+     */
     @Override
     public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
-        Context mContext = this;
+//        Context mContext = this;
         mAppInstance = this;
 
         // Enable verbose logging and strict mode in debug builds
@@ -43,6 +51,11 @@ public class FlowerCentral extends Application {
         }
     }
 
+    /**
+     * Attach to parents base context.
+     *
+     * @param base base context
+     */
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
