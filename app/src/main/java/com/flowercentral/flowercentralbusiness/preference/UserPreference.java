@@ -8,6 +8,9 @@ import android.preference.PreferenceManager;
 
 import com.flowercentral.flowercentralbusiness.login.ui.model.Vendor;
 
+/**
+ * Vendor login details manager here.
+ */
 public class UserPreference extends PreferenceActivity {
 
     private final static String API_TOKEN = "api_token";
@@ -139,6 +142,12 @@ public class UserPreference extends PreferenceActivity {
 //        return vendor;
 //    }
 
+    /**
+     * Write profile information to preference.
+     *
+     * @param context context
+     * @param vendor profile data
+     */
     public static void setProfileInformation(Context context, Vendor vendor) {
         setApiToken(context, vendor.getApiToken());
         setVendorShopName(context, vendor.getVendorDetails().getVendorShopName());
@@ -148,6 +157,11 @@ public class UserPreference extends PreferenceActivity {
         setVendorLoginMessage(context, vendor.getMessage());
     }
 
+    /**
+     * Delete profile information from preference.
+     *
+     * @param context context
+     */
     public static void deleteProfileInformation(Context context) {
         setApiToken(context, null);
         setVendorShopName(context, null);

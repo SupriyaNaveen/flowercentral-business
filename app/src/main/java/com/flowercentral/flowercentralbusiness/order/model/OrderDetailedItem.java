@@ -138,7 +138,7 @@ public class OrderDetailedItem implements Parcelable {
         DELIVERED("Delivered"),
         @SerializedName("Cancelled")
         CANCELLED("Cancelled"),
-        @SerializedName("Vendor not found")
+        @SerializedName("Vendor not found!")
         VENDOR_NOT_FOUND("Vendor not found");
 
         DELIVERY_STATUS(String s) {
