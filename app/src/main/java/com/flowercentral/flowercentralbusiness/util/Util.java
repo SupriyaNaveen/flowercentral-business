@@ -13,7 +13,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -207,7 +206,7 @@ public class Util {
             Date date = format1.parse(_date);
             strDate = format2.format(date);
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+//            Log.e(TAG, e.getMessage());
             strDate = _date;
         }
         return strDate;
