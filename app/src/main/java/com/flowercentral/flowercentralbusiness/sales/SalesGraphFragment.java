@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.flowercentral.flowercentralbusiness.R;
 import com.flowercentral.flowercentralbusiness.databinding.FragmentSalesGraphBinding;
 import com.flowercentral.flowercentralbusiness.rest.BaseModel;
@@ -41,6 +42,7 @@ public class SalesGraphFragment extends Fragment {
 
     private static final String TAG = SalesGraphFragment.class.getSimpleName();
     private FragmentSalesGraphBinding mBinder;
+    private MaterialDialog mProgressDialog;
 
     private VIEW_TYPE mViewType;
 
@@ -133,10 +135,14 @@ public class SalesGraphFragment extends Fragment {
             return;
         }
 
+        mProgressDialog = Util.showProgressDialog(getActivity(), "Sales", "Fetching data...", false);
+
         // Make web api call to get the pending order item list.
         BaseModel<JSONObject> baseModel = new BaseModel<JSONObject>(getActivity()) {
             @Override
             public void onSuccess(int statusCode, Map<String, String> headers, JSONObject response) {
+
+                dismissDialog();
                 // Construct the order item list from web api response.
                 SalesDetails salesDetails = constructSalesDetails(response);
                 updateSalesGraphView(salesDetails);
@@ -144,6 +150,7 @@ public class SalesGraphFragment extends Fragment {
 
             @Override
             public void onError(ErrorData error) {
+                dismissDialog();
                 if (error != null) {
 
                     updateSalesGraphView(null);
@@ -290,5 +297,16 @@ public class SalesGraphFragment extends Fragment {
         return new Gson().fromJson(String.valueOf(response),
                 new TypeToken<SalesDetails>() {
                 }.getType());
+    }
+
+    public void dismissDialog() {
+        try {
+            if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                mProgressDialog.dismiss();
+                mProgressDialog = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
